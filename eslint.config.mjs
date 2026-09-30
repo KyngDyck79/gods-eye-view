@@ -26,6 +26,13 @@ const V2_FILES = [
   'src/audio/**/*.{js,mjs}',
   'src/ui/cockpitAtc.js',
   'src/ui/cockpitAtc.test.mjs',
+  'server/providers/audio/**/*.js',
+  'server/providers/trafficIncidents/**/*.js',
+  'server/providers/cctv/cadence.js',
+  'src/layers/trafficIncidents/**/*.js',
+  'src/ui/audioSourcesDialog.js',
+  'src/ui/cctvRate.js',
+  'src/ui/cctvRate.test.mjs',
   'eslint.config.mjs',
 ];
 

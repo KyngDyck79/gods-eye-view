@@ -1,5 +1,36 @@
 # Changelog
 
+## GOD'S EYE VIEW v2 — Phase 3: ATC audio, traffic, cameras (2026-09-30)
+
+- **ATC audio.** The cockpit ATC page lists your own audio sources for the
+  airport and frequency, with LISTEN / STOP / MUTE / VOLUME. A new "Your audio
+  sources" dialog (SOURCES) stores receivers and stream links in this browser
+  only. LIVE AUDIO shows only while the stream is playing and a transmission
+  was heard in the last 15 s; a quiet frequency reads "no transmission heard".
+  Streams from your own network play through a local relay that only connects
+  to local addresses, only passes audio and records nothing. LiveATC is offered
+  only as **LISTEN ON EXTERNAL SOURCE**, which opens LiveATC's own page; its
+  streams are never embedded, relayed or recorded. Starting ATC audio stops the
+  radio and vice versa.
+- **Traffic.** Simulated traffic dots are off by default: roads without
+  measured speeds draw nothing and the row says "Road speeds: no source
+  configured". A labeled switch (SIMULATION OFF / SIMULATED DOTS ON) brings
+  the simulation back, and every status line then says SIMULATED.
+- **Traffic Incidents layer** (Movement group): accidents, closures, lane
+  closures, road works and jams in view, from TomTom Incident Details with your
+  key, budgeted to stay inside the free 2,500 requests per month.
+- **Cameras.** The viewer has a frame cap (AUTO / 5 / 10 / 15), which limits
+  redraws only, and a "Source:" line with the rate the camera actually
+  delivers: measured video frames per second, or how often a still image
+  really changes. Still images are re-requested conditionally (ETag /
+  Last-Modified), so unchanged frames aren't downloaded again. An unreachable
+  camera's placeholder reads CAMERA OFFLINE.
+- **SDR-SETUP.md**: build your own KMYR airband receiver (RTL-SDR →
+  RTLSDR-Airband → Icecast → the app).
+- South Carolina (511SC/SCDOT) cameras are **not** included: 511SC has no
+  developer program and its terms forbid display without SCDOT's written
+  permission.
+
 ## GOD'S EYE VIEW v2 — Phase 2: cockpit, frequencies, aviation weather (2026-09-30)
 
 - The cockpit briefing has a fourth page, **ATC**: nearest airport and runway,

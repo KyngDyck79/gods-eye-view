@@ -171,7 +171,8 @@
       "scripts/google-server-key.mjs",
       "src/data/cctvFootprint.js",
       "src/sources/cctvTypes.js",
-      "src/sources/httpBody.js"
+      "src/sources/httpBody.js",
+      "server/providers/cctv/cadence.js"
     ],
     "external": []
   },
@@ -439,7 +440,8 @@
       "src/ui/cctvControls.js",
       "src/ui/cctvFrames.js",
       "src/ui/cctvVideo.js",
-      "src/ui/cctvPresentation.js"
+      "src/ui/cctvPresentation.js",
+      "src/ui/cctvRate.js"
     ],
     "external": []
   },
@@ -487,7 +489,10 @@
       "src/cockpitVisionPolicy.js",
       "src/ui/panelRailGeometry.js",
       "src/audio/audioBus.js",
-      "src/ui/cockpitAtc.js"
+      "src/ui/cockpitAtc.js",
+      "src/audio/streamPlayer.js",
+      "src/data/tapAddress.js",
+      "src/audio/sources.js"
     ],
     "external": ["cesium"]
   },
@@ -631,7 +636,11 @@
       "src/ui/localSdrPresentation.js",
       "src/data/cameraArrival.js",
       "src/audio/audioBus.js",
-      "src/ui/cockpitAtc.js"
+      "src/ui/cockpitAtc.js",
+      "src/ui/cctvRate.js",
+      "src/audio/streamPlayer.js",
+      "src/data/tapAddress.js",
+      "src/audio/sources.js"
     ],
     "external": ["cesium"]
   },
@@ -2040,7 +2049,14 @@
       "src/layers/installations/namedMarkers.js",
       "src/data/infrastructureOverlayEntry.js",
       "src/audio/audioBus.js",
-      "src/ui/cockpitAtc.js"
+      "src/ui/cockpitAtc.js",
+      "src/layers/trafficIncidents/source.js",
+      "src/layers/trafficIncidents/index.js",
+      "src/app/layers/trafficIncidents.js",
+      "src/ui/cctvRate.js",
+      "src/audio/streamPlayer.js",
+      "src/data/tapAddress.js",
+      "src/audio/sources.js"
     ],
     "external": [
       "hls.js",
@@ -2526,7 +2542,10 @@
       "src/data/local_data/osm_military_names/names.json",
       "src/layers/installations/namedMarkers.js",
       "src/data/infrastructureOverlayEntry.js",
-      "src/audio/audioBus.js"
+      "src/audio/audioBus.js",
+      "src/layers/trafficIncidents/source.js",
+      "src/layers/trafficIncidents/index.js",
+      "src/app/layers/trafficIncidents.js"
     ],
     "external": [
       "hls.js",

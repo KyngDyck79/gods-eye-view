@@ -29,6 +29,8 @@ Providers added or changed for v2 so far:
 | [adsbdb](https://github.com/mrjackwills/adsbdb) | Plausible routes, aircraft type | No service licence published; route data by David Taylor (Edinburgh) and Jim Mason (Glasgow), display only — not to be copied or republished | Credited |
 | [OurAirports](https://ourairports.com/data/) | Airports, runways, frequencies, navaids | Public domain | Courtesy |
 | [AviationWeather.gov](https://aviationweather.gov/data/api/) | METAR and TAF | U.S. Government work (NOAA/NWS) | Courtesy |
+| [TomTom](https://docs.tomtom.com/traffic-api/documentation/tomtom-maps/traffic-incidents/incident-details) | Traffic incidents (your key) | TomTom for Developers terms | Required |
+| [LiveATC.net](https://www.liveatc.net/) | External link only, never embedded | LiveATC terms (personal use) | Linked |
 
 ## Third-party software
 

@@ -23,6 +23,12 @@
     "src/ui/systemStatus.js",
     "server/providers/aviationWeather/**/*.js",
     "src/audio/**/*.js",
-    "src/ui/cockpitAtc.js"
+    "src/ui/cockpitAtc.js",
+    "server/providers/audio/**/*.js",
+    "server/providers/trafficIncidents/**/*.js",
+    "server/providers/cctv/cadence.js",
+    "src/layers/trafficIncidents/source.js",
+    "src/ui/audioSourcesDialog.js",
+    "src/ui/cctvRate.js"
   ]
 }
