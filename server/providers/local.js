@@ -29,6 +29,8 @@ import { aircraftViewportProxy } from './aircraft/viewportRoute.js';
 import { gatewayStatusRoutes } from './gateway/routes.js';
 import { airportsProxy } from './airports/index.js';
 import { aviationWeatherProxy } from './aviationWeather/index.js';
+import { audioRelayProxy } from './audio/relay.js';
+import { trafficIncidentsProxy } from './trafficIncidents/index.js';
 
 /** Construct the local provider plugins in their established order. */
 function localProviderPlugins() {
@@ -62,6 +64,8 @@ function localProviderPlugins() {
     aircraftViewportProxy(),
     airportsProxy(),
     aviationWeatherProxy(),
+    audioRelayProxy(),
+    trafficIncidentsProxy(),
     gatewayStatusRoutes(),
     keySetupEndpoint(),
   ];

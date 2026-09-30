@@ -26,6 +26,7 @@ const PANEL_GROUPS = [
       'local-adsb',
       'ais-live-vessels',
       'traffic',
+      'traffic-incidents',
       'transit',
       'bikeshare',
     ],

@@ -102,6 +102,27 @@ export const PROVIDER_CATALOG = Object.freeze({
     }),
     verified: '2026-09-29',
   }),
+  'tomtom-incidents': Object.freeze({
+    id: 'tomtom-incidents',
+    name: 'TomTom Traffic Incidents',
+    domain: 'traffic',
+    sourceUrl:
+      'https://docs.tomtom.com/traffic-api/documentation/tomtom-maps/traffic-incidents/incident-details',
+    cost: 'Free tier: 2,500 Incident Details requests per month; paid beyond',
+    apiKeyRequired: true,
+    rateLimit:
+      'Budgeted here at 80 requests per UTC day (under 2,500 per month); bounding box at most 10,000 km².',
+    license: 'TomTom for Developers terms (your own key)',
+    commercialUse: 'conditional',
+    updateFrequency: 'Live; cached 5 minutes per area here',
+    dataTypes: ['accidents', 'closures', 'road works', 'jams', 'hazards'],
+    attribution: Object.freeze({
+      text: 'Traffic incidents © TomTom',
+      url: 'https://www.tomtom.com',
+      required: true,
+    }),
+    verified: '2026-09-30',
+  }),
   ourairports: Object.freeze({
     id: 'ourairports',
     name: 'OurAirports',

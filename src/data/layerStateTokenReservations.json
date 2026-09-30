@@ -21,6 +21,7 @@
   ["satellites", "s"],
   ["telegeography-submarine-cables", "u"],
   ["traffic", "t"],
+  ["traffic-incidents", "0"],
   ["transit", "j"],
   ["weather-cyclones", "y"],
   ["weather-lightning", "l"],
