@@ -1,3 +1,5 @@
+import { audioBus } from '../../audio/audioBus.js';
+
 import { RADIO_VOICE_PLAYBACK_TIMEOUT_MS } from './policy.js';
 
 export function createPlayback({ state: layerState, services, parts, source }) {
@@ -171,6 +173,13 @@ export function createPlayback({ state: layerState, services, parts, source }) {
     }
     parts.presentation.emitState();
 
+    // One stream at a time: taking the bus stops any other producer (ATC).
+    audioBus.claim({
+      id: 'radio',
+      kind: 'PUBLIC RADIO',
+      label: station.name || null,
+      stop: () => stopRadioPlayback({ origin: 'programmatic' }),
+    });
     try {
       const playback = layerState._audio.play();
       if (playback?.then) await playback;
@@ -317,6 +326,7 @@ export function createPlayback({ state: layerState, services, parts, source }) {
     layerState._audioStationId = null;
     layerState._audioState = 'stopped';
     layerState._audioError = null;
+    audioBus.release('radio');
     parts.presentation.emitState();
     if (origin === 'user' || origin === 'voice') {
       parts.presentation.emitPlaybackControl('stop', origin, stoppedAttemptId);
@@ -361,6 +371,7 @@ export function createPlayback({ state: layerState, services, parts, source }) {
     layerState._activePlaybackAttempt = null;
     layerState._audio?.pause();
     layerState._audioState = 'paused';
+    audioBus.release('radio');
     parts.presentation.emitState();
     if (origin === 'user' || origin === 'voice') {
       parts.presentation.emitPlaybackControl('pause', origin, pausedAttemptId);
