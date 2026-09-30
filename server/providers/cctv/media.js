@@ -457,7 +457,8 @@ export async function fetchWithinHost(url, init, fetchImpl = fetch) {
     // Anything that is not a 3xx (including a test double with no status) is
     // the final answer.
     const status = Number(upstream?.status);
-    if (!(status >= 300 && status < 400)) return upstream;
+    // 304 Not Modified is a final answer to a conditional request, not a redirect.
+    if (!(status >= 300 && status < 400) || status === 304) return upstream;
     const location = upstream.headers.get('location');
     try {
       await upstream.body?.cancel();
@@ -516,7 +517,11 @@ export function cctvUpstreamUserAgent(url) {
  * @param {typeof fetch} [options.fetchImpl=fetch] - Fetch implementation.
  * @param {number} [options.timeoutMs=CCTV_FRAME_FETCH_TIMEOUT_MS] - Abort timeout.
  * @param {number} [options.maxBytes=CCTV_FRAME_MAX_BODY_BYTES] - Snapshot byte cap.
- * @returns {Promise<{ok:true,body:Buffer,contentType:string}|null>}
+ * @param {{ etag?: string|null, lastModified?: string|null }} [options.validators]
+ *   The previous frame's ETag / Last-Modified. When given, the request is
+ *   conditional and an unchanged frame answers `{ ok: true, notModified: true }`
+ *   without downloading it again.
+ * @returns {Promise<{ok:true,body?:Buffer,contentType?:string,notModified?:boolean,etag?:string|null,lastModified?:string|null}|null>}
  */
 export async function fetchCctvImageFromUpstream(
   url,
@@ -524,6 +529,7 @@ export async function fetchCctvImageFromUpstream(
     fetchImpl = fetch,
     timeoutMs = CCTV_FRAME_FETCH_TIMEOUT_MS,
     maxBytes = CCTV_FRAME_MAX_BODY_BYTES,
+    validators = null,
   } = {},
 ) {
   if (!url || !/^https?:\/\//i.test(url)) return null;
@@ -534,23 +540,29 @@ export async function fetchCctvImageFromUpstream(
     );
   }, timeoutMs);
   try {
+    const headers = { 'User-Agent': cctvUpstreamUserAgent(url) };
+    if (validators?.etag) headers['If-None-Match'] = validators.etag;
+    if (validators?.lastModified)
+      headers['If-Modified-Since'] = validators.lastModified;
     const upstream = await fetchWithinHost(
       url,
-      {
-        headers: { 'User-Agent': cctvUpstreamUserAgent(url) },
-        signal: controller.signal,
-      },
+      { headers, signal: controller.signal },
       fetchImpl,
     );
     if (!upstream) return null;
+    if (validators && upstream.status === 304) {
+      return { ok: true, notModified: true };
+    }
     const contentType = upstream.headers.get('content-type') || '';
     if (!upstream.ok || !contentType.startsWith('image/')) {
       controller.abort();
       return null;
     }
+    const etag = upstream.headers.get('etag');
+    const lastModified = upstream.headers.get('last-modified');
     const body = await readCappedResponseBytes(upstream, maxBytes);
     if (!body) return null;
-    return { ok: true, body, contentType };
+    return { ok: true, body, contentType, etag, lastModified };
   } catch {
     return null;
   } finally {

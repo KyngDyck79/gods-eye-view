@@ -28,6 +28,17 @@
       </div>
       <div id="cctv-source-badge" role="status" aria-live="polite">SOURCE · UNKNOWN</div>
       <div id="cctv-meta">Enable CCTV to load camera intersections</div>
+      <div class="cctv-rate-row">
+        <label class="cctv-fps-cap">FPS CAP
+          <select id="cctv-fps-cap" aria-label="Viewer frame cap (a limit on redraws, not the camera's rate)">
+            <option value="auto">AUTO</option>
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="15">15</option>
+          </select>
+        </label>
+        <span id="cctv-source-rate" role="status">Source: —</span>
+      </div>
       <div class="cctv-controls">
         <button id="cctv-enable-btn" class="scene-btn">CCTV OFF</button>
         <button id="cctv-nearest-btn" class="scene-btn">NEAREST</button>

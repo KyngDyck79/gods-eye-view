@@ -365,3 +365,25 @@
   color: #a8f7ff;
   text-shadow: 0 0 10px rgba(0, 212, 255, 0.18);
 }
+
+/* Viewer frame cap and measured source rate (GODS-EYE-VIEW-SPEC v2, 4.9). */
+.cctv-rate-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem 0.6rem;
+  margin: 0.3rem 0;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.05rem;
+  color: var(--text-secondary);
+}
+.cctv-fps-cap select {
+  margin-left: 0.3rem;
+  padding: 0.1rem 0.25rem;
+  color: var(--text-primary);
+  font: inherit;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 0.25rem;
+}

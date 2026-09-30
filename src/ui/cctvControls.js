@@ -17,6 +17,7 @@ import {
   _updateCctvSyncChip,
 } from './cctvPresentation.js';
 import { _initCctvPanel } from './cctvBindings.js';
+import { readCctvFpsCap, writeCctvFpsCap } from './cctvRate.js';
 
 /** Own camera-panel interaction and presentation; receive the camera port and application actions. */
 export class CctvControls {
@@ -38,6 +39,15 @@ export class CctvControls {
     this._calibrationEdit = null;
     this._actionGeneration = 0;
     this._initCctvPanel();
+    // Viewer frame cap: a limit on redraws only, remembered in this browser.
+    this._cctvFpsCapValue = readCctvFpsCap();
+    if (this._cctvFpsCap) {
+      this._cctvFpsCap.value = this._cctvFpsCapValue;
+      this.listen(this._cctvFpsCap, 'change', () => {
+        this._cctvFpsCapValue = this._cctvFpsCap.value;
+        writeCctvFpsCap(this._cctvFpsCapValue);
+      });
+    }
     if (this._cctvVideo && typeof MutationObserver !== 'undefined') {
       this._videoVisibilityObserver = new MutationObserver(() =>
         this._renderCctvState(this._cctvState),
@@ -113,6 +123,7 @@ export class CctvControls {
     if (this.destroyed) return;
     this.destroyed = true;
     this._cctvVideoSurface?.stop();
+    clearInterval(this._cctvRateTimer);
     this._videoVisibilityObserver?.disconnect();
     this._actionGeneration++;
     this.listeners.abort();
