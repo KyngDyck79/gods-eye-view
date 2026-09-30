@@ -17,6 +17,7 @@ import {
 } from '../../data/modelVisualAnchor.js';
 import {
   FOCUS_EVIDENCE_DEV,
+  MAX_EXTRAPOLATION_SEC,
   RENDER_DELAY_SEC,
   TRACKED_MODEL_MAX_PX,
   TRACKED_MODEL_MIN_PX,
@@ -237,10 +238,11 @@ export function createMotion({
         ? newest.epochMs
         : Cesium.JulianDate.toDate(newest.time).getTime(),
       lastContactEpochMs: info?.lastContactEpochMs,
-      // Permit one minute of contact grace but cap any cached-feed drift at
-      // five minutes. Source backoff is exposed separately as a STALE cue.
-      minimumSec: 60,
-      maximumSec: 300,
+      // Never move an aircraft more than MAX_EXTRAPOLATION_SEC past its last
+      // real position (GODS-EYE-VIEW-SPEC v2, 2.3); after that it holds and
+      // the missed-poll STALE cue takes over.
+      minimumSec: MAX_EXTRAPOLATION_SEC,
+      maximumSec: MAX_EXTRAPOLATION_SEC,
     });
     return _extrapolateFix(
       newest,

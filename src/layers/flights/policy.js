@@ -145,6 +145,10 @@ export const TRAIL_MAX_POINTS = 400;
 // the back/forward oscillation and is a regression.
 // ---------------------------------------------------------------------------
 
+/** @constant {number} Longest dead-reckoning past the last real position (spec 2.3). */
+
+export const MAX_EXTRAPOLATION_SEC = 30;
+
 /** @constant {number} Display latency in seconds (= one poll interval). */
 
 export const RENDER_DELAY_SEC = 30;

@@ -133,7 +133,7 @@ test('construction is inert; adapters preserve routes, viewport query, cache epo
   const requests = [];
   const fetchImpl = async (url, init) => {
     requests.push({ url, init });
-    if (url.startsWith('/api/opensky?'))
+    if (url.startsWith('/api/aircraft?'))
       return response(
         { time: now / 1000, states: [aircraft] },
         {
@@ -158,10 +158,17 @@ test('construction is inert; adapters preserve routes, viewport query, cache epo
   assert.equal(requests.length, 0);
   const signal = new AbortController().signal;
   const snapshot = await civil.getSnapshot(
-    { latitude: 30.123456, longitude: -97 },
+    {
+      latitude: 30.123456,
+      longitude: -97,
+      viewBox: { south: 29.5, west: -97.8, north: 30.6, east: -96.2 },
+    },
     { signal },
   );
-  assert.equal(requests[0].url, '/api/opensky?lat=30.1235&lon=-97.0000');
+  assert.equal(
+    requests[0].url,
+    '/api/aircraft?lamin=29.500&lomin=-97.800&lamax=30.600&lomax=-96.200&lat=30.1235&lon=-97.0000',
+  );
   assert.equal(requests[0].init.signal, signal);
   assert.equal(snapshot.source, 'adsb.lol');
   assert.equal(snapshot.coverage, '250 nm regional');

@@ -203,7 +203,7 @@ test('flights poll refreshes tracked callsign/FL/kts and marks a missed poll STA
   const nowSec = Math.floor(Date.now() / 1000);
   let openskyPoll = 0;
   globalThis.fetch = async (url) => {
-    if (!String(url).startsWith('/api/opensky')) {
+    if (!String(url).startsWith('/api/aircraft')) {
       return { ok: true, status: 200, json: async () => ({ ac: [] }) };
     }
     const states = openskyPoll++ === 0
@@ -223,9 +223,13 @@ test('flights poll refreshes tracked callsign/FL/kts and marks a missed poll STA
 
   try {
     await flightsLayer.update(viewer);
-    assert.equal(entity.gevLabelModel.title, 'DAL123');
-    assert.match(entity.gevLabelModel.details.join(' · '), /FL350/);
-    assert.match(entity.gevLabelModel.details.join(' · '), /486 kts/);
+    const readout = () =>
+      [entity.gevLabelModel.title, ...entity.gevLabelModel.details].join(' · ');
+    assert.match(entity.gevLabelModel.title, /^DAL123\b/);
+    assert.match(readout(), /FL350/);
+    assert.match(readout(), /486 kts/);
+    // Source and observed-position time (spec 4.4), as an absolute UTC time.
+    assert.match(readout(), /position \d{2}:\d{2}:\d{2}Z/);
 
     await flightsLayer.update(viewer);
     assert.match(
@@ -347,7 +351,7 @@ test('real civil track path creates no native label and publishes every cached h
     assert.ok(entities.values.every((candidate) => candidate.label === undefined));
     assert.deepEqual(entity.gevLabelModel, {
       title: 'N12345 · FL350 · 486 kts',
-      details: ['TEST AIR · A320', 'AUS → LAX'],
+      details: ['TEST AIR · A320', 'PLAUSIBLE ROUTE AUS → LAX'],
       accent: '#39d0ff',
     });
     viewer.scene.preUpdate.raiseEvent();

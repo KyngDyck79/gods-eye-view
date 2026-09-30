@@ -15,6 +15,8 @@ import { normalizeVesselTrack, vesselSnapshot } from './vessels.js';
 
 const defaultFetch = (...args) => globalThis.fetch(...args);
 const header = (response, name) => response.headers?.get?.(name);
+const cleanHeaderText = (value) =>
+  typeof value === 'string' ? value.trim().slice(0, 80) : '';
 
 function openSkyError(response) {
   const error = httpError(response, 'OpenSky');
@@ -49,34 +51,71 @@ function openSkyError(response) {
   return error;
 }
 
-/** Existing same-origin aircraft routes; no request starts during construction. */
+/** Exact user-facing outage text (GODS-EYE-VIEW-SPEC v2, 4.27). */
+export const AIRCRAFT_UNAVAILABLE_MESSAGE =
+  'AIRCRAFT DATA TEMPORARILY UNAVAILABLE';
+
+function viewBoxParams(query) {
+  const params = new URLSearchParams();
+  const box = query.viewBox;
+  if (
+    box &&
+    ['south', 'west', 'north', 'east'].every((key) => Number.isFinite(box[key]))
+  ) {
+    params.set('lamin', box.south.toFixed(3));
+    params.set('lomin', box.west.toFixed(3));
+    params.set('lamax', box.north.toFixed(3));
+    params.set('lomax', box.east.toFixed(3));
+  }
+  if (Number.isFinite(query.latitude) && Number.isFinite(query.longitude)) {
+    params.set('lat', query.latitude.toFixed(4));
+    params.set('lon', query.longitude.toFixed(4));
+  }
+  return params;
+}
+
+/**
+ * Live aircraft for the current view through the gateway's /api/aircraft
+ * route (adsb.lol first, OpenSky fallback). No request starts during
+ * construction.
+ */
 export function createOpenSkySource({
   fetchImpl = defaultFetch,
   now = () => Date.now(),
 } = {}) {
   return {
-    label: 'OpenSky Network',
+    label: 'Live aircraft',
     async getSnapshot(query = {}, { signal } = {}) {
-      const params = new URLSearchParams();
-      if (Number.isFinite(query.latitude) && Number.isFinite(query.longitude)) {
-        params.set('lat', query.latitude.toFixed(4));
-        params.set('lon', query.longitude.toFixed(4));
-      }
+      const params = viewBoxParams(query);
       const { response, payload } = await readResponse(
         fetchImpl,
-        `/api/opensky${params.size ? '?' + params : ''}`,
+        `/api/aircraft${params.size ? '?' + params : ''}`,
         { signal },
-        'OpenSky',
+        'Aircraft',
       );
-      if (!response.ok) throw openSkyError(response);
+      if (!response.ok) {
+        const error = openSkyError(response);
+        if (response.status === 503)
+          error.message = AIRCRAFT_UNAVAILABLE_MESSAGE;
+        throw error;
+      }
+      const snapshot = openSkySnapshot(payload, {
+        source:
+          cleanHeaderText(payload?.source) ||
+          header(response, 'x-flight-source') ||
+          'Live aircraft',
+        coverage:
+          cleanHeaderText(payload?.coverage) ||
+          header(response, 'x-flight-coverage') ||
+          'viewport',
+        now: now(),
+        stale: payload?.stale === true,
+      });
       return {
-        ...openSkySnapshot(payload, {
-          source: header(response, 'x-flight-source') || 'OpenSky Network',
-          coverage:
-            header(response, 'x-flight-coverage') ||
-            'worldwide upstream snapshot',
-          now: now(),
-        }),
+        ...snapshot,
+        // A partially loaded view does not prove absence of the rest.
+        complete: snapshot.complete && payload?.complete !== false,
+        providerId: cleanHeaderText(payload?.providerId) || null,
         status: response.status,
       };
     },
