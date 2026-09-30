@@ -1,5 +1,30 @@
 # Changelog
 
+## GOD'S EYE VIEW v2 — Phase 5: marine, transit agencies, emergency facilities (2026-09-30)
+
+- **Emergency Facilities (OSM)** layer (Infrastructure group, share token 5).
+  Hospitals, fire stations, police, ambulance stations and emergency shelters
+  from OpenStreetMap. Fetched per 0.5° tile, cached 7 days on disk, at most
+  100 queries a day. Uses your `OVERPASS_UPSTREAMS` if set, otherwise the
+  public overpass-api.de, then VK Maps. Tilted views load the area around the
+  screen center.
+- **Transit agencies in config.** Add your own GTFS-Realtime agencies in
+  `config/transit-agencies.json`, which ships empty, with keys in `.env` as
+  `TRANSIT_KEY_*`. Keys stay on the server. WMATA Metrobus is the documented
+  example (`config/transit-agencies.example.json`,
+  `docs/TRANSIT-AGENCIES.md`). Problems show in Terminal and in
+  `/api/transit/feeds`.
+- **Marine.**
+  - aisstream.io is listed in SYSTEM and shows **NEEDS KEY** until
+    `AISSTREAM_API_KEY` is set.
+  - Vessel cards show each position's age (`AGE 42S`). With no reported
+    position time they show when it was received, or `TIME NOT REPORTED`,
+    instead of claiming `LIVE`.
+- In-app data credits added for NWS, NASA EONET, AviationWeather.gov and
+  OurAirports.
+- Weather warnings, traffic incidents and emergency facilities now refresh
+  their panel row after background loads.
+
 ## GOD'S EYE VIEW v2 — Phase 4: warnings, natural events, alerts (2026-09-30)
 
 - **Weather Warnings (NWS)** layer (Weather group, share token 3): active NWS

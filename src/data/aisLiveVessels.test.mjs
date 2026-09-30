@@ -1334,10 +1334,8 @@ test('buildSelectedVesselCard: full detail card with MMSI + position time', () =
   assert.equal(card.id, 'vessel:353136000');
   assert.equal(card.priority, 100000);
   assert.equal(card.title, 'EVER GIVEN');
-  assert.deepEqual(card.details, [
-    'CONTAINER SHIP · 14.5KT · 231°',
-    'MMSI 353136000 · POS: 11:22:33Z',
-  ]);
+  assert.equal(card.details[0], 'CONTAINER SHIP · 14.5KT · 231°');
+  assert.match(card.details[1], /^MMSI 353136000 · POS: 11:22:33Z · AGE \d+[SMHD]$/);
 });
 
 test('vessel host publication preserves the shipped grid winner and separation selector', () => {
@@ -1447,11 +1445,11 @@ test('buildSelectedVesselCard: destination line + STALE marker; placeholders for
     destination: 'ROTTERDAM',
     missedRefreshes: 2,
   }));
-  assert.deepEqual(card.details, [
-    'TANKER · --KT · --°',
-    '→ ROTTERDAM',
-    'MMSI 353136000 · POS: LIVE · STALE',
-  ]);
+  assert.deepEqual(card.details.slice(0, 2), ['TANKER · --KT · --°', '→ ROTTERDAM']);
+  assert.match(
+    card.details[2],
+    /^MMSI 353136000 · POS: (TIME NOT REPORTED|RCVD \d+[SMHD] AGO) · STALE$/,
+  );
 });
 
 // --- Vertical datum (h = N + lift) ------------------------------------------

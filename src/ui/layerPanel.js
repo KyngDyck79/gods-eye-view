@@ -38,6 +38,7 @@ const PANEL_GROUPS = [
   {
     label: 'Infrastructure',
     ids: [
+      'emergency-facilities',
       'alpr-cameras',
       'military-installations',
       'local-datacenters',

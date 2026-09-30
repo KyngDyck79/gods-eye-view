@@ -13,6 +13,8 @@ export function createNwsWarningsLayer({ source } = /** @type {any} */ ({})) {
   let _dataSource = null;
   let _request = null;
   let _enabled = false;
+  /** @type {any} */
+  let _dataManager = null;
   let _alerts = [];
   let _lastUpdate = null;
   let _lastError = null;
@@ -115,12 +117,14 @@ export function createNwsWarningsLayer({ source } = /** @type {any} */ ({})) {
           ? `${snapshot.stale ? 'STALE · ' : ''}${_alerts.length} alert areas in view`
           : 'No NWS alert areas in view (US only)';
         render();
+        _dataManager?.refreshLayerStats?.();
         return true;
       } catch (error) {
         if (request.signal.aborted || _request !== request || !_enabled)
           return false;
         _alerts = [];
         render();
+        _dataManager?.refreshLayerStats?.();
         _lastError = error?.message || 'WEATHER DATA TEMPORARILY UNAVAILABLE';
         _statusMessage = null;
         return false;
@@ -155,6 +159,10 @@ export function createNwsWarningsLayer({ source } = /** @type {any} */ ({})) {
           expires: a.expires,
           source: 'NWS',
         }));
+    },
+    /** Keep a manager handle so background loads repaint the panel row. */
+    attachDataManager(dataManager) {
+      _dataManager = dataManager;
     },
     getStats() {
       return {

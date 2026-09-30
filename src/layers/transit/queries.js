@@ -7,7 +7,7 @@ import {
   transitDetectionMetric,
 } from './policy.js';
 import {
-  TRANSIT_ENABLED_FEEDS,
+  allTransitFeeds,
   getRegisteredTransitFeed,
 } from '../../data/transitFeeds.js';
 import { transitModeTier } from '../../data/transitPresetStyle.js';
@@ -192,7 +192,7 @@ export function createQueries({ state, parts }) {
           source: 'GTFS-RT',
           status: 'zoom-in',
           coverage: state._altitudeGateOpen
-            ? `No feed here yet · ${TRANSIT_ENABLED_FEEDS.length} regions available`
+            ? `No feed here yet · ${allTransitFeeds().length} regions available`
             : `Fly below ${Math.round(ACTIVATION_ALTITUDE_M / 1000).toLocaleString()} km to a covered region`,
         };
       }

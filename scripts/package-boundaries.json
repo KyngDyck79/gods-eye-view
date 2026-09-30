@@ -46,7 +46,9 @@
       "src/data/adsbLolFallback.js",
       "src/data/aisStreamAdapter.js",
       "src/data/aisWatchdog.js",
-      "src/sources/httpBody.js"
+      "src/sources/httpBody.js",
+      "server/providers/gateway/catalog.js",
+      "server/providers/gateway/registry.js"
     ],
     "external": ["ws"]
   },
@@ -2062,7 +2064,10 @@
       "src/layers/nwsWarnings/index.js",
       "src/layers/naturalEvents/index.js",
       "src/app/layers/naturalEvents.js",
-      "src/app/layers/nwsWarnings.js"
+      "src/app/layers/nwsWarnings.js",
+      "src/layers/emergencyFacilities/source.js",
+      "src/layers/emergencyFacilities/index.js",
+      "src/app/layers/emergencyFacilities.js"
     ],
     "external": [
       "hls.js",
@@ -2557,7 +2562,10 @@
       "src/layers/naturalEvents/source.js",
       "src/app/layers/nwsWarnings.js",
       "src/layers/naturalEvents/index.js",
-      "src/app/layers/naturalEvents.js"
+      "src/app/layers/naturalEvents.js",
+      "src/layers/emergencyFacilities/source.js",
+      "src/layers/emergencyFacilities/index.js",
+      "src/app/layers/emergencyFacilities.js"
     ],
     "external": [
       "hls.js",
@@ -2953,7 +2961,9 @@
       "src/sources/transitHistory.js",
       "src/sources/transitService.js",
       "src/sources/transitHistoryStore.js",
-      "src/sources/rateLimit.js"
+      "src/sources/rateLimit.js",
+      "src/data/transitAgencyConfig.js",
+      "server/providers/transitAgencies.js"
     ],
     "external": ["pbf"]
   },

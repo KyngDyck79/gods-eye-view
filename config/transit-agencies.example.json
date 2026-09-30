@@ -1,0 +1,20 @@
+{
+  "$comment": "Example only. Copy the entry inside \"agencies\" into config/transit-agencies.json, then add TRANSIT_KEY_WMATA=your-key to .env. Checked 2026-09-30: the address answers 401 without a key and accepts the api_key header; WMATA Transit Data Terms of Use (https://developer.wmata.com/license) license use within your own application.",
+  "agencies": [
+    {
+      "id": "wmata-bus",
+      "name": "Metrobus",
+      "operator": "Washington Metropolitan Area Transit Authority",
+      "region": "Washington, DC",
+      "center": { "lat": 38.9072, "lon": -77.0369 },
+      "loadRadiusKm": 60,
+      "vehiclePositionsUrl": "https://api.wmata.com/gtfs/bus-gtfsrt-vehiclepositions.pb",
+      "keyHeader": "api_key",
+      "keyEnv": "TRANSIT_KEY_WMATA",
+      "defaultMode": "bus",
+      "license": "WMATA Transit Data Terms of Use",
+      "licenseUrl": "https://developer.wmata.com/license",
+      "attribution": "Washington Metropolitan Area Transit Authority (not affiliated or endorsed)"
+    }
+  ]
+}

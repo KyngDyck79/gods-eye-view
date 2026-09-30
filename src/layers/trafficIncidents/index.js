@@ -52,6 +52,8 @@ export function createTrafficIncidentsLayer(
   let _dataSource = null;
   let _request = null;
   let _enabled = false;
+  /** @type {any} */
+  let _dataManager = null;
   let _incidents = [];
   let _lastUpdate = null;
   let _lastError = null;
@@ -184,6 +186,7 @@ export function createTrafficIncidentsLayer(
             ? `${snapshot.stale ? 'STALE · ' : ''}${_incidents.length} incidents in view`
             : 'No incidents reported in view';
         render();
+        _dataManager?.refreshLayerStats?.();
         return true;
       } catch (error) {
         if (request.signal.aborted || _request !== request || !_enabled)
@@ -191,6 +194,7 @@ export function createTrafficIncidentsLayer(
         // Never keep drawing old incidents as if current.
         _incidents = [];
         render();
+        _dataManager?.refreshLayerStats?.();
         _lastError =
           error?.message || 'TRAFFIC INCIDENTS TEMPORARILY UNAVAILABLE';
         _status = error?.keyRequired ? 'key-required' : 'error';
@@ -219,6 +223,10 @@ export function createTrafficIncidentsLayer(
       return _incidents.slice(0, maxCount).map(mapIncidentRecord);
     },
 
+    /** Keep a manager handle so background loads repaint the panel row. */
+    attachDataManager(dataManager) {
+      _dataManager = dataManager;
+    },
     getStats() {
       return {
         count: _incidents.length,

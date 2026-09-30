@@ -124,6 +124,7 @@ function metroTransitRouteMode(routeId) {
  *   url: string, headers?: Record<string, string>,
  *   license: string, licenseUrl: string, attribution: string,
  *   defaultMode: string, routeMode?: (routeId: string|null) => string,
+ *   defaultEnabled?: boolean, historyRetention?: boolean, terms?: any,
  * }>>}
  */
 export const TRANSIT_FEED_REGISTRY = Object.freeze([
@@ -288,6 +289,43 @@ const ANY_FEED_BY_ID = new Map(
   TRANSIT_FEED_REGISTRY.map((feed) => [feed.id, feed]),
 );
 
+/**
+ * Agencies the owner added in `config/transit-agencies.json`. The server adds
+ * them with their upstream URL and key header; the browser adds the public
+ * catalog copy it gets from `/api/transit/feeds`.
+ * @type {object[]}
+ */
+const CONFIGURED_FEEDS = [];
+
+/**
+ * Add configured agencies. Ids already known are ignored, so a built-in feed
+ * can never be replaced from config.
+ * @param {object[]} feeds
+ * @returns {number} How many were added.
+ */
+export function addConfiguredTransitFeeds(feeds) {
+  let added = 0;
+  for (const feed of feeds || []) {
+    if (
+      typeof feed?.id !== 'string' ||
+      !TRANSIT_FEED_ID_PATTERN.test(feed.id) ||
+      ANY_FEED_BY_ID.has(feed.id)
+    )
+      continue;
+    const entry = Object.freeze({ ...feed, configured: true });
+    CONFIGURED_FEEDS.push(entry);
+    FEED_BY_ID.set(entry.id, entry);
+    ANY_FEED_BY_ID.set(entry.id, entry);
+    added += 1;
+  }
+  return added;
+}
+
+/** Built-in enabled feeds plus configured agencies. */
+export function allTransitFeeds() {
+  return [...TRANSIT_ENABLED_FEEDS, ...CONFIGURED_FEEDS];
+}
+
 /** Feed ids are path segments: lowercase letters, digits, hyphens only. */
 export const TRANSIT_FEED_ID_PATTERN = /^[a-z0-9][a-z0-9-]{1,63}$/;
 
@@ -343,10 +381,11 @@ export function haversineKm(aLat, aLon, bLat, bLon) {
  */
 export function transitFeedsInRange(lat, lon, slackKm = 0) {
   if (!Number.isFinite(lat) || !Number.isFinite(lon)) return [];
-  return TRANSIT_ENABLED_FEEDS.map((feed) => ({
-    feed,
-    km: haversineKm(lat, lon, feed.center.lat, feed.center.lon),
-  }))
+  return allTransitFeeds()
+    .map((feed) => ({
+      feed,
+      km: haversineKm(lat, lon, feed.center.lat, feed.center.lon),
+    }))
     .filter(({ feed, km }) => km <= feed.loadRadiusKm + Math.max(0, slackKm))
     .sort((a, b) => a.km - b.km)
     .map(({ feed }) => feed);
@@ -389,7 +428,7 @@ export function transitModeResolved(feed, routeId) {
  * @returns {object[]}
  */
 export function publicTransitCatalog() {
-  return TRANSIT_ENABLED_FEEDS.map((feed) => ({
+  return allTransitFeeds().map((feed) => ({
     id: feed.id,
     name: feed.name,
     operator: feed.operator,
@@ -400,5 +439,8 @@ export function publicTransitCatalog() {
     licenseUrl: feed.licenseUrl,
     attribution: feed.attribution,
     historyRetention: feed.historyRetention === true,
+    ...(feed.configured
+      ? { configured: true, defaultMode: feed.defaultMode }
+      : {}),
   }));
 }

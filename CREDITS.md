@@ -34,6 +34,7 @@ Providers added or changed for v2 so far:
 | [NOAA National Weather Service](https://www.weather.gov/documentation/services-web-api) | Warning polygons, alerts | U.S. Government work | Courtesy |
 | [USGS](https://earthquake.usgs.gov) | Earthquake alerts | U.S. Government work | Courtesy |
 | [NASA EONET](https://eonet.gsfc.nasa.gov) | Natural events | NASA open data | Courtesy |
+| [OpenStreetMap](https://www.openstreetmap.org/copyright) via [Overpass API](https://overpass-api.de) and [VK Maps Overpass](https://maps.mail.ru/osm/tools/overpass/) | Emergency facilities | ODbL 1.0 | Required |
 
 ## Third-party software
 

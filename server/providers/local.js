@@ -34,6 +34,7 @@ import { trafficIncidentsProxy } from './trafficIncidents/index.js';
 import { nwsAlertsProxy } from './nws/index.js';
 import { eonetProxy } from './eonet/index.js';
 import { usgsProxy } from './usgs.js';
+import { facilitiesProxy } from './facilities/index.js';
 
 /** Construct the local provider plugins in their established order. */
 function localProviderPlugins() {
@@ -72,6 +73,7 @@ function localProviderPlugins() {
     nwsAlertsProxy(),
     eonetProxy(),
     usgsProxy(),
+    facilitiesProxy(),
     gatewayStatusRoutes(),
     keySetupEndpoint(),
   ];

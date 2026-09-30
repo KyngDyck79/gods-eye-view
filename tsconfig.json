@@ -32,10 +32,14 @@
     "src/ui/cctvRate.js",
     "server/providers/nws/**/*.js",
     "server/providers/eonet/**/*.js",
+    "server/providers/facilities/**/*.js",
+    "server/providers/transitAgencies.js",
+    "src/data/transitAgencyConfig.js",
     "server/providers/usgs.js",
     "src/alerts/**/*.js",
     "src/layers/nwsWarnings/source.js",
     "src/layers/naturalEvents/source.js",
+    "src/layers/emergencyFacilities/source.js",
     "src/ui/alertsPanel.js"
   ]
 }

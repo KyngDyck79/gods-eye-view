@@ -572,7 +572,10 @@ function buildPhase3VesselsWorkload(count) {
         accent: '57, 213, 255',
         title: selected ? 'SELECTED VESSEL' : `VESSEL ${vesselIndex}`,
         details: selected
-          ? ['CARGO · 14.5KT · 231°', 'MMSI 353136000 · POS: LIVE']
+          ? [
+              'CARGO · 14.5KT · 231°',
+              'MMSI 353136000 · POS: 11:22:33Z · AGE 4S',
+            ]
           : ['CARGO · 14.5KT · 231°'],
         selected,
         priority: selected ? 100000 : vesselAmbientCount - vesselIndex,

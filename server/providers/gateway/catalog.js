@@ -181,6 +181,53 @@ export const PROVIDER_CATALOG = Object.freeze({
     }),
     verified: '2026-09-30',
   }),
+  aisstream: Object.freeze({
+    id: 'aisstream',
+    name: 'aisstream.io',
+    domain: 'marine',
+    sourceUrl: 'https://aisstream.io/documentation',
+    cost: 'Free (BETA, no SLA)',
+    apiKeyRequired: true,
+    rateLimit:
+      'One WebSocket per key; the gateway holds it and relays to the browser.',
+    license: 'aisstream.io terms (your own key)',
+    commercialUse: 'conditional',
+    updateFrequency: 'Live stream',
+    dataTypes: ['AIS vessel positions', 'vessel static data'],
+    attribution: Object.freeze({
+      text: 'Vessel positions: aisstream.io',
+      url: 'https://aisstream.io',
+      required: false,
+    }),
+    verified: '2026-09-30',
+  }),
+  'osm-overpass': Object.freeze({
+    id: 'osm-overpass',
+    name: 'OpenStreetMap (Overpass API)',
+    domain: 'facilities',
+    sourceUrl:
+      'https://dev.overpass-api.de/overpass-doc/en/preface/commons.html',
+    cost: 'Free (public instance) or your own instance',
+    apiKeyRequired: false,
+    rateLimit:
+      'Public instance: about 10,000 requests and 1 GB per day. Here: one query per 0.5° tile, cached 7 days on disk, at most 6 per minute and 100 per day. Public instances: overpass-api.de, then VK Maps.',
+    license: 'ODbL 1.0 (© OpenStreetMap contributors)',
+    commercialUse: 'allowed',
+    updateFrequency: 'Community edits; cached 7 days here',
+    dataTypes: [
+      'hospitals',
+      'fire stations',
+      'police',
+      'ambulance stations',
+      'shelters',
+    ],
+    attribution: Object.freeze({
+      text: '© OpenStreetMap contributors',
+      url: 'https://www.openstreetmap.org/copyright',
+      required: true,
+    }),
+    verified: '2026-09-30',
+  }),
   ourairports: Object.freeze({
     id: 'ourairports',
     name: 'OurAirports',

@@ -8,7 +8,25 @@ import {
   CAMERA_PERCENTAGE_CHANGED,
   TRANSIT_SELECTED_OVERLAY_SOURCE_ID,
 } from './policy.js';
-import { TRANSIT_ENABLED_FEEDS } from '../../data/transitFeeds.js';
+import {
+  addConfiguredTransitFeeds,
+  allTransitFeeds,
+} from '../../data/transitFeeds.js';
+
+/** Configured agencies are fetched once per page from the gateway catalog. */
+let configuredCatalogRequest = null;
+function loadConfiguredAgencies() {
+  configuredCatalogRequest ||= Promise.resolve()
+    .then(() => globalThis.fetch?.('/api/transit/feeds'))
+    .then((response) => (response?.ok ? response.json() : null))
+    .then((body) =>
+      addConfiguredTransitFeeds(
+        (body?.feeds || []).filter((feed) => feed?.configured === true),
+      ),
+    )
+    .catch(() => 0);
+  return configuredCatalogRequest;
+}
 
 /**
  * Init / enable / disable / update / destroy for one Transit layer instance.
@@ -162,7 +180,7 @@ export function createLifecycle({ state, services, parts }) {
       restoreSpriteOrder(viewer);
       bindStyleEvents();
       console.log(
-        `[Data:Transit] Initialized with ${TRANSIT_ENABLED_FEEDS.length} GTFS-RT feeds`,
+        `[Data:Transit] Initialized with ${allTransitFeeds().length} GTFS-RT feeds`,
       );
     },
 
@@ -196,6 +214,9 @@ export function createLifecycle({ state, services, parts }) {
       }
       parts.viewport.runProximityCheck();
       restoreSpriteOrder(viewer);
+      void loadConfiguredAgencies().then((added) => {
+        if (added && state._enabled) parts.viewport.runProximityCheck();
+      });
     },
 
     /**

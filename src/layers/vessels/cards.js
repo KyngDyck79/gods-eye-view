@@ -162,11 +162,30 @@ export function createCards({
     return Number.isFinite(heading) ? `${Math.round(heading)}DEG` : '--DEG';
   }
 
+  /** Compact age: 42S, 7M, 3H, 2D. */
+  function formatAge(ms) {
+    const sec = Math.max(0, Math.round(ms / 1000));
+    if (sec < 90) return `${sec}S`;
+    if (sec < 90 * 60) return `${Math.round(sec / 60)}M`;
+    if (sec < 36 * 3600) return `${Math.round(sec / 3600)}H`;
+    return `${Math.round(sec / 86400)}D`;
+  }
+
+  /**
+   * Position time plus message age (GODS-EYE-VIEW-SPEC v2, 4.15). With no
+   * reported position time, the age is from when the gateway received it.
+   */
   function formatPositionTime(record) {
-    if (!record.lastPositionUtc) return 'POS: LIVE';
-    const date = new Date(record.lastPositionUtc);
-    if (Number.isNaN(date.getTime())) return 'POS: LIVE';
-    return `POS: ${date.toISOString().slice(11, 19)}Z`;
+    const now = Date.now();
+    const date = record.lastPositionUtc
+      ? new Date(record.lastPositionUtc)
+      : null;
+    if (date && !Number.isNaN(date.getTime())) {
+      return `POS: ${date.toISOString().slice(11, 19)}Z · AGE ${formatAge(now - date.getTime())}`;
+    }
+    if (Number.isFinite(record.receivedAtMs))
+      return `POS: RCVD ${formatAge(now - record.receivedAtMs)} AGO`;
+    return 'POS: TIME NOT REPORTED';
   }
   return {
     updateSelectedVesselHud,

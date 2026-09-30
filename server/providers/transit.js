@@ -1,9 +1,14 @@
 import { createTransitService } from '../../src/sources/transitService.js';
 export { fetchTransitFeed } from '../../src/sources/transitService.js';
+import { loadTransitAgencies } from './transitAgencies.js';
 
 /** Connect the reusable transit request service to development and preview. */
 export function transitProxy(options = {}) {
-  const service = createTransitService(options);
+  const { problems } = loadTransitAgencies();
+  const service = createTransitService({
+    configProblems: () => problems,
+    ...options,
+  });
   function install(server) {
     server.middlewares.use('/api/transit', async (req, res) => {
       const response = await service.handle({
