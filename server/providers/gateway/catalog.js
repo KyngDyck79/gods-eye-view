@@ -228,6 +228,28 @@ export const PROVIDER_CATALOG = Object.freeze({
     }),
     verified: '2026-09-30',
   }),
+  'whisper-local': Object.freeze({
+    id: 'whisper-local',
+    name: 'Local speech server (whisper.cpp)',
+    domain: 'voice',
+    sourceUrl:
+      'https://github.com/ggml-org/whisper.cpp/tree/master/examples/server',
+    cost: 'Free; runs on this Mac',
+    apiKeyRequired: true,
+    needsKeyMessage:
+      'SPEECH SERVER NOT SET UP — add WHISPER_SERVER_URL (see VOICE-SETUP.md)',
+    rateLimit: 'Local; at most 60 transcriptions per minute here.',
+    license: 'MIT (whisper.cpp); OpenAI Whisper model weights MIT',
+    commercialUse: 'allowed',
+    updateFrequency: 'On request',
+    dataTypes: ['speech to text'],
+    attribution: Object.freeze({
+      text: 'Speech recognition: whisper.cpp (local)',
+      url: 'https://github.com/ggml-org/whisper.cpp',
+      required: false,
+    }),
+    verified: '2026-09-30',
+  }),
   ourairports: Object.freeze({
     id: 'ourairports',
     name: 'OurAirports',

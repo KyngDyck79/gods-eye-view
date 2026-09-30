@@ -393,3 +393,123 @@
   background: rgba(0, 0, 0, 0.35);
   border: 1px solid rgba(255, 255, 255, 0.14);
 }
+
+/* Voice settings (GODS-EYE-VIEW-SPEC v2, 4.20) */
+#voice-settings-panel {
+  position: fixed;
+  z-index: 195;
+  bottom: 7.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(26rem, calc(100vw - 2rem));
+  max-height: min(75vh, calc(100dvh - 9rem));
+  overflow-y: auto;
+  color: var(--text-primary);
+  background: rgba(7, 13, 22, 0.97);
+  border: 1px solid rgba(255, 77, 77, 0.45);
+  border-radius: 0.65rem;
+  box-shadow: 0 1.4rem 4.5rem rgba(0, 0, 0, 0.72);
+}
+#voice-settings-panel[hidden] {
+  display: none;
+}
+.voice-settings-body {
+  display: grid;
+  gap: 8px;
+  padding: 10px 12px 14px;
+  font-size: 12px;
+}
+.voice-settings-body h4 {
+  margin: 8px 0 0;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  color: rgba(255, 255, 255, 0.7);
+}
+.vs-row {
+  display: grid;
+  grid-template-columns: 96px minmax(0, 1fr);
+  align-items: center;
+  gap: 8px;
+}
+.vs-row > span {
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  color: rgba(255, 255, 255, 0.6);
+}
+.vs-row select,
+.vs-row input[type='text'] {
+  min-width: 0;
+  background: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 4px 6px;
+}
+.vs-check {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.vs-buttons {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.vs-meter {
+  height: 10px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  overflow: hidden;
+}
+.vs-meter i {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: linear-gradient(90deg, #3ddc84, #ffd23b 70%, #ff3b3b);
+  transition: width 60ms linear;
+}
+.vs-note {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 11px;
+}
+.vs-status[data-state='ok'] {
+  color: #3ddc84;
+}
+.vs-status[data-state='bad'] {
+  color: #ffb347;
+}
+.vs-warning {
+  margin: 0;
+  color: #ff6b6b;
+  font-size: 11px;
+}
+#gev-listening {
+  position: fixed;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10000;
+  padding: 4px 12px;
+  border: 1px solid #ff3b3b;
+  background: rgba(40, 0, 0, 0.85);
+  color: #ff5a5a;
+  font: 700 11px/1.4 monospace;
+  letter-spacing: 0.16em;
+  pointer-events: none;
+}
+#gev-listening[hidden] {
+  display: none;
+}
+#gev-ptt-button {
+  margin-top: 6px;
+  padding: 6px 10px;
+  border: 1px solid rgba(255, 59, 59, 0.7);
+  background: rgba(40, 0, 0, 0.6);
+  color: #fff;
+  font: 700 10px/1 monospace;
+  letter-spacing: 0.14em;
+  touch-action: none;
+}
+#gev-ptt-button[hidden] {
+  display: none;
+}

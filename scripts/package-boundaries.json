@@ -2067,7 +2067,14 @@
       "src/app/layers/nwsWarnings.js",
       "src/layers/emergencyFacilities/source.js",
       "src/layers/emergencyFacilities/index.js",
-      "src/app/layers/emergencyFacilities.js"
+      "src/app/layers/emergencyFacilities.js",
+      "src/voice/local/settings.js",
+      "src/voice/local/tts.js",
+      "src/voice/local/stt.js",
+      "src/voice/local/wav.js",
+      "src/voice/local/vad.js",
+      "src/voice/local/mic.js",
+      "src/voice/local/localSession.js"
     ],
     "external": [
       "hls.js",

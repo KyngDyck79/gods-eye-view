@@ -17,6 +17,7 @@ export function createVoiceControl({ reset = false } = {}) {
         <div class="gev-voice-cost">
           <button id="gev-voice-tier" class="gev-voice-tier-btn" type="button" aria-pressed="false" title="Voice model tier — applies next session">STD</button>
           <span id="gev-voice-cost-value" class="gev-voice-cost-value" data-level="ok" title="Estimated session cost">~$0.00</span>
+          <button id="gev-voice-settings-btn" class="gev-voice-tier-btn" type="button" title="Voice settings: microphone, engine, spoken replies">SET</button>
         </div>
       </div>
       <button id="gev-voice-button" type="button" aria-label="Voice control — activate to toggle voice; hold Space to speak" aria-describedby="gev-voice-help">

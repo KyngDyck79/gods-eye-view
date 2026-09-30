@@ -50,7 +50,9 @@
     "test:track": "node scripts/track-regression.mjs",
     "qa:map-source-tray": "node scripts/qa-map-source-tray.mjs",
     "check:boundaries": "node scripts/check-import-directions.mjs && node scripts/check-package-boundaries.mjs",
-    "qa:transit": "node scripts/qa-transit.mjs"
+    "qa:transit": "node scripts/qa-transit.mjs",
+    "speech:setup": "bash scripts/setup-speech.sh",
+    "speech": "bash scripts/start-speech.sh"
   },
   "dependencies": {
     "@jtarrio/signals": "^0.10.0",

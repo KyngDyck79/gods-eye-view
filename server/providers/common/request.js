@@ -5,8 +5,9 @@ async function readRequestBodyCapped(req, maxBytes) {
   for await (const chunk of req) {
     total += chunk.length;
     if (total > maxBytes) {
-      const err = new Error('Request body too large');
-      err.code = 'BODY_TOO_LARGE';
+      const err = Object.assign(new Error('Request body too large'), {
+        code: 'BODY_TOO_LARGE',
+      });
       throw err;
     }
     chunks.push(chunk);
@@ -30,8 +31,10 @@ function readRequestBody(req, maxBytes = 1024 * 1024) {
         // oversized body from a genuine failure without matching on text.
         bodyTooLarge = true;
         chunks.length = 0;
-        const error = new Error(`Request body exceeds ${maxBytes} bytes`);
-        error.code = 'BODY_TOO_LARGE';
+        const error = Object.assign(
+          new Error(`Request body exceeds ${maxBytes} bytes`),
+          { code: 'BODY_TOO_LARGE' },
+        );
         reject(error);
         return;
       }

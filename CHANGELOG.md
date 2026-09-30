@@ -1,5 +1,31 @@
 # Changelog
 
+## GOD'S EYE VIEW v2 — Phase 6: local voice (2026-09-30)
+
+- **Local voice is now the default** (decision 6A). The mic button uses your
+  chosen microphone. Speech is turned into text by whisper.cpp on this Mac,
+  through `/api/stt`, which answers this Mac only and refuses any speech
+  server that isn't on it. Nothing is saved.
+  - Web Speech is available as an engine, with its privacy and input notice.
+  - OpenAI Realtime stays available as an opt-in engine.
+- **Voice Settings** (the **SET** button on the voice control):
+  - engine and microphone picker (BlackHole 2ch preselected);
+  - live input level;
+  - noise suppression, voice activation (local speech detection), push to
+    talk (hold Space or HOLD TO TALK) and wake phrase;
+  - a 3-second local microphone test with playback and peak level;
+  - spoken-reply on/off, volume, speed and voice;
+  - flight levels;
+  - a warning if the Mac's output is BlackHole.
+- **● LISTENING** shows whenever audio is captured. Capture is muted while
+  GOD speaks.
+- **Aviation phrasing** for spoken replies: airline telephony ("American one
+  two three"), altitudes in words or flight levels, three-digit headings.
+- `npm run speech:setup` builds whisper.cpp's server and fetches `base.en`.
+  `npm run speech` starts it on 127.0.0.1:8178.
+- New doc: `VOICE-SETUP.md`, covering the exact AudioRelay → BlackHole steps
+  for the Galaxy S23 Ultra, plus troubleshooting.
+
 ## GOD'S EYE VIEW v2 — Phase 5: marine, transit agencies, emergency facilities (2026-09-30)
 
 - **Emergency Facilities (OSM)** layer (Infrastructure group, share token 5).

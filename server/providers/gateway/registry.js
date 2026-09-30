@@ -148,7 +148,9 @@ export function createProviderRegistry({
     if (!entry.configured()) {
       return {
         status: 'NEEDS_KEY',
-        message: `${entry.meta.name.toUpperCase()} NEEDS API KEY`,
+        message:
+          entry.meta.needsKeyMessage ||
+          `${entry.meta.name.toUpperCase()} NEEDS API KEY`,
       };
     }
     const budget = entry.budget?.snapshot?.() || null;

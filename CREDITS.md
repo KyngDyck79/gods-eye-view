@@ -34,6 +34,8 @@ Providers added or changed for v2 so far:
 | [NOAA National Weather Service](https://www.weather.gov/documentation/services-web-api) | Warning polygons, alerts | U.S. Government work | Courtesy |
 | [USGS](https://earthquake.usgs.gov) | Earthquake alerts | U.S. Government work | Courtesy |
 | [NASA EONET](https://eonet.gsfc.nasa.gov) | Natural events | NASA open data | Courtesy |
+| [whisper.cpp](https://github.com/ggml-org/whisper.cpp) | Local speech-to-text server (built by `npm run speech:setup`, not bundled) | MIT | Credited |
+| [BlackHole](https://existential.audio/blackhole/) and [AudioRelay](https://www.audiorelay.net) | Rod's microphone routing (installed separately, not bundled) | Their own licenses | Credited |
 | [OpenStreetMap](https://www.openstreetmap.org/copyright) via [Overpass API](https://overpass-api.de) and [VK Maps Overpass](https://maps.mail.ru/osm/tools/overpass/) | Emergency facilities | ODbL 1.0 | Required |
 
 ## Third-party software

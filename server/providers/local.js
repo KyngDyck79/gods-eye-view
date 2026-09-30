@@ -35,6 +35,7 @@ import { nwsAlertsProxy } from './nws/index.js';
 import { eonetProxy } from './eonet/index.js';
 import { usgsProxy } from './usgs.js';
 import { facilitiesProxy } from './facilities/index.js';
+import { whisperProxy } from './whisper/index.js';
 
 /** Construct the local provider plugins in their established order. */
 function localProviderPlugins() {
@@ -74,6 +75,7 @@ function localProviderPlugins() {
     eonetProxy(),
     usgsProxy(),
     facilitiesProxy(),
+    whisperProxy(),
     gatewayStatusRoutes(),
     keySetupEndpoint(),
   ];
