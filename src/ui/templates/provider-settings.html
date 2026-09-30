@@ -23,3 +23,25 @@
     </div>
     <p class="key-setup-note" data-key-setup-status role="status" aria-live="polite">The Google Maps key buys the photorealistic planet — everything else stacks on top.</p>
   </aside>
+
+  <!-- SYSTEM STATUS — diagnostics v1 (src/ui/systemStatus.js). Rows come from
+       GET /api/providers; nothing here is hard-coded provider state. -->
+  <button id="system-status-chip" type="button" hidden aria-haspopup="dialog" aria-controls="system-status" aria-expanded="false" data-status="IDLE">
+    <span class="material-symbols-outlined" aria-hidden="true">radar</span>
+    <span data-system-status-label>SYSTEM</span>
+  </button>
+  <aside id="system-status" role="dialog" aria-labelledby="system-status-title" hidden>
+    <header class="system-status-header">
+      <span class="system-status-kicker">GOD'S EYE VIEW · SYSTEM STATUS</span>
+      <button type="button" class="system-status-close" data-system-status-close aria-label="Close system status">
+        <span class="material-symbols-outlined" aria-hidden="true">close</span>
+      </button>
+    </header>
+    <h2 id="system-status-title">Data providers</h2>
+    <p class="system-status-mode" data-system-status-mode></p>
+    <div class="system-status-list" data-system-status-list></div>
+    <footer class="system-status-about">
+      <p><strong>GOD'S EYE VIEW</strong> · Created by Rod Smith</p>
+      <p>Built on the open-source God's Eye View project by Bilawal Sidhu and contributors (MIT License). See CREDITS.md.</p>
+    </footer>
+  </aside>
