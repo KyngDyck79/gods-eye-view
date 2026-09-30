@@ -20,6 +20,9 @@
     "server/providers/aircraft/viewport.js",
     "server/providers/aircraft/viewportRoute.js",
     "src/search/airportGeocoder.js",
-    "src/ui/systemStatus.js"
+    "src/ui/systemStatus.js",
+    "server/providers/aviationWeather/**/*.js",
+    "src/audio/**/*.js",
+    "src/ui/cockpitAtc.js"
   ]
 }

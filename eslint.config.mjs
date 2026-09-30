@@ -22,6 +22,10 @@ const V2_FILES = [
   'src/search/airportGeocoder.test.mjs',
   'src/ui/systemStatus.js',
   'src/ui/systemStatus.test.mjs',
+  'server/providers/aviationWeather/**/*.js',
+  'src/audio/**/*.{js,mjs}',
+  'src/ui/cockpitAtc.js',
+  'src/ui/cockpitAtc.test.mjs',
   'eslint.config.mjs',
 ];
 

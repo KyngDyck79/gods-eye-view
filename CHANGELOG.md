@@ -1,5 +1,26 @@
 # Changelog
 
+## GOD'S EYE VIEW v2 — Phase 2: cockpit, frequencies, aviation weather (2026-09-30)
+
+- The cockpit briefing has a fourth page, **ATC**: nearest airport and runway,
+  the estimated ATC facility and frequency with a HIGH/MEDIUM/LOW confidence
+  and a plain-English reason, ATIS, the airport's METAR (decoded and raw, with
+  its age) and TAF. When the field has no METAR, the nearest reporting
+  station is shown and named.
+- New frequency engine (`/api/airports/frequency`) following the spec's
+  ground / tower / approach / departure / en-route rules, with runway
+  alignment. Every frequency comes from OurAirports; above FL180 or beyond 40
+  nm it says "En-route (Center) frequency not in dataset" instead of guessing.
+- New AviationWeather.gov provider (`/api/avwx/metar`, `/taf`, `/nearest`)
+  using the official cache files, never per-station polling. METARs older than
+  90 minutes are marked STALE. Outages read "WEATHER DATA TEMPORARILY
+  UNAVAILABLE".
+- New AudioBus: one audible stream at a time. Radio now claims it, so any
+  future ATC stream stops the radio and vice versa. The ATC page has
+  LISTEN / STOP / MUTE / VOLUME / frequency / source / status controls, which
+  read NO AUDIO SOURCE until Phase 3 adds sources.
+- Cockpit briefing panel no longer grows wider than its window.
+
 ## GOD'S EYE VIEW v2 — Phase 1: gateway and live aircraft (2026-09-29)
 
 - Live aircraft come from a new `/api/aircraft` route that fetches only the

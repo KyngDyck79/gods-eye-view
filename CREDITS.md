@@ -28,6 +28,7 @@ Providers added or changed for v2 so far:
 | [OpenSky Network](https://openskynetwork.github.io/opensky-api/rest.html) | Live aircraft (fallback), tracks | Non-commercial terms of use | Required |
 | [adsbdb](https://github.com/mrjackwills/adsbdb) | Plausible routes, aircraft type | No service licence published; route data by David Taylor (Edinburgh) and Jim Mason (Glasgow), display only — not to be copied or republished | Credited |
 | [OurAirports](https://ourairports.com/data/) | Airports, runways, frequencies, navaids | Public domain | Courtesy |
+| [AviationWeather.gov](https://aviationweather.gov/data/api/) | METAR and TAF | U.S. Government work (NOAA/NWS) | Courtesy |
 
 ## Third-party software
 
