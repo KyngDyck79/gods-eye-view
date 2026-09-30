@@ -108,9 +108,9 @@ export function createModel({ state: layerState, services, parts, source }) {
     // untouched (flow stays undefined → multiplier 1, identical output).
     const flow = layerState._liveMode ? road.flow : null;
     if (flow?.closure) return 0;
-    // Strict data-integrity view: uncovered roads spawn nothing when hidden.
-    if (layerState._liveMode && !flow && layerState._uncoveredMode === 'hide')
-      return 0;
+    // Strict data-integrity view (default): roads without measured flow spawn
+    // nothing, keyless or live.
+    if (!flow && layerState._uncoveredMode === 'hide') return 0;
 
     const lengthM = estimateRoadLengthDeg(road.coords);
 
@@ -231,6 +231,9 @@ export function createModel({ state: layerState, services, parts, source }) {
    * @param {number} [input.coveragePct] - Share of shown dots on matched roads, 0–100.
    * @param {boolean} [input.statusUnavailable] - The status probe itself failed.
    * @param {string} [input.roadSource] - Name of the geometry being drawn.
+   * @param {'sim'|'hide'} [input.uncoveredMode] - Whether roads without
+   *   measured flow are simulated ('sim') or drawn empty ('hide', the layer's
+   *   default). Omitted means 'sim', the historical wording.
    * @returns {{mode:'live'|'sim', error:string|null, loadingLabel:string}}
    */
 
@@ -241,11 +244,17 @@ export function createModel({ state: layerState, services, parts, source }) {
     coveragePct = 0,
     statusUnavailable = false,
     roadSource = 'OpenStreetMap',
+    uncoveredMode = 'sim',
   } = {}) {
+    const hidden = uncoveredMode === 'hide';
     // `mode` is the CONFIGURED source (live key present vs keyless), not this
     // instant's health — health rides on `error`. The qa-traffic harness pins
     // that meaning.
     const mode = liveMode ? 'live' : 'sim';
+    if (liveMode && flowError && hidden) {
+      const down = `ROAD SPEEDS UNAVAILABLE — ${flowError}`;
+      return { mode, error: down, loadingLabel: down };
+    }
     if (liveMode && flowError) {
       // One string for both fields. The manager's meta line renders `error` and
       // drops `loadingLabel` in its error branch, so the owner's SIMULATED copy
@@ -266,6 +275,15 @@ export function createModel({ state: layerState, services, parts, source }) {
             : 'LIVE · Roads: TomTom · No flow roads in view',
       };
     }
+    if (liveMode && roadSource === 'TomTom + OpenStreetMap' && hidden) {
+      return {
+        mode,
+        error: null,
+        loadingLabel: fetching
+          ? `Syncing flow · Roads: ${roadSource}`
+          : `${coveragePct > 0 ? 'LIVE' : 'NO FLOW IN VIEW'} · Roads: ${roadSource} · Roads without flow hidden`,
+      };
+    }
     if (liveMode && roadSource === 'TomTom + OpenStreetMap') {
       return {
         mode,
@@ -273,6 +291,17 @@ export function createModel({ state: layerState, services, parts, source }) {
         loadingLabel: fetching
           ? `Syncing flow · Roads: ${roadSource}`
           : `${coveragePct > 0 ? 'LIVE' : 'SIMULATED'} · Roads: ${roadSource} · Flow ${coveragePct}%`,
+      };
+    }
+    if (liveMode && hidden) {
+      return {
+        mode,
+        error: null,
+        loadingLabel: fetching
+          ? 'Syncing flow · Roads: OpenStreetMap · Flow: TomTom'
+          : coveragePct > 0
+            ? `LIVE · Roads: OpenStreetMap · Flow: TomTom · ${coveragePct}% cov · Unmatched hidden`
+            : 'NO FLOW IN VIEW · Roads: OpenStreetMap · Flow: TomTom',
       };
     }
     if (liveMode) {
@@ -284,6 +313,17 @@ export function createModel({ state: layerState, services, parts, source }) {
           : coveragePct > 0
             ? `LIVE · Roads: OpenStreetMap · Flow: TomTom · ${coveragePct}% cov${coveragePct < 100 ? ' · Unmatched: simulated' : ''}`
             : 'SIMULATED · Roads: OpenStreetMap · Flow: TomTom (no matches)',
+      };
+    }
+    // Keyless with simulation off (the default): nothing is drawn, and the
+    // line says why and what would turn real data on.
+    if (hidden) {
+      return {
+        mode,
+        error: null,
+        loadingLabel: statusUnavailable
+          ? 'Road speeds: traffic service unreachable'
+          : 'Road speeds: no source configured — add a TomTom key',
       };
     }
     // Keyless simulation — one terse line that names the mode and the remedy

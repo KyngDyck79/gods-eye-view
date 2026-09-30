@@ -62,6 +62,9 @@ function setup(t, requestRoads, getStatus = async () => ({ hasKey: false })) {
       resetFlowTileCache() {},
     },
   });
+  // Road/dot navigation behavior needs dots even without a TomTom key: opt
+  // into simulation (off by default since v2).
+  layer.setParams({ uncoveredRoads: 'sim' });
   layer.init(viewer);
   t.after(() => layer.destroy(viewer));
   const move = (lon, lat, height = 3200) => {

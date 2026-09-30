@@ -211,8 +211,12 @@ test('row chips use real params; query overrides passive restore and user can ch
     layer.setParams({ roadMode: 'osm' }, { origin: 'local-restore' });
     assert.equal(layer.getParams().roadMode, 'tomtom');
     const chips = layer.getRowControls().chips;
-    assert.equal(chips.length, 3);
+    // Three road-source chips plus the simulation switch (off by default).
+    assert.equal(chips.length, 4);
     assert.equal(chips[0].active, true);
+    assert.equal(chips[3].id, 'uncovered-simulation');
+    assert.equal(chips[3].active, false);
+    assert.deepEqual(chips[3].params, { uncoveredRoads: 'sim' });
     layer.setParams(chips[2].params, { origin: 'user' });
     assert.equal(layer.getParams().roadMode, 'hybrid');
     assert.match(layer.getStats().loadingLabel, /Hybrid needs a TomTom key/);

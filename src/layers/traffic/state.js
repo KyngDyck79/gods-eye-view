@@ -143,7 +143,9 @@ export function createState({ services }) {
 
   /** @type {'sim'|'hide'} Live-mode treatment of roads without flow data. */
 
-  layerState._uncoveredMode = 'sim';
+  // Roads with no measured flow draw nothing unless simulation is switched on
+  // (GODS-EYE-VIEW-SPEC v2: never infer speeds from nothing; decision 3B).
+  layerState._uncoveredMode = 'hide';
 
   /**
    * Jam-viz prototype mode: 'density' = deep-jam density boost + platoon queues

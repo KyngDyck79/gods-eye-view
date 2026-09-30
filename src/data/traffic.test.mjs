@@ -167,3 +167,20 @@ test('zero matched dots never claims live coverage', () => {
   assert.match(feed.loadingLabel, /TomTom \(no matches\)/);
   assert.ok(!LIVE_CLAIM.test(feed.loadingLabel));
 });
+
+test('with simulation off (the default), keyless traffic says there is no road-speed source', () => {
+  const keyless = trafficFeedPresentation({ uncoveredMode: 'hide' });
+  assert.equal(keyless.loadingLabel, 'Road speeds: no source configured — add a TomTom key');
+  assert.equal(
+    trafficFeedPresentation({ uncoveredMode: 'hide', statusUnavailable: true }).loadingLabel,
+    'Road speeds: traffic service unreachable',
+  );
+  const live = trafficFeedPresentation({ liveMode: true, uncoveredMode: 'hide', coveragePct: 60 });
+  assert.equal(live.loadingLabel, 'LIVE · Roads: OpenStreetMap · Flow: TomTom · 60% cov · Unmatched hidden');
+  for (const input of [{}, { liveMode: true }, { liveMode: true, roadSource: 'TomTom + OpenStreetMap' }]) {
+    assert.doesNotMatch(
+      trafficFeedPresentation({ ...input, uncoveredMode: 'hide' }).loadingLabel,
+      /SIMULATED|simulated/,
+    );
+  }
+});

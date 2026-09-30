@@ -39,8 +39,9 @@ export function createAnimation({
     // byte-identical): closures spawn nothing, congestion colors/slows dots.
     const flow = layerState._liveMode ? road.flow : null;
     if (flow?.closure) return;
-    if (layerState._liveMode && !flow && layerState._uncoveredMode === 'hide')
-      return;
+    // No measured flow (keyless, or TomTom has none for this road): nothing
+    // is drawn unless the user switched simulation on.
+    if (!flow && layerState._uncoveredMode === 'hide') return;
 
     const count = Number.isFinite(budgetCount)
       ? Math.max(0, Math.floor(budgetCount))

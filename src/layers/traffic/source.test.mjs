@@ -115,11 +115,13 @@ test('traffic construction is inert and parameters belong to each layer', async 
   const services = { credits: {}, render: {} };
   const a = createTrafficLayer({ services, source });
   const b = createTrafficLayer({ services, source });
-  a.setParams({ densityScale: 2, speedScale: 3, uncoveredRoads: 'hide' });
+  a.setParams({ densityScale: 2, speedScale: 3, uncoveredRoads: 'sim' });
   assert.equal(a.getParams().densityScale, 2);
+  assert.equal(a.getParams().uncoveredRoads, 'sim');
   assert.equal(b.getParams().densityScale, 1);
   assert.equal(b.getParams().speedScale, 1);
-  assert.equal(b.getParams().uncoveredRoads, 'sim');
+  // Simulation is off by default (decision 3B).
+  assert.equal(b.getParams().uncoveredRoads, 'hide');
 });
 
 test('road tile replies respect cancellation even when the tile source ignores it', async () => {
@@ -410,7 +412,10 @@ const ofmDetail = decodeOpenFreeMapTile(
   6745,
 );
 
-async function matchingContext(fetchFlowForBounds) {
+async function matchingContext(
+  fetchFlowForBounds,
+  { uncoveredMode = 'sim' } = {},
+) {
   const { createState } = await import('./state.js');
   const { createModel } = await import('./model.js');
   const { createFlow } = await import('./flow.js');
@@ -420,6 +425,8 @@ async function matchingContext(fetchFlowForBounds) {
     _liveMode: true,
     _enabled: true,
     _flowStatusPromise: Promise.resolve(),
+    // Matching tests cover the simulated-unmatched mode unless told otherwise.
+    _uncoveredMode: uncoveredMode,
   });
   const source = {
     fetchFlowForBounds,
@@ -528,6 +535,23 @@ test('refresh failure removes cached matches and reports simulated flow', async 
     /SIMULATED — TomTom daily budget reached/,
   );
   assert.equal(state._flowPending, 0);
+});
+
+test('with simulation off (the default), a refresh failure says road speeds are unavailable', async () => {
+  const { flow, controls } = await matchingContext(
+    async () => {
+      throw new Error('HTTP 429');
+    },
+    { uncoveredMode: 'hide' },
+  );
+  const { model } = await matchingContext(async () => []);
+  const roads = model.parseRoads({ roads: ofmDetail.roads });
+  await flow.applyFlowToRoads(roads, bounds, 0);
+  assert.match(
+    controls.getStats().loadingLabel,
+    /^ROAD SPEEDS UNAVAILABLE — TomTom daily budget reached/,
+  );
+  assert.doesNotMatch(controls.getStats().loadingLabel, /SIMULATED/);
 });
 
 test('superseded flow cannot apply matches after a camera move or disable', async () => {

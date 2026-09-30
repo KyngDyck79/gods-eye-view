@@ -165,17 +165,32 @@ export function createControls({ state: layerState, services, parts, source }) {
       const titles = {
         tomtom: `TomTom roads only, each with its live flow${needsKey}`,
         osm: 'OpenStreetMap roads, with TomTom flow matched when available',
-        hybrid: `TomTom roads first; OpenStreetMap fills the rest, simulated${needsKey}`,
+        hybrid: `TomTom roads first; OpenStreetMap fills the rest${needsKey}`,
       };
       const labels = { tomtom: 'TomTom', osm: 'OSM', hybrid: 'Hybrid' };
+      const simulating = layerState._uncoveredMode === 'sim';
       return {
-        chips: TRAFFIC_ROAD_MODES.map((mode) => ({
-          id: `roads-${mode}`,
-          label: labels[mode],
-          title: titles[mode],
-          active: mode === selected,
-          params: { roadMode: mode },
-        })),
+        chips: [
+          ...TRAFFIC_ROAD_MODES.map((mode) => ({
+            id: `roads-${mode}`,
+            label: labels[mode],
+            title: titles[mode],
+            active: mode === selected,
+            params: { roadMode: mode },
+          })),
+          // Off by default: roads without measured flow draw nothing. When on,
+          // those roads get made-up white dots at fixed per-road-class
+          // speeds, and every status line says SIMULATED.
+          {
+            id: 'uncovered-simulation',
+            label: simulating ? 'SIMULATED DOTS ON' : 'SIMULATION OFF',
+            title: simulating
+              ? 'Roads without measured flow show simulated dots (not real traffic). Click to turn simulation off.'
+              : 'Roads without measured flow show nothing. Click to show simulated dots instead (not real traffic).',
+            active: simulating,
+            params: { uncoveredRoads: simulating ? 'hide' : 'sim' },
+          },
+        ],
       };
     },
 
@@ -294,6 +309,7 @@ export function createControls({ state: layerState, services, parts, source }) {
         coveragePct: flowCoveragePct,
         statusUnavailable: layerState._flowStatusUnavailable,
         roadSource: layerState._roadSource,
+        uncoveredMode: layerState._uncoveredMode,
       });
       return {
         count: layerState._count,

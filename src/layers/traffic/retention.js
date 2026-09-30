@@ -60,9 +60,7 @@ export function createRetention({ state, parts }) {
       record.road.flow = record.road.source.flow;
       if (
         record.road.flow?.closure ||
-        (state._liveMode &&
-          !record.road.flow &&
-          state._uncoveredMode === 'hide')
+        (!record.road.flow && state._uncoveredMode === 'hide')
       )
         record.target = 0;
       for (let i = record.dots.length - 1; i >= 0 && budget > 0; i--) {
