@@ -141,9 +141,42 @@ export class LocationNavigation {
       getExpandedCity: () => this._expandedCityId,
       onCity: (id) => this._onCityPillClick(id),
       onPoi: (id, index) => this._onPoiClick(id, index),
-      onSearch: (query) => this._locationLookup.run(query),
+      onSearch: (query) => {
+        if (this._trackLiveAircraft(query)) return;
+        this._locationLookup.run(query);
+      },
       onReset: () => this.resetToGlobeView(),
     });
+  }
+
+  /**
+   * Search box, live objects first: an exact callsign, registration or ICAO
+   * hex of a loaded aircraft tracks it instead of geocoding the text.
+   * Partial matches never win, so ordinary place names still fly.
+   * @returns {boolean} Whether the query was handled as an aircraft.
+   */
+  _trackLiveAircraft(query) {
+    const q = String(query || '')
+      .replace(/\s+/g, '')
+      .toUpperCase();
+    if (!/^[A-Z0-9-]{3,8}$/.test(q) || !/\d/.test(q)) return false;
+    const layer = this.services.flightsLayer;
+    const found = layer?.findByQuery?.(q);
+    if (!found) return false;
+    const exact = [found.callsign, found.registration, found.icao24].some(
+      (value) =>
+        String(value || '')
+          .replace(/\s+/g, '')
+          .toUpperCase() === q,
+    );
+    if (!exact) return false;
+    const tracked = !!layer.trackById?.(found.icao24, { origin: 'user' });
+    if (tracked) {
+      this._showToast(
+        `Tracking ${found.callsign || found.registration || found.icao24}`,
+      );
+    }
+    return tracked;
   }
 
   _beginWorldJumpTransition() {

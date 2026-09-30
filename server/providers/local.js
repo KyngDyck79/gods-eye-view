@@ -25,6 +25,9 @@ import { weatherProxy } from './weather.js';
 import { firePerimetersProxy } from './firePerimeters.js';
 import { cycloneProxy } from './cyclones.js';
 import { windProxy } from './wind.js';
+import { aircraftViewportProxy } from './aircraft/viewportRoute.js';
+import { gatewayStatusRoutes } from './gateway/routes.js';
+import { airportsProxy } from './airports/index.js';
 
 /** Construct the local provider plugins in their established order. */
 function localProviderPlugins() {
@@ -55,6 +58,9 @@ function localProviderPlugins() {
     weatherProxy(),
     cycloneProxy(),
     firePerimetersProxy(),
+    aircraftViewportProxy(),
+    airportsProxy(),
+    gatewayStatusRoutes(),
     keySetupEndpoint(),
   ];
 }
