@@ -29,6 +29,13 @@
     "server/providers/cctv/cadence.js",
     "src/layers/trafficIncidents/source.js",
     "src/ui/audioSourcesDialog.js",
-    "src/ui/cctvRate.js"
+    "src/ui/cctvRate.js",
+    "server/providers/nws/**/*.js",
+    "server/providers/eonet/**/*.js",
+    "server/providers/usgs.js",
+    "src/alerts/**/*.js",
+    "src/layers/nwsWarnings/source.js",
+    "src/layers/naturalEvents/source.js",
+    "src/ui/alertsPanel.js"
   ]
 }

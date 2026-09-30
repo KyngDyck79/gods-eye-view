@@ -31,6 +31,9 @@ Providers added or changed for v2 so far:
 | [AviationWeather.gov](https://aviationweather.gov/data/api/) | METAR and TAF | U.S. Government work (NOAA/NWS) | Courtesy |
 | [TomTom](https://docs.tomtom.com/traffic-api/documentation/tomtom-maps/traffic-incidents/incident-details) | Traffic incidents (your key) | TomTom for Developers terms | Required |
 | [LiveATC.net](https://www.liveatc.net/) | External link only, never embedded | LiveATC terms (personal use) | Linked |
+| [NOAA National Weather Service](https://www.weather.gov/documentation/services-web-api) | Warning polygons, alerts | U.S. Government work | Courtesy |
+| [USGS](https://earthquake.usgs.gov) | Earthquake alerts | U.S. Government work | Courtesy |
+| [NASA EONET](https://eonet.gsfc.nasa.gov) | Natural events | NASA open data | Courtesy |
 
 ## Third-party software
 

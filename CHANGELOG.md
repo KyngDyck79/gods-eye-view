@@ -1,5 +1,26 @@
 # Changelog
 
+## GOD'S EYE VIEW v2 — Phase 4: warnings, natural events, alerts (2026-09-30)
+
+- **Weather Warnings (NWS)** layer (Weather group, share token 3): active NWS
+  warning, watch and advisory polygons in view, in the official NWS hazard
+  colors. The gateway downloads the national feed at most every 90 s.
+- **Natural Events (NASA EONET)** layer (Events group, share token 4): open
+  wildfires, volcanoes and storms from the last 30 days, with storm tracks
+  and source links.
+- **ALERTS** chip and feed (top right): emergency squawks (7500/7600/7700 or
+  an emergency status, in neutral wording), NWS Tornado / Severe
+  Thunderstorm / Flash Flood warnings in view, earthquakes at or above a set
+  magnitude within a set radius, and providers going offline or rate
+  limited. Alerts are timestamped and de-duplicated, clicking one flies there
+  or tracks the aircraft, and each rule has ON and VOICE switches. With VOICE
+  on, an alert is read aloud once, never twice.
+- Gateway routes: `/api/nws/alerts` (view or point), `/api/eonet/events`,
+  `/api/usgs/{feed}`.
+- Already in place and kept: the radar loop with play and UTC frame
+  timestamps, NHC cyclone cones, and the ISS ground track and pass
+  predictions.
+
 ## GOD'S EYE VIEW v2 — Phase 3: ATC audio, traffic, cameras (2026-09-30)
 
 - **ATC audio.** The cockpit ATC page lists your own audio sources for the

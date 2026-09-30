@@ -19,6 +19,8 @@ import { createWindSource } from '../layers/wind/source.js';
 import { createFirmsSource } from '../layers/firms/source.js';
 import { createReferenceSources } from '../sources/reference.js';
 import { createTrafficIncidentSource } from '../layers/trafficIncidents/source.js';
+import { createNwsWarningSource } from '../layers/nwsWarnings/source.js';
+import { createNaturalEventSource } from '../layers/naturalEvents/source.js';
 export { createReferenceSources as createStandaloneReferenceSources } from '../sources/reference.js';
 
 /** Select standalone providers without starting their acquisition. */
@@ -35,6 +37,8 @@ export function createStandaloneLayerSources() {
     radio: createRadioSource(),
     traffic: createTrafficSource({ mapTiles }),
     'traffic-incidents': createTrafficIncidentSource(),
+    'nws-warnings': createNwsWarningSource(),
+    'natural-events': createNaturalEventSource(),
     transit: createTransitSource(),
     bikeshare: createBikeshareSource(),
     installations: createInstallationSource({ mapTiles }),

@@ -74,3 +74,23 @@
       <p class="system-status-message" data-audio-sources-status role="status"></p>
     </form>
   </aside>
+
+  <!-- ALERTS — timestamped alert feed (src/ui/alertsPanel.js). -->
+  <button id="alerts-chip" type="button" hidden aria-haspopup="dialog" aria-controls="alerts-panel" aria-expanded="false" data-count="0">
+    <span class="material-symbols-outlined" aria-hidden="true">flare</span>
+    <span data-alerts-label>ALERTS</span>
+  </button>
+  <aside id="alerts-panel" role="dialog" aria-labelledby="alerts-title" hidden>
+    <header class="system-status-header">
+      <span class="system-status-kicker">GOD'S EYE VIEW · ALERTS</span>
+      <button type="button" class="system-status-close" data-alerts-close aria-label="Close alerts">
+        <span class="material-symbols-outlined" aria-hidden="true">close</span>
+      </button>
+    </header>
+    <h2 id="alerts-title">Alerts</h2>
+    <div class="system-status-list" data-alerts-list></div>
+    <details class="alerts-rules">
+      <summary>Rules</summary>
+      <div data-alerts-rules></div>
+    </details>
+  </aside>

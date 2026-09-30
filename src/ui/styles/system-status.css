@@ -279,3 +279,117 @@
   border-radius: 0.3rem;
   cursor: pointer;
 }
+
+/* ALERTS chip (top right, under the style indicator) and feed. */
+#alerts-chip {
+  position: fixed;
+  top: 4.4rem;
+  right: 0.9rem;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.7rem;
+  color: rgba(225, 244, 248, 0.92);
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.09rem;
+  background: rgba(7, 13, 22, 0.9);
+  border: 1px solid rgba(54, 220, 255, 0.38);
+  border-radius: 0.42rem;
+  cursor: pointer;
+}
+#alerts-chip[hidden] {
+  display: none;
+}
+#alerts-chip:not([data-count='0']) {
+  border-color: #ff4d4d;
+  color: #fff;
+}
+#alerts-chip:not([data-count='0']) .material-symbols-outlined {
+  color: #ff4d4d;
+}
+#alerts-panel {
+  position: fixed;
+  z-index: 190;
+  top: 6.8rem;
+  right: 0.9rem;
+  width: min(28rem, calc(100vw - 2rem));
+  max-height: min(70vh, calc(100dvh - 8rem));
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1rem;
+  overflow: auto;
+  color: var(--text-primary);
+  background: rgba(7, 13, 22, 0.96);
+  border: 1px solid rgba(255, 77, 77, 0.45);
+  border-radius: 0.65rem;
+  box-shadow: 0 1.4rem 4.5rem rgba(0, 0, 0, 0.72);
+}
+#alerts-panel[hidden] {
+  display: none;
+}
+#alerts-panel h2 {
+  margin: 0;
+  font-size: 1rem;
+}
+.alerts-row {
+  display: grid;
+  gap: 0.15rem;
+  width: 100%;
+  padding: 0.5rem 0.6rem;
+  text-align: left;
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-left: 3px solid #ffb13b;
+  border-radius: 0.4rem;
+  cursor: pointer;
+}
+.alerts-row.alerts-high {
+  border-left-color: #ff4d4d;
+}
+.alerts-row.alerts-low {
+  border-left-color: #55dff5;
+}
+.alerts-row.alerts-cleared {
+  opacity: 0.5;
+}
+.alerts-time {
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  color: var(--text-secondary);
+}
+.alerts-title {
+  font-size: 0.78rem;
+}
+.alerts-detail {
+  font-size: 0.66rem;
+  color: var(--text-secondary);
+}
+.alerts-rules summary {
+  cursor: pointer;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  color: #55dff5;
+}
+.alerts-rule {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem 0.6rem;
+  margin-top: 0.4rem;
+  font-size: 0.66rem;
+}
+.alerts-rule-label {
+  flex-basis: 100%;
+  color: var(--text-secondary);
+}
+.alerts-rule input[type='number'] {
+  width: 5rem;
+  padding: 0.2rem;
+  color: var(--text-primary);
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+}

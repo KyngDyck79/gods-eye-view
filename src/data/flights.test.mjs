@@ -73,6 +73,9 @@ test('flights analyst record: full record maps every contract field', () => {
     operator: 'Southwest Airlines',
     routeOrigin: 'AUS',
     routeDestination: 'LAX',
+    squawk: null,
+    emergency: null,
+    registration: null,
   });
 });
 

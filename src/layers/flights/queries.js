@@ -263,6 +263,10 @@ export function createQueries({
       operator: text(info?.airline),
       routeOrigin: routeOk ? text(info?.route?.origin?.code) : null,
       routeDestination: routeOk ? text(info?.route?.destination?.code) : null,
+      // Transponder state as reported (alerts engine; may be set in error).
+      squawk: text(info?.squawk),
+      emergency: text(info?.emergency),
+      registration: text(info?.registration),
     };
   }
   const methods = {

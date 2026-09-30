@@ -33,6 +33,13 @@ const V2_FILES = [
   'src/ui/audioSourcesDialog.js',
   'src/ui/cctvRate.js',
   'src/ui/cctvRate.test.mjs',
+  'server/providers/nws/**/*.js',
+  'server/providers/eonet/**/*.js',
+  'server/providers/usgs.js',
+  'src/alerts/**/*.{js,mjs}',
+  'src/layers/nwsWarnings/**/*.js',
+  'src/layers/naturalEvents/**/*.js',
+  'src/ui/alertsPanel.js',
   'eslint.config.mjs',
 ];
 

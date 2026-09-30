@@ -2056,7 +2056,13 @@
       "src/ui/cctvRate.js",
       "src/audio/streamPlayer.js",
       "src/data/tapAddress.js",
-      "src/audio/sources.js"
+      "src/audio/sources.js",
+      "src/layers/nwsWarnings/source.js",
+      "src/layers/naturalEvents/source.js",
+      "src/layers/nwsWarnings/index.js",
+      "src/layers/naturalEvents/index.js",
+      "src/app/layers/naturalEvents.js",
+      "src/app/layers/nwsWarnings.js"
     ],
     "external": [
       "hls.js",
@@ -2545,7 +2551,13 @@
       "src/audio/audioBus.js",
       "src/layers/trafficIncidents/source.js",
       "src/layers/trafficIncidents/index.js",
-      "src/app/layers/trafficIncidents.js"
+      "src/app/layers/trafficIncidents.js",
+      "src/layers/nwsWarnings/source.js",
+      "src/layers/nwsWarnings/index.js",
+      "src/layers/naturalEvents/source.js",
+      "src/app/layers/nwsWarnings.js",
+      "src/layers/naturalEvents/index.js",
+      "src/app/layers/naturalEvents.js"
     ],
     "external": [
       "hls.js",

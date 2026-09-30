@@ -31,6 +31,9 @@ import { airportsProxy } from './airports/index.js';
 import { aviationWeatherProxy } from './aviationWeather/index.js';
 import { audioRelayProxy } from './audio/relay.js';
 import { trafficIncidentsProxy } from './trafficIncidents/index.js';
+import { nwsAlertsProxy } from './nws/index.js';
+import { eonetProxy } from './eonet/index.js';
+import { usgsProxy } from './usgs.js';
 
 /** Construct the local provider plugins in their established order. */
 function localProviderPlugins() {
@@ -66,6 +69,9 @@ function localProviderPlugins() {
     aviationWeatherProxy(),
     audioRelayProxy(),
     trafficIncidentsProxy(),
+    nwsAlertsProxy(),
+    eonetProxy(),
+    usgsProxy(),
     gatewayStatusRoutes(),
     keySetupEndpoint(),
   ];

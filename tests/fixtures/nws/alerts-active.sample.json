@@ -1,0 +1,144 @@
+{
+ "type": "FeatureCollection",
+ "features": [
+  {
+   "type": "Feature",
+   "id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.22b343657e560ffaa446edf4432cc583b2763455.001.1",
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -95.01,
+       39.91
+      ],
+      [
+       -94.89,
+       39.9
+      ],
+      [
+       -94.83,
+       39.75
+      ],
+      [
+       -94.88,
+       39.64
+      ],
+      [
+       -95.05,
+       39.7
+      ],
+      [
+       -95.01,
+       39.91
+      ]
+     ]
+    ]
+   },
+   "properties": {
+    "id": "urn:oid:2.49.0.1.840.0.22b343657e560ffaa446edf4432cc583b2763455.001.1",
+    "areaDesc": "Doniphan, KS; Andrew, MO; Buchanan, MO",
+    "sent": "2026-09-30T10:26:00-05:00",
+    "effective": "2026-09-30T10:26:00-05:00",
+    "expires": "2026-10-01T10:30:00-05:00",
+    "ends": "2026-10-05T04:00:00-05:00",
+    "severity": "Severe",
+    "certainty": "Likely",
+    "urgency": "Expected",
+    "event": "Flood Warning",
+    "senderName": "NWS Kansas City/Pleasant Hill MO",
+    "headline": "Flood Warning issued September 30 at 10:26AM CDT until October 5 at 4:00AM CDT by NWS Kansas City/Pleasant Hill MO",
+    "description": "...The National Weather Service in Kansas City/Pleasant Hill has\nissued a Flood Warning for the following rivers in Kansas...\nMissouri...\n\nMissouri River at St Joseph affecting Andrew, Buchanan and Doniphan\nCounties.\n\nThis product along with additional weather and stream information is\navailable at www.weather.gov/kc/.\n\n* WHAT...Minor flooding is forecast.\n\n* WHERE...Missouri River at St Joseph.\n\n* WHEN...From Thursday evening to late Sunday night.\n\n* IMPACTS...At 17.0 feet, Lowland flooding upstream and downstream\nfrom St. Joseph occurs. At 19.0 feet, Backwater from the Missouri\nRiver floods property along the Nodaway river at Nodaway, Missouri.\nAt 21.0 feet, Riverfront Park in St. Joseph begins to flood.\n\n* ADDITIONAL DETAILS...\n- At 10:00 AM CDT Wednesday the stage was 8.9 feet.\n- Forecast...The river will rise above flood stage late tomorrow\nevening to 20.7 feet Friday evening. It will then fall below\nflood stage early Sunday morning to 6.7 feet Sunday, October 18.\nIt will rise to 6.9 feet Tuesday, October 20. It will then fall\nagain and remain below flood stage.\n- Flood stage is 17.0 feet.\n- http://www.weather.gov/safety/flood",
+    "instruction": null
+   }
+  },
+  {
+   "type": "Feature",
+   "id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.25a133e1583e58db367e8b2bb028bf5d23c895f1.001.1",
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -106.11,
+       35.42
+      ],
+      [
+       -106.02,
+       35.37
+      ],
+      [
+       -105.92,
+       35.41
+      ],
+      [
+       -105.82,
+       35.52
+      ],
+      [
+       -105.89,
+       35.64
+      ],
+      [
+       -105.95,
+       35.7
+      ],
+      [
+       -106.11,
+       35.67
+      ],
+      [
+       -106.22,
+       35.55
+      ],
+      [
+       -106.2,
+       35.46
+      ],
+      [
+       -106.11,
+       35.42
+      ]
+     ]
+    ]
+   },
+   "properties": {
+    "id": "urn:oid:2.49.0.1.840.0.25a133e1583e58db367e8b2bb028bf5d23c895f1.001.1",
+    "areaDesc": "Santa Fe, NM",
+    "sent": "2026-09-30T09:25:00-06:00",
+    "effective": "2026-09-30T09:25:00-06:00",
+    "expires": "2026-09-30T13:15:00-06:00",
+    "ends": "2026-09-30T13:15:00-06:00",
+    "severity": "Severe",
+    "certainty": "Likely",
+    "urgency": "Expected",
+    "event": "Flood Warning",
+    "senderName": "NWS Albuquerque NM",
+    "headline": "Flood Warning issued September 30 at 9:25AM MDT until September 30 at 1:15PM MDT by NWS Albuquerque NM",
+    "description": "* WHAT...Flooding caused by excessive rainfall is expected.\n\n* WHERE...Central Santa Fe County in north central New Mexico...\n\n* WHEN...Until 115 PM MDT.\n\n* IMPACTS...Flooding of rivers, creeks, streams, and other low-lying\nand flood-prone locations is imminent or occurring. Streams\ncontinue to rise due to excess runoff from earlier rainfall.\nLow-water crossings are inundated with water and may not be\npassable.\n\n* ADDITIONAL DETAILS...\n- At 924 AM MDT, Doppler radar and automated rain gauges indicated\nmoderate to heavy rain occurring over the area. Flooding is\nongoing or expected to begin shortly in the warned area. Up to\n0.5 inches of rain have fallen on top of 1 inch of rain received\nover the past 24 hours.\n- Additional rainfall amounts up to 0.5 inches are possible in the\nwarned area. This will exacerbate arroyo and stream flooding that\nwas observed on the west and south side of Santa Fe yesterday.\n- Some locations that will experience flooding include...\nSanta Fe, Eldorado At Santa Fe, La Cienega, Cerrillos Hills State\nPark, Los Cerrillos, Lamy, Galisteo, Canada De Los Alamos and\nAgua Fria.\n- Low water crossings along the Santa Fe River, Arroyo Hondo and\nGalisteo Creek may become impassable due to runoff and impacts\nfrom rainfall yesterday.\n- http://www.weather.gov/safety/flood",
+    "instruction": "Turn around, don't drown when encountering flooded roads. Most flood\ndeaths occur in vehicles.\n\nArroyos, streams, and normally dry rivers can become raging killer\ncurrents in a matter of minutes. Water in arroyos can travel many\nmiles and take hours to reach your location from upstream rain areas."
+   }
+  },
+  {
+   "type": "Feature",
+   "id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.b6d09aa2ad2eab531f0236c01e3b94a366f7e7e0.001.1",
+   "geometry": null,
+   "properties": {
+    "id": "urn:oid:2.49.0.1.840.0.b6d09aa2ad2eab531f0236c01e3b94a366f7e7e0.001.1",
+    "areaDesc": "Monroe Upper Keys; Monroe Middle Keys; Monroe Lower Keys",
+    "sent": "2026-09-30T11:36:00-04:00",
+    "effective": "2026-09-30T11:36:00-04:00",
+    "expires": "2026-10-01T05:00:00-04:00",
+    "ends": "2026-10-01T05:00:00-04:00",
+    "severity": "Minor",
+    "certainty": "Likely",
+    "urgency": "Expected",
+    "event": "Coastal Flood Advisory",
+    "senderName": "NWS Key West FL",
+    "headline": "Coastal Flood Advisory issued September 30 at 11:36AM EDT until October 1 at 5:00AM EDT by NWS Key West FL",
+    "description": "* WHAT...Saltwater flooding.\n\n* WHERE...Florida Keys.\n\n* WHEN...Until 5 AM EDT Thursday.\n\n* IMPACTS...Saltwater flooding of low elevation streets and lots\nis expected. Some storm drains will overflow, and some\nseawalls and docks will be overtopped. Boaters can expect less\nclearance under fixed bridges. Motorists should remember that\npersistent puddles around the times of high tide are almost\ncertain to contain a mix of saltwater.",
+    "instruction": "If travel is required, allow extra time as some roads may be\nclosed. Do not drive around barricades or through water of\nunknown depth. Take the necessary actions to protect flood-prone\nproperty."
+   }
+  }
+ ]
+}

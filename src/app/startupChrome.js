@@ -8,6 +8,7 @@ export function startApplicationChrome({
   signal,
   initializeWelcome = initFirstRunExperience,
   initializeSettings,
+  viewer = null,
 }) {
   let disposed = false;
   let firstRun;
@@ -36,7 +37,9 @@ export function startApplicationChrome({
       revealTimer = setTimeout(revealFirstRun, 900);
     });
   const keySetup = Promise.resolve(
-    signal.aborted ? null : initializeSettings?.({ signal }),
+    signal.aborted
+      ? null
+      : initializeSettings?.({ signal, viewer, dataManager }),
   );
   // Own the pending initializer too; it must not reveal a dialog after abort.
   void keySetup.catch(() =>

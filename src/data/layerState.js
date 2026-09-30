@@ -617,6 +617,16 @@ export const LAYER_STATE_REGISTRY = Object.freeze([
     disposition: 'enabled-only',
   }),
   Object.freeze({
+    id: 'natural-events',
+    token: '4',
+    disposition: 'enabled-only',
+  }),
+  Object.freeze({
+    id: 'nws-warnings',
+    token: '3',
+    disposition: 'enabled-only',
+  }),
+  Object.freeze({
     id: 'radio',
     token: 'r',
     disposition: 'enabled+options',

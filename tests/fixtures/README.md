@@ -9,4 +9,7 @@ content of each record is unchanged.
 | `awc/metars.cache.sample.csv` | `https://aviationweather.gov/data/cache/metars.cache.csv.gz` (header plus 12 stations, including KMYR, KCRE, KHYW) | 2026-09-30 03:38 UTC |
 | `awc/tafs.cache.sample.xml` | `https://aviationweather.gov/data/cache/tafs.cache.xml.gz` (KMYR, KCRE, KCHS, LFBT) | 2026-09-30 03:38 UTC |
 
-AviationWeather.gov data is a U.S. Government work (NOAA/NWS).
+| `nws/alerts-active.sample.json` | `https://api.weather.gov/alerts/active?status=actual` (two polygon alerts, one zone-only; properties trimmed to the fields used) | 2026-09-30 |
+| `eonet/events-open.sample.json` | `https://eonet.gsfc.nasa.gov/api/v3/events?status=open&days=30&limit=5` (unmodified) | 2026-09-30 |
+
+AviationWeather.gov and NWS data are U.S. Government works (NOAA/NWS).

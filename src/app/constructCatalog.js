@@ -24,6 +24,8 @@ import { createApplicationAwareness } from './layers/militaryAwareness.js';
 import { createApplicationFirms } from './layers/firms.js';
 import { createApplicationEarthquakes } from './layers/earthquakes.js';
 import { createApplicationTrafficIncidents } from './layers/trafficIncidents.js';
+import { createApplicationNwsWarnings } from './layers/nwsWarnings.js';
+import { createApplicationNaturalEvents } from './layers/naturalEvents.js';
 import { createApplicationFirePerimeters } from './layers/perimeters.js';
 import { createApplicationCables } from './layers/submarineCables.js';
 import { createInfrastructureLayers } from '../data/infrastructure.js';
@@ -55,6 +57,8 @@ const SOURCE_METHODS = Object.freeze({
   cyclones: ['getSnapshot'],
   earthquakes: ['getSnapshot'],
   'traffic-incidents': ['getSnapshot'],
+  'nws-warnings': ['getSnapshot'],
+  'natural-events': ['getSnapshot'],
   'fire-perimeters': ['getSnapshot'],
   cables: ['fetch'],
 });
@@ -146,6 +150,8 @@ export function createApplicationCatalog({
           ...(resolveAsset ? { resolveAsset } : {}),
         }),
         createApplicationEarthquakes({ source: sources.earthquakes }),
+        createApplicationNaturalEvents({ source: sources['natural-events'] }),
+        createApplicationNwsWarnings({ source: sources['nws-warnings'] }),
         createApplicationFirePerimeters({
           source: sources['fire-perimeters'],
         }),
