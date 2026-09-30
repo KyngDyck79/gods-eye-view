@@ -1,5 +1,43 @@
 # Changelog
 
+## GOD'S EYE VIEW v2 — Phase 1: gateway and live aircraft (2026-09-29)
+
+- Live aircraft come from a new `/api/aircraft` route that fetches only the
+  current view: adsb.lol first (one point query of up to 250 nm, or up to four
+  spaced tiles), OpenSky for continental and world views or when adsb.lol is
+  down. Registration, type, squawk and emergency status now come with each
+  aircraft. Tabs share cached answers and in-flight requests.
+- Every gateway provider runs under a request budget: a hard per-minute
+  limit, a daily credit ledger (OpenSky credits are spread across the UTC
+  day), backoff with jitter that honours Retry-After, and a circuit breaker.
+- Aircraft data older than five minutes is never shown: the route answers
+  `AIRCRAFT DATA TEMPORARILY UNAVAILABLE` and the map clears. Dead reckoning
+  stops 30 s after the last real position. Positions older than 60 s are STALE.
+- The tracked-aircraft readout adds the squawk, emergency status in neutral
+  wording, the source and the UTC time of the last observed position, and
+  labels routes "PLAUSIBLE ROUTE" or "Route unverified".
+- OpenSky username/password auth is gone (OpenSky retired it on 2026-03-18);
+  `basic` and `auto` now mean OAuth.
+- OurAirports airports, runways, frequencies and navaids download once to
+  `data/cache/ourairports/`, refresh weekly and answer `/api/airports/*` from
+  memory.
+- Search: airport codes (KMYR, MYR) and "… airport" names fly to the airport;
+  an exact callsign, registration or ICAO hex of a loaded aircraft tracks it.
+- SYSTEM chip and dialog (bottom right) show each provider's status, last
+  success, latency, budget use, license and required attribution, from
+  `/api/providers`. `/api/health` reports gateway status and usage mode.
+- `GEV_USAGE_MODE=commercial` switches off providers whose terms forbid
+  commercial use. `GEV_CONTACT_EMAIL` goes into the User-Agent now sent to
+  adsb.lol, OpenSky, OurAirports, Nominatim, Overpass and CelesTrak.
+- Branding: GOD'S EYE VIEW, created by Rod Smith. The upstream MIT notice is
+  unchanged; see CREDITS.md.
+- New scripts: `npm run lint`, `npm run typecheck`, `npm run start`,
+  `npm run gate`.
+- Fixed a missing import in the bikeshare city registry that would throw for a
+  city without a load radius.
+
+## Earlier changes (upstream)
+
 - Public Overpass instances are no longer used by default. Street Traffic
   roads come from TomTom flow tiles, OpenFreeMap vector tiles, or both, chosen
   on the layer row (TomTom / OSM / Hybrid) or with `?trafficRoads=`. With a
