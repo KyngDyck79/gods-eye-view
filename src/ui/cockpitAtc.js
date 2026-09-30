@@ -7,6 +7,11 @@
  */
 
 import { AUDIO_STATES, audioBus } from '../audio/audioBus.js';
+import { audioSourceStore, getAudioSources } from '../audio/sources.js';
+import { createStreamPlayer } from '../audio/streamPlayer.js';
+
+/** Window event that opens the "Your audio sources" dialog. */
+const AUDIO_SOURCES_OPEN_EVENT = 'gev:audio-sources-open';
 
 /** Re-ask the frequency engine at most this often for one aircraft… */
 export const ATC_REFRESH_MS = 15_000;
@@ -169,6 +174,10 @@ export function initAtcElements() {
     audioFrequency: byId('cockpit-atc-audio-frequency'),
     audioSource: byId('cockpit-atc-audio-source'),
     audioStatus: byId('cockpit-atc-audio-status'),
+    audioDetail: byId('cockpit-atc-audio-detail'),
+    source: byId('cockpit-atc-source'),
+    sources: byId('cockpit-atc-sources'),
+    external: byId('cockpit-atc-external'),
   };
   this.atcState = {
     subject: null,
@@ -179,52 +188,156 @@ export function initAtcElements() {
     frequency: null,
     weather: { code: null, fetchedAt: 0, metar: null, taf: null, error: null },
   };
-  const { mute, volume, stop } = this.atc;
+  const { mute, volume, stop, listen, source, sources, external } = this.atc;
+  this.atcPlayer = createStreamPlayer();
+  this.atcSources = [];
+  this.atcExternalOpenedFor = null;
+  const onListen = () => {
+    const chosen = this.atcSources.find(
+      (candidate) =>
+        candidate.embeddable &&
+        candidate.id === /** @type {HTMLSelectElement} */ (source)?.value,
+    );
+    if (chosen) void this.atcPlayer.play(chosen);
+  };
+  const onSources = () =>
+    (document.defaultView || window).dispatchEvent(
+      new CustomEvent(AUDIO_SOURCES_OPEN_EVENT),
+    );
+  const onExternal = () => {
+    this.atcExternalOpenedFor = external?.dataset.icao || null;
+    this.renderAtcAudio();
+  };
   const onMute = () => audioBus.setMuted(!audioBus.getState().muted);
   const onVolume = () =>
     audioBus.setVolume(
       Number(/** @type {HTMLInputElement} */ (volume).value) / 100,
     );
-  const onStop = () => audioBus.stopAll();
+  const onStop = () => this.atcPlayer.stop();
+  const onSourceChange = () => this.renderAtcAudio();
   mute?.addEventListener('click', onMute);
   volume?.addEventListener('input', onVolume);
   stop?.addEventListener('click', onStop);
-  const unsubscribe = audioBus.subscribe((state) => this.renderAtcAudio(state));
+  listen?.addEventListener('click', onListen);
+  sources?.addEventListener('click', onSources);
+  external?.addEventListener('click', onExternal);
+  source?.addEventListener('change', onSourceChange);
+  const unsubscribe = audioBus.subscribe(() => this.renderAtcAudio());
+  const unsubscribePlayer = this.atcPlayer.subscribe(() =>
+    this.renderAtcAudio(),
+  );
+  const unsubscribeSources = audioSourceStore.subscribe(() =>
+    this.refreshAtcSources(),
+  );
   this._listenerRemovers?.push(
     () => mute?.removeEventListener('click', onMute),
     () => volume?.removeEventListener('input', onVolume),
     () => stop?.removeEventListener('click', onStop),
+    () => listen?.removeEventListener('click', onListen),
+    () => sources?.removeEventListener('click', onSources),
+    () => external?.removeEventListener('click', onExternal),
+    () => source?.removeEventListener('change', onSourceChange),
     unsubscribe,
+    unsubscribePlayer,
+    unsubscribeSources,
+    () => this.atcPlayer?.destroy(),
     () => this.atcState?.abort?.abort(),
   );
 }
 
 /**
- * ATC audio controls: status comes from the bus owner, never assumed.
+ * Rebuild the source list for the current airport and frequency.
  * @this {any} The Cockpit controller.
  */
-export function renderAtcAudio(state = audioBus.getState()) {
+export function refreshAtcSources() {
   const a = this.atc;
   if (!a) return;
-  const owner = state.owner;
   const frequency = this.atcState?.frequency;
+  const airport = frequency?.airport;
+  const icao = airport ? airport.icao || airport.ident : null;
+  this.atcSources = getAudioSources(audioSourceStore, {
+    airportIcao: icao,
+    facilityType: frequency?.facility || null,
+    frequencyMHz: frequency?.frequencyMHz ?? null,
+  });
+  const playable = this.atcSources.filter((s) => s.embeddable);
+  if (a.source) {
+    const select = /** @type {HTMLSelectElement} */ (a.source);
+    const previous = select.value;
+    select.textContent = '';
+    if (!playable.length) {
+      select.append(new Option('NO SOURCE FOR THIS AIRPORT', ''));
+    }
+    for (const s of playable) {
+      const where = [s.airportIcao, s.frequencyMHz ? `${s.frequencyMHz}` : null]
+        .filter(Boolean)
+        .join(' ');
+      select.append(
+        new Option(`${s.kind} · ${s.label}${where ? ` · ${where}` : ''}`, s.id),
+      );
+    }
+    if (playable.some((s) => s.id === previous)) select.value = previous;
+    select.disabled = !playable.length;
+  }
+  const external = this.atcSources.find((s) => !s.embeddable);
+  if (a.external) {
+    a.external.hidden = !external;
+    if (external) {
+      a.external.href = external.url;
+      a.external.dataset.icao = external.airportIcao || '';
+      a.external.textContent = `LISTEN ON EXTERNAL SOURCE · ${external.label} ↗`;
+      a.external.title = `${external.credit}: ${external.license}`;
+    }
+  }
+  this.renderAtcAudio();
+}
+
+/**
+ * ATC audio controls. The status comes from the player, which decides LIVE
+ * from real playback plus measured activity; nothing here assumes it.
+ * @this {any} The Cockpit controller.
+ */
+export function renderAtcAudio() {
+  const a = this.atc;
+  if (!a) return;
+  const bus = audioBus.getState();
+  const player = this.atcPlayer?.getState?.() || null;
+  const frequency = this.atcState?.frequency;
+  const playing = player && player.phase !== 'idle';
+  const airport = frequency?.airport;
+  const icao = airport ? airport.icao || airport.ident : null;
   if (a.audioFrequency)
     a.audioFrequency.textContent = `FREQ ${frequency?.frequencyMHz ? mhz(frequency.frequencyMHz) : dash}`;
   if (a.audioSource)
-    a.audioSource.textContent = `SOURCE ${owner?.id === 'atc' ? owner.label || dash : dash}`;
-  // No ATC audio sources exist until Phase 3; say so plainly.
-  if (a.audioStatus)
-    a.audioStatus.textContent =
-      owner?.id === 'atc'
-        ? owner.status || AUDIO_STATES.CONNECTING
-        : AUDIO_STATES.NONE;
-  if (a.stop) a.stop.disabled = !owner;
+    a.audioSource.textContent = `SOURCE ${playing ? player.source?.label || dash : dash}`;
+  let status = player?.state || AUDIO_STATES.NONE;
+  if (!playing && icao && this.atcExternalOpenedFor === icao) {
+    status = AUDIO_STATES.EXTERNAL;
+  }
+  if (a.audioStatus) {
+    a.audioStatus.textContent = status;
+    a.audioStatus.dataset.live = String(Boolean(player?.live));
+  }
+  if (a.audioDetail) {
+    a.audioDetail.textContent =
+      status === AUDIO_STATES.EXTERNAL
+        ? 'Opened on LiveATC in another tab; not played here'
+        : player?.detail || '';
+  }
+  const selected = /** @type {HTMLSelectElement|null} */ (a.source)?.value;
+  if (a.listen) {
+    a.listen.disabled = !selected;
+    a.listen.title = selected
+      ? 'Play the selected source'
+      : 'Add a source for this airport first (SOURCES)';
+  }
+  if (a.stop) a.stop.disabled = !playing;
   if (a.mute) {
-    a.mute.setAttribute('aria-pressed', String(state.muted));
-    a.mute.textContent = state.muted ? 'UNMUTE' : 'MUTE';
+    a.mute.setAttribute('aria-pressed', String(bus.muted));
+    a.mute.textContent = bus.muted ? 'UNMUTE' : 'MUTE';
   }
   if (a.volume && document.activeElement !== a.volume)
-    a.volume.value = String(Math.round(state.volume * 100));
+    a.volume.value = String(Math.round(bus.volume * 100));
 }
 
 /** @this {any} */
@@ -389,7 +502,7 @@ export function maybeRefreshAtcBrief(info) {
           weatherError: w.error,
         }),
       );
-      this.renderAtcAudio();
+      this.refreshAtcSources();
     } catch (error) {
       if (controller.signal.aborted) return;
       renderAtcView.call(this, {

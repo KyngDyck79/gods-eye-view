@@ -2284,3 +2284,23 @@ body.cockpit-mode #intel-hud .hud-right-edge {
     animation: none;
   }
 }
+.cockpit-atc-audio select {
+  max-width: 100%;
+  padding: 2px 4px;
+  color: #fff;
+  font: inherit;
+  background: rgba(0, 7, 12, 0.76);
+  border: 1px solid rgba(244, 251, 255, 0.18);
+  border-radius: 3px;
+}
+.cockpit-atc-audio strong[data-live='true'] {
+  color: #ff4d4d;
+}
+.cockpit-atc-audio small#cockpit-atc-audio-detail {
+  flex-basis: 100%;
+  color: rgba(244, 251, 255, 0.5);
+}
+.cockpit-atc-external {
+  flex-basis: 100%;
+  color: var(--cockpit-accent);
+}

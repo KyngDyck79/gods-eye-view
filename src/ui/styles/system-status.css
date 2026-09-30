@@ -210,3 +210,72 @@
   letter-spacing: 0.12rem;
   color: var(--text-secondary);
 }
+
+/* ATC audio sources dialog (src/ui/audioSourcesDialog.js): same card as
+   SYSTEM STATUS, opened from the cockpit ATC page. */
+#audio-sources {
+  position: fixed;
+  z-index: 191;
+  right: 0.9rem;
+  bottom: 5.6rem;
+  width: min(30rem, calc(100vw - 2rem));
+  max-height: min(78vh, calc(100dvh - 7rem));
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1rem;
+  overflow: auto;
+  color: var(--text-primary);
+  background:
+    linear-gradient(145deg, rgba(10, 27, 37, 0.97), rgba(7, 13, 22, 0.95)),
+    rgba(7, 17, 25, 0.96);
+  border: 1px solid rgba(54, 220, 255, 0.42);
+  border-radius: 0.65rem;
+  box-shadow: 0 1.4rem 4.5rem rgba(0, 0, 0, 0.72);
+}
+
+#audio-sources[hidden] {
+  display: none;
+}
+
+#audio-sources h2 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.audio-sources-form {
+  display: grid;
+  gap: 0.4rem;
+  font-size: 0.7rem;
+}
+
+.audio-sources-form label {
+  display: grid;
+  gap: 0.15rem;
+  color: var(--text-secondary);
+}
+
+.audio-sources-form input,
+.audio-sources-form select {
+  padding: 0.35rem 0.45rem;
+  color: var(--text-primary);
+  font: inherit;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 0.3rem;
+}
+
+.audio-sources-form button,
+.audio-source-remove {
+  justify-self: start;
+  padding: 0.35rem 0.7rem;
+  color: #fff;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.08rem;
+  background: rgba(255, 77, 77, 0.16);
+  border: 1px solid rgba(255, 77, 77, 0.5);
+  border-radius: 0.3rem;
+  cursor: pointer;
+}

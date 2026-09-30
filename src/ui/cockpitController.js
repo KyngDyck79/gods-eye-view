@@ -47,6 +47,7 @@ import { onKeyDown } from './cockpitInput.js';
 import {
   initAtcElements,
   maybeRefreshAtcBrief,
+  refreshAtcSources,
   renderAtcAudio,
 } from './cockpitAtc.js';
 import * as Cesium from 'cesium';
@@ -379,8 +380,11 @@ export class CockpitViewController {
   maybeRefreshAtcBrief(info) {
     return maybeRefreshAtcBrief.call(this, info);
   }
-  renderAtcAudio(state) {
-    return renderAtcAudio.call(this, state);
+  renderAtcAudio() {
+    return renderAtcAudio.call(this);
+  }
+  refreshAtcSources() {
+    return refreshAtcSources.call(this);
   }
   renderRegionalBriefStatus(status, info) {
     return renderRegionalBriefStatus.call(this, status, info);

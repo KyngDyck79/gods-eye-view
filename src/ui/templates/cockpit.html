@@ -287,13 +287,19 @@
           </div>
           <div class="cockpit-atc-audio" role="group" aria-label="ATC audio">
             <span class="cockpit-atc-audio-label">ATC AUDIO</span>
-            <button id="cockpit-atc-listen" type="button" disabled title="No audio source for this frequency yet">LISTEN</button>
+            <select id="cockpit-atc-source" aria-label="ATC audio source" disabled>
+              <option value="">NO SOURCE FOR THIS AIRPORT</option>
+            </select>
+            <button id="cockpit-atc-sources" type="button" title="Add or remove your own audio sources (kept in this browser)">SOURCES</button>
+            <button id="cockpit-atc-listen" type="button" disabled title="Add a source for this airport first">LISTEN</button>
             <button id="cockpit-atc-stop" type="button" disabled>STOP</button>
             <button id="cockpit-atc-mute" type="button" aria-pressed="false">MUTE</button>
             <input id="cockpit-atc-volume" class="gev-quantitative-slider" type="range" min="0" max="100" value="80" aria-label="ATC audio volume" />
             <small id="cockpit-atc-audio-frequency">FREQ —</small>
             <small id="cockpit-atc-audio-source">SOURCE —</small>
             <strong id="cockpit-atc-audio-status" role="status">NO AUDIO SOURCE</strong>
+            <small id="cockpit-atc-audio-detail"></small>
+            <a id="cockpit-atc-external" class="cockpit-atc-external" href="https://www.liveatc.net/" target="_blank" rel="noopener noreferrer" hidden>LISTEN ON EXTERNAL SOURCE · LIVEATC ↗</a>
           </div>
           <a class="cockpit-weather-credit" href="https://aviationweather.gov" target="_blank" rel="noopener">METAR/TAF: NOAA AviationWeather.gov · Airports: OurAirports</a>
         </section>

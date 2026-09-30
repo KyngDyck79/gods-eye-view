@@ -48,7 +48,7 @@ function defaultPort(protocol) {
 /**
  * Validate one `band=url` entry.
  * @param {string} entry Raw entry text.
- * @returns {{band:string, url:string}|{band:string|null, reason:string}}
+ * @returns {{band:string|null, url?:string, reason?:string}}
  */
 function parseEntry(entry) {
   const separator = entry.indexOf('=');
@@ -400,6 +400,9 @@ async function readFeed(
  * @param {Function} [options.lookupImpl] `dns.promises.lookup`-compatible.
  * @param {() => number} [options.now]
  * @param {{warn:Function, info?:Function}} [options.logger]
+ * @param {number} [options.timeoutMs] Per-feed read deadline.
+ * @param {number} [options.maxBytes] Per-feed body cap.
+ * @param {number} [options.cacheMs] Snapshot reuse window.
  * @returns {{handle:Function, config:object}}
  */
 export function createLocalReceiversHandler({

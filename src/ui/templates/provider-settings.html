@@ -45,3 +45,32 @@
       <p>Built on the open-source God's Eye View project by Bilawal Sidhu and contributors (MIT License). See CREDITS.md.</p>
     </footer>
   </aside>
+
+  <!-- AUDIO SOURCES — user-owned ATC audio (src/ui/audioSourcesDialog.js).
+       Entries live in this browser only. LiveATC is never added here: it is
+       only ever opened as an external link. -->
+  <aside id="audio-sources" class="system-status-dialog" role="dialog" aria-labelledby="audio-sources-title" hidden>
+    <header class="system-status-header">
+      <span class="system-status-kicker">GOD'S EYE VIEW · ATC AUDIO SOURCES</span>
+      <button type="button" class="system-status-close" data-audio-sources-close aria-label="Close audio sources">
+        <span class="material-symbols-outlined" aria-hidden="true">close</span>
+      </button>
+    </header>
+    <h2 id="audio-sources-title">Your audio sources</h2>
+    <p class="system-status-mode">Kept in this browser only. Never uploaded or synced. See SDR-SETUP.md for a receiver of your own.</p>
+    <div class="system-status-list" data-audio-sources-list></div>
+    <form class="audio-sources-form" data-audio-sources-form>
+      <label>Name <input name="label" maxlength="60" placeholder="KMYR Tower (my SDR)" /></label>
+      <label>Stream address <input name="url" required placeholder="http://192.168.1.20:8000/kmyr" /></label>
+      <label>Type
+        <select name="kind">
+          <option value="USER SDR">USER SDR — my receiver on this network</option>
+          <option value="USER URL">USER URL — another stream I'm allowed to listen to</option>
+        </select>
+      </label>
+      <label>Airport (optional) <input name="airportIcao" maxlength="4" placeholder="KMYR" /></label>
+      <label>Frequency MHz (optional) <input name="frequencyMHz" inputmode="decimal" placeholder="128.45" /></label>
+      <button type="submit">ADD SOURCE</button>
+      <p class="system-status-message" data-audio-sources-status role="status"></p>
+    </form>
+  </aside>
