@@ -25,10 +25,12 @@ export function parseCsv(text) {
 }
 
 /**
+ * Parse CSV text into arrays of fields, header row included. Use this when
+ * header names repeat (the AWC METAR file has four `sky_cover` columns).
  * @param {string} text
  * @returns {string[][]}
  */
-function parseRows(text) {
+export function parseRows(text) {
   const rows = [];
   let row = [];
   let field = '';

@@ -82,6 +82,26 @@ export const PROVIDER_CATALOG = Object.freeze({
     }),
     verified: '2026-09-29',
   }),
+  awc: Object.freeze({
+    id: 'awc',
+    name: 'AviationWeather.gov',
+    domain: 'weather',
+    sourceUrl: 'https://aviationweather.gov/data/api/',
+    cost: 'Free',
+    apiKeyRequired: false,
+    rateLimit:
+      '100 requests per minute; at most 400 results per request. Cache files are used instead of per-station queries.',
+    license: 'U.S. Government work (NOAA/NWS), public domain',
+    commercialUse: 'allowed',
+    updateFrequency: 'METAR cache every minute, TAF cache every 10 minutes',
+    dataTypes: ['METAR', 'TAF'],
+    attribution: Object.freeze({
+      text: 'Aviation weather: NOAA/NWS AviationWeather.gov',
+      url: 'https://aviationweather.gov',
+      required: false,
+    }),
+    verified: '2026-09-29',
+  }),
   ourairports: Object.freeze({
     id: 'ourairports',
     name: 'OurAirports',
