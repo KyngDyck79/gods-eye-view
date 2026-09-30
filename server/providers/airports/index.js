@@ -8,6 +8,7 @@
  *   GET /api/airports/nearest?lat&lon[&radiusNm&limit&types]
  *   GET /api/airports/search?q[&limit]
  *   GET /api/airports/navaids?lat&lon[&radiusNm&limit]
+ *   GET /api/airports/frequency?lat&lon[&alt&gnd&gs&trk&vs&still&orig&dest]
  *   GET /api/airports/{ICAO|IATA|ident}   (with runways and frequencies)
  */
 
@@ -18,6 +19,7 @@ import { createBudget } from '../gateway/budget.js';
 import { PROVIDER_CATALOG } from '../gateway/catalog.js';
 import { gevUserAgent, providerRegistry } from '../gateway/registry.js';
 import { airportSummary, buildAirportStore } from './store.js';
+import { selectFrequency } from './frequencyEngine.js';
 
 export const OURAIRPORTS_BASE =
   'https://davidmegginson.github.io/ourairports-data/';
@@ -230,6 +232,33 @@ export function createAirportService({
           attribution,
         },
       };
+    }
+    if (route === 'frequency') {
+      // Aircraft state in aviation units: ft MSL, kts, degrees true, ft/min.
+      const lat = number('lat', NaN, -90, 90);
+      const lon = number('lon', NaN, -180, 180);
+      if (![lat, lon].every(Number.isFinite)) {
+        return { status: 400, body: { error: 'lat and lon required' } };
+      }
+      const optional = (name, min, max) => {
+        const value = number(name, null, min, max);
+        return Number.isFinite(value) ? value : null;
+      };
+      const code = (name) =>
+        (params.get(name) || '').trim().toUpperCase().slice(0, 8) || null;
+      const result = selectFrequency(store, {
+        lat,
+        lon,
+        altFt: optional('alt', -2000, 80000),
+        onGround: params.get('gnd') === '1',
+        gsKts: optional('gs', 0, 2000),
+        trackDeg: optional('trk', 0, 360),
+        vsFpm: optional('vs', -20000, 20000),
+        stationarySec: optional('still', 0, 86400),
+        origin: code('orig'),
+        destination: code('dest'),
+      });
+      return { status: 200, body: { ...result, attribution } };
     }
     if (route === 'search') {
       const limit = number('limit', 10, 1, 25);
