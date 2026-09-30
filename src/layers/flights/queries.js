@@ -161,6 +161,14 @@ export function createQueries({
         ? info.renderAltitudeM
         : carto.height,
       onGround: info?.onGround === true,
+      // Reported (not derived) kinematics for the ATC frequency estimate.
+      verticalRateMps: Number.isFinite(info?.verticalRate)
+        ? info.verticalRate
+        : null,
+      squawk: info?.squawk ?? null,
+      positionEpochMs: Number.isFinite(info?.positionEpochMs)
+        ? info.positionEpochMs
+        : null,
       velocityMps: displayed.speedMps,
       track: displayed.trackDeg,
       stale: Boolean(

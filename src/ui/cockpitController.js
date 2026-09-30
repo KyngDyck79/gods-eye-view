@@ -44,6 +44,11 @@ import {
   syncSignalLayout,
 } from './cockpitLayout.js';
 import { onKeyDown } from './cockpitInput.js';
+import {
+  initAtcElements,
+  maybeRefreshAtcBrief,
+  renderAtcAudio,
+} from './cockpitAtc.js';
 import * as Cesium from 'cesium';
 
 export class CockpitViewController {
@@ -224,6 +229,7 @@ export class CockpitViewController {
     this.scratchCameraCartographic = new Cesium.Cartographic();
     this.scratchTargetCartographic = new Cesium.Cartographic();
     this._listenerRemovers = [];
+    initAtcElements.call(this);
 
     // Camera mutations belong before scene update/culling. Changing the camera
     // from preRender makes 3D Tiles discover a new view after traversal and can
@@ -369,6 +375,12 @@ export class CockpitViewController {
   }
   maybeRefreshRegionalBrief(info) {
     return maybeRefreshRegionalBrief.call(this, info);
+  }
+  maybeRefreshAtcBrief(info) {
+    return maybeRefreshAtcBrief.call(this, info);
+  }
+  renderAtcAudio(state) {
+    return renderAtcAudio.call(this, state);
   }
   renderRegionalBriefStatus(status, info) {
     return renderRegionalBriefStatus.call(this, status, info);

@@ -230,7 +230,7 @@
           <button id="cockpit-brief-previous" type="button" aria-label="Previous briefing page" title="Previous briefing page">
             <span class="material-symbols-outlined" aria-hidden="true">chevron_left</span>
           </button>
-          <span id="cockpit-brief-position" aria-live="polite">1 / 3</span>
+          <span id="cockpit-brief-position" aria-live="polite">1 / 4</span>
           <button id="cockpit-brief-next" type="button" aria-label="Next briefing page" title="Next briefing page">
             <span class="material-symbols-outlined" aria-hidden="true">chevron_right</span>
           </button>
@@ -239,7 +239,7 @@
             type="button"
             aria-label="CYCLE OFF"
             aria-pressed="false"
-            title="Cycle briefing pages automatically every 9 seconds (Signals → News → Local). Pauses while you hover or focus the panel. Live signal data refreshes continuously either way."
+            title="Cycle briefing pages automatically every 9 seconds (Signals → News → Local → ATC). Pauses while you hover or focus the panel. Live signal data refreshes continuously either way."
           >CYCLE OFF</button>
           <button id="cockpit-signal-toggle" type="button" aria-label="Collapse cockpit briefing panel" aria-expanded="true" title="Collapse briefing panel">
             <span class="material-symbols-outlined" aria-hidden="true">right_panel_close</span>
@@ -267,6 +267,36 @@
           </div>
           <a class="cockpit-weather-credit" href="https://open-meteo.com/" target="_blank" rel="noopener">Weather data by Open-Meteo.com</a>
         </section>
+        <!-- ATC · airport, runway, estimated facility/frequency, METAR/TAF and
+             ATC audio (src/ui/cockpitAtc.js). Frequencies come from OurAirports;
+             the facility is an estimate and always shows its confidence. -->
+        <section data-cockpit-brief-page="atc" aria-label="ATC, airport and aviation weather" hidden>
+          <div id="cockpit-atc-status" class="cockpit-brief-status">ACQUIRING AIRPORT DATA</div>
+          <div class="cockpit-local-grid cockpit-atc-grid">
+            <div><span>AIRPORT</span><strong id="cockpit-atc-airport">—</strong><small id="cockpit-atc-airport-detail">—</small></div>
+            <div><span>RUNWAY</span><strong id="cockpit-atc-runway">—</strong><small id="cockpit-atc-runway-detail">—</small></div>
+            <div><span>FACILITY · EST.</span><strong id="cockpit-atc-facility">—</strong><small id="cockpit-atc-confidence">—</small></div>
+            <div><span>FREQUENCY</span><strong id="cockpit-atc-frequency">—</strong><small id="cockpit-atc-atis">—</small></div>
+          </div>
+          <p id="cockpit-atc-reason" class="cockpit-atc-reason">—</p>
+          <div class="cockpit-atc-wx">
+            <div class="cockpit-atc-wx-head"><strong id="cockpit-atc-category">METAR —</strong><small id="cockpit-atc-metar-age">—</small></div>
+            <p id="cockpit-atc-metar-summary" class="cockpit-atc-wx-summary">—</p>
+            <code id="cockpit-atc-metar-raw" class="cockpit-atc-raw">—</code>
+            <code id="cockpit-atc-taf-raw" class="cockpit-atc-raw">TAF —</code>
+          </div>
+          <div class="cockpit-atc-audio" role="group" aria-label="ATC audio">
+            <span class="cockpit-atc-audio-label">ATC AUDIO</span>
+            <button id="cockpit-atc-listen" type="button" disabled title="No audio source for this frequency yet">LISTEN</button>
+            <button id="cockpit-atc-stop" type="button" disabled>STOP</button>
+            <button id="cockpit-atc-mute" type="button" aria-pressed="false">MUTE</button>
+            <input id="cockpit-atc-volume" class="gev-quantitative-slider" type="range" min="0" max="100" value="80" aria-label="ATC audio volume" />
+            <small id="cockpit-atc-audio-frequency">FREQ —</small>
+            <small id="cockpit-atc-audio-source">SOURCE —</small>
+            <strong id="cockpit-atc-audio-status" role="status">NO AUDIO SOURCE</strong>
+          </div>
+          <a class="cockpit-weather-credit" href="https://aviationweather.gov" target="_blank" rel="noopener">METAR/TAF: NOAA AviationWeather.gov · Airports: OurAirports</a>
+        </section>
       </div>
       <footer class="cockpit-signal-footer">
         <span id="cockpit-brief-source">SOURCE-BACKED EVENTS · NO SYNTHETIC NEWS</span>
@@ -274,6 +304,7 @@
           <button type="button" data-cockpit-brief-index="0" aria-label="Show Live Signals" aria-current="true">SIG</button>
           <button type="button" data-cockpit-brief-index="1" aria-label="Show Regional News">NEWS</button>
           <button type="button" data-cockpit-brief-index="2" aria-label="Show Local Info">LOCAL</button>
+          <button type="button" data-cockpit-brief-index="3" aria-label="Show ATC and airport weather">ATC</button>
         </nav>
       </footer>
     </aside>

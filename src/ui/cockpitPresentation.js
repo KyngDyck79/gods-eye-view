@@ -32,10 +32,10 @@ export const COCKPIT_GROUND_WAIT_TIMEOUT_MS = 5000;
 export const COCKPIT_BRIEF_ROTATE_MS = 9000;
 
 export const COCKPIT_BRIEF_CYCLE_OFF_HELP =
-  'Cycle briefing pages automatically every 9 seconds (Signals → News → Local). Pauses while you hover or focus the panel. Live signal data refreshes continuously either way.';
+  'Cycle briefing pages automatically every 9 seconds (Signals → News → Local → ATC). Pauses while you hover or focus the panel. Live signal data refreshes continuously either way.';
 
 export const COCKPIT_BRIEF_CYCLE_ON_HELP =
-  'Stop automatic page cycling. Previous, Next, and the SIG/NEWS/LOCAL tabs stay available.';
+  'Stop automatic page cycling. Previous, Next, and the SIG/NEWS/LOCAL/ATC tabs stay available.';
 
 export const COCKPIT_REGIONAL_REFRESH_MS = 5 * 60_000;
 
@@ -59,6 +59,12 @@ export const COCKPIT_BRIEF_PAGES = [
     kicker: 'LOCAL INFO',
     subtitle: 'PLACE / CONDITIONS / POSITION',
     source: 'NATURAL EARTH · OPEN-METEO · UTC',
+  },
+  {
+    id: 'atc',
+    kicker: 'ATC',
+    subtitle: 'FREQ ESTIMATE · METAR/TAF',
+    source: 'OURAIRPORTS · NOAA AVIATIONWEATHER.GOV · ESTIMATED',
   },
 ];
 
