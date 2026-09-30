@@ -162,6 +162,19 @@ export function createGod({
       if (r?.ok === false) return { reply: layerFailure(r, layerId, true) };
       return { reply: `Showing ${r?.label || layerId} near ${point.label}.` };
     },
+    async goTo(slots) {
+      if (slots.ref !== 'place')
+        return { reply: 'Say where, e.g. “go to KMYR” or “go to Charleston”.' };
+      const point = await resolvePoint(slots);
+      if (!point) return { reply: `I couldn't find “${slots.place}”.` };
+      const r = await tools.flyTo(point);
+      return {
+        reply:
+          r?.ok === false
+            ? r.error || `Couldn't fly to ${point.label}.`
+            : `Going to ${point.label}.`,
+      };
+    },
     async openCockpit() {
       const r = await tools.run('control_cockpit', { action: 'enter' });
       return {

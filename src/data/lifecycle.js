@@ -519,12 +519,16 @@ export class LayerLifecycle {
   _armUpdateLoop(layerId, entry) {
     const configuredRefreshInterval = Number(entry.module.refreshInterval);
     const updateInterval = Number(entry.module.updateInterval);
+    // Phones poll half as often (GODS-EYE-VIEW-SPEC v2, 4.26).
+    const pollingScale = globalThis.matchMedia?.('(max-width: 700px)')?.matches
+      ? 2
+      : 1;
     const refreshInterval =
-      configuredRefreshInterval > 0
+      (configuredRefreshInterval > 0
         ? configuredRefreshInterval
         : updateInterval > 0
           ? updateInterval
-          : 0;
+          : 0) * pollingScale;
     if (refreshInterval > 0) {
       entry.intervalId = setInterval(() => {
         void this._runPeriodicUpdate(layerId, entry);

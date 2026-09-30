@@ -168,6 +168,13 @@ export function parseCommand(text, { layers = [] } = {}) {
       ))
   )
     return { intent: 'camerasNear', ...placeRef(m[1]) };
+  if (
+    (m = /^(?:go to|fly to|take me to|zoom to|search for|search) (.+)$/.exec(
+      t,
+    )) &&
+    !/ (near|around) /.test(m[1])
+  )
+    return { intent: 'goTo', ...placeRef(m[1]) };
   if ((m = /^(?:track|follow|find|lock on(?: to)?) (.+)$/.exec(t))) {
     const q = m[1].replace(/^(flight|aircraft|plane|ship|vessel)\s+/, '');
     return THERE.test(q)

@@ -29,6 +29,16 @@ test('every spec 4.19 command parses', () => {
     ref: 'here',
   });
   assert.deepEqual(p('open cockpit'), { intent: 'openCockpit' });
+  assert.deepEqual(p('go to KMYR'), {
+    intent: 'goTo',
+    ref: 'place',
+    place: 'kmyr',
+  });
+  assert.deepEqual(p('fly to Charleston'), {
+    intent: 'goTo',
+    ref: 'place',
+    place: 'charleston',
+  });
   assert.deepEqual(p('nearest airport'), { intent: 'nearestAirport' });
   assert.deepEqual(p("what's the closest airport"), {
     intent: 'nearestAirport',

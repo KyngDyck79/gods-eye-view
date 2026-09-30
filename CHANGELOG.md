@@ -1,5 +1,26 @@
 # Changelog
 
+## GOD'S EYE VIEW v2 — Phase 8: performance, phone layout, docs (2026-09-30)
+
+- **Performance:** new synthetic 5,000-aircraft load test
+  (`scripts/perf/aircraft-load.js`), measured on the Mac mini M2. Frame rate
+  meets the spec target (54–55 fps). The 100 ms freeze target is not met: each
+  5,000-contact poll blocks for 105–250 ms. See `docs/PERFORMANCE.md` and
+  `KNOWN-LIMITATIONS.md`.
+- **Phone layout** (700 px wide or less):
+  - a bottom tab bar AIR / GROUND / VOICE / WEATHER / MORE;
+  - bottom sheets with layer switches;
+  - VOICE in thumb reach (tap for on/off, hold to talk);
+  - GOD (with "go to {place}") above the tab bar;
+  - desktop panels tucked away, reachable from MORE;
+  - polling halved;
+  - the map credit line stays visible.
+- **GOD:** new "go to / fly to {place or airport}" command.
+- **Docs:** `SETUP.md`, `API-KEYS.md`, `TROUBLESHOOTING.md`,
+  `KNOWN-LIMITATIONS.md` and `DATA-SOURCES.md` (a pointer to
+  `DATA_SOURCES.md`), plus a v2 section at the top of the README with the
+  launch steps.
+
 ## GOD'S EYE VIEW v2 — Phase 7: GOD assistant (2026-09-30)
 
 - **GOD** answers typed commands (the **GOD** chip, top right) and spoken

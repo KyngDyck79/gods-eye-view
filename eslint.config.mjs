@@ -40,6 +40,7 @@ const V2_FILES = [
   'server/providers/ai/**/*.js',
   'src/god/**/*.js',
   'src/ui/godPanel.js',
+  'src/ui/mobileLayout.js',
   'src/voice/local/**/*.js',
   'src/ui/voiceSettings.js',
   'server/providers/transitAgencies.js',

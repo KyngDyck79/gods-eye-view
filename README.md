@@ -30,6 +30,50 @@ _“pretty cool”_ — [Brendan Eich](https://x.com/BrendanEich/status/20945920
 
 ---
 
+## GOD'S EYE VIEW v2, Rod Smith's edition
+
+**Created by Rod Smith.** Built on the open-source
+[God's Eye View](https://github.com/bilawalsidhu/gods-eye-view) project by
+Bilawal Sidhu and contributors (MIT License, unchanged).
+
+v2 adds:
+- a provider gateway with budgets and live status (**SYSTEM**);
+- honest data ages and stale warnings;
+- airports, METAR/TAF and ATC frequencies;
+- your own ATC receivers, and LiveATC as an external link only;
+- TomTom traffic incidents;
+- NWS warning polygons, NASA natural events and an **ALERTS** feed;
+- OpenStreetMap emergency facilities;
+- transit agencies set in a config file;
+- local voice via your Galaxy S23 Ultra and whisper.cpp;
+- the **GOD** assistant;
+- a phone layout.
+
+**Launch it** (details in [SETUP.md](SETUP.md)):
+
+```bash
+cd ~/gods-eye-view
+npm ci
+npm run dev
+```
+
+Then open **http://localhost:4173** in Chrome.
+
+| Guide | For |
+|---|---|
+| [SETUP.md](SETUP.md) | Install, launch, update |
+| [API-KEYS.md](API-KEYS.md) | Which keys unlock what |
+| [VOICE-SETUP.md](VOICE-SETUP.md) | Galaxy S23 Ultra → AudioRelay → BlackHole → local speech |
+| [SDR-SETUP.md](SDR-SETUP.md) | Your own live ATC receiver |
+| [TROUBLESHOOTING.md](TROUBLESHOOTING.md) | When something doesn't work |
+| [KNOWN-LIMITATIONS.md](KNOWN-LIMITATIONS.md) | What's missing or unverified, and why |
+| [DATA_SOURCES.md](DATA_SOURCES.md) · [CREDITS.md](CREDITS.md) | Every provider, license and credit |
+| [docs/reports/](docs/reports/) | Phase-by-phase build and test reports |
+
+The original project's README continues below.
+
+---
+
 <div align="center">
 
 **[Quick Start](#-quick-start) · [First Five Minutes](#-the-first-five-minutes) · [Talk to It](#-talk-to-it) · [What's Live](#-whats-on-the-globe) · [Under the Hood](#-under-the-hood) · [Keys & Costs](#-api-keys) · [Contributing](CONTRIBUTING.md)**
