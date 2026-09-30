@@ -1,0 +1,25 @@
+{
+  "//": "Typecheck gate (GODS-EYE-VIEW-SPEC v2, Part 8): JSDoc-typed JavaScript, checked without emitting. Modules written for v2 are listed in `include`; add new v2 modules there.",
+  "compilerOptions": {
+    "target": "ES2023",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "lib": ["ES2023", "DOM", "DOM.Iterable", "DOM.AsyncIterable"],
+    "types": ["node"],
+    "allowJs": true,
+    "checkJs": true,
+    "noEmit": true,
+    "strict": false,
+    "noImplicitAny": false,
+    "skipLibCheck": true,
+    "resolveJsonModule": true
+  },
+  "include": [
+    "server/providers/gateway/**/*.js",
+    "server/providers/airports/**/*.js",
+    "server/providers/aircraft/viewport.js",
+    "server/providers/aircraft/viewportRoute.js",
+    "src/search/airportGeocoder.js",
+    "src/ui/systemStatus.js"
+  ]
+}

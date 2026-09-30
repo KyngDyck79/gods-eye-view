@@ -143,7 +143,7 @@ async function fetchOverpassPayload(
         redirect: 'error',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
-          'User-Agent': OVERPASS_USER_AGENT,
+          'User-Agent': OVERPASS_USER_AGENT(),
           ...(authorization ? { Authorization: authorization } : {}),
         },
         body,

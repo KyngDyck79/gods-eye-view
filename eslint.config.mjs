@@ -1,0 +1,68 @@
+import js from '@eslint/js';
+import globals from 'globals';
+
+/**
+ * Lint gate (GODS-EYE-VIEW-SPEC v2, Part 8).
+ *
+ * Code written for v2 must pass the recommended rules with zero findings.
+ * The inherited code base predates this linter: its existing findings (mostly
+ * unused variables) are reported as warnings so they stay visible without
+ * forcing a rewrite of working modules. Errors fail `npm run lint`; warnings
+ * do not.
+ */
+
+/** Modules written for v2 — strict. Add new v2 modules here. */
+const V2_FILES = [
+  'server/providers/gateway/**/*.js',
+  'server/providers/airports/**/*.js',
+  'server/providers/aircraft/viewport.js',
+  'server/providers/aircraft/viewportRoute.js',
+  'src/gateway/**/*.mjs',
+  'src/search/airportGeocoder.js',
+  'src/search/airportGeocoder.test.mjs',
+  'src/ui/systemStatus.js',
+  'src/ui/systemStatus.test.mjs',
+  'eslint.config.mjs',
+];
+
+const inheritedAsWarnings = Object.fromEntries(
+  Object.keys(js.configs.recommended.rules).map((rule) => [rule, 'warn']),
+);
+
+export default [
+  {
+    ignores: [
+      'node_modules/**',
+      'dist/**',
+      'data/**',
+      '.gev-cache/**',
+      '.gev-logs/**',
+      'public/**',
+      'pinokio/**',
+      'src/data/local_data/**',
+      'output/**',
+      'screenshots/**',
+      'qa-shots/**',
+    ],
+  },
+  {
+    files: ['**/*.{js,mjs,cjs}'],
+    languageOptions: {
+      ecmaVersion: 'latest',
+      sourceType: 'module',
+      globals: {
+        ...globals.browser,
+        ...globals.node,
+        ...globals.worker,
+        AudioWorkletProcessor: 'readonly',
+        registerProcessor: 'readonly',
+      },
+    },
+    linterOptions: { reportUnusedDisableDirectives: 'off' },
+    rules: inheritedAsWarnings,
+  },
+  {
+    files: V2_FILES,
+    rules: js.configs.recommended.rules,
+  },
+];

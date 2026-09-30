@@ -1,3 +1,5 @@
+import { CITY_RANGE_BASE_KM } from './policy.js';
+
 function buildBcycleUrls(systemId) {
   return {
     stationInformationUrl: `https://gbfs.bcycle.com/${systemId}/station_information.json`,

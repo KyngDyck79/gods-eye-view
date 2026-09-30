@@ -88,7 +88,8 @@
       "server/providers/space/launch-library.js",
       "server/providers/common/http.js",
       "src/data/spaceProviderRequests.js",
-      "src/sources/httpBody.js"
+      "src/sources/httpBody.js",
+      "server/providers/gateway/registry.js"
     ],
     "external": []
   },
@@ -209,7 +210,8 @@
       "src/data/routeSteps.js",
       "src/sources/httpBody.js",
       "src/sources/overpass.js",
-      "src/sources/rateLimit.js"
+      "src/sources/rateLimit.js",
+      "server/providers/gateway/registry.js"
     ],
     "external": []
   },
@@ -228,7 +230,8 @@
       "server/providers/overpass/geometry.js",
       "server/providers/overpass/transport.js",
       "src/sources/httpBody.js",
-      "src/sources/rateLimit.js"
+      "src/sources/rateLimit.js",
+      "server/providers/gateway/registry.js"
     ],
     "external": []
   },
@@ -255,7 +258,8 @@
       "src/data/local_data/natural_earth/regions.json",
       "src/data/naturalEarthRegions.js",
       "src/data/bundledJson.js",
-      "src/data/retryableLoad.js"
+      "src/data/retryableLoad.js",
+      "server/providers/gateway/registry.js"
     ],
     "external": []
   },
@@ -312,6 +316,7 @@
       "src/search/coordinateGeocoder.js",
       "src/search/coordinateParser.js",
       "src/search/presetGeocoder.js",
+      "src/search/airportGeocoder.js",
       "src/search/nominatim.js",
       "src/nominatimGeocode.js",
       "src/data/regionalModel.js",
@@ -1878,6 +1883,7 @@
       "src/search/coordinateGeocoder.js",
       "src/search/coordinateParser.js",
       "src/search/presetGeocoder.js",
+      "src/search/airportGeocoder.js",
       "src/voice/session.js",
       "src/voice/sessionCommands.js",
       "src/voice/realtimeSession.js",
@@ -2413,6 +2419,7 @@
       "src/search/coordinateGeocoder.js",
       "src/search/coordinateParser.js",
       "src/search/presetGeocoder.js",
+      "src/search/airportGeocoder.js",
       "src/app/localGeojsonServices.js",
       "src/layers/alpr/records.js",
       "src/layers/earthquakes/records.js",
@@ -2564,6 +2571,7 @@
       "src/search/coordinateGeocoder.js",
       "src/search/coordinateParser.js",
       "src/search/presetGeocoder.js",
+      "src/search/airportGeocoder.js",
       "src/search/nominatim.js",
       "src/nominatimGeocode.js",
       "src/data/regionalModel.js",
