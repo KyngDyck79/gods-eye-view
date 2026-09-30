@@ -11,7 +11,7 @@ export * from './realtimeController.js';
  * opt-in.
  */
 export function initGevVoiceCommands(options) {
-  const runner = createGevActionRunner(options);
+  const runner = options.runner || createGevActionRunner(options);
   if (readVoiceSettings().engine === 'openai')
     return createVoiceCommands({ ...options, runner });
   const controls = createVoiceCommands({

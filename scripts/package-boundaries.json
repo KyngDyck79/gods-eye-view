@@ -2074,7 +2074,16 @@
       "src/voice/local/wav.js",
       "src/voice/local/vad.js",
       "src/voice/local/mic.js",
-      "src/voice/local/localSession.js"
+      "src/voice/local/localSession.js",
+      "src/god/instance.js",
+      "src/ui/godPanel.js",
+      "src/god/parser.js",
+      "src/voice/local/aviationSpeech.js",
+      "src/god/phrasing.js",
+      "src/god/god.js",
+      "src/alerts/engine.js",
+      "src/ui/alertsPanel.js",
+      "src/god/tools.js"
     ],
     "external": [
       "hls.js",

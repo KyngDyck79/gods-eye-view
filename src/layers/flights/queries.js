@@ -267,6 +267,9 @@ export function createQueries({
       squawk: text(info?.squawk),
       emergency: text(info?.emergency),
       registration: text(info?.registration),
+      typeName: text(info?.typeName),
+      // When the position was reported (for "as of N seconds ago").
+      positionEpochMs: num(info?.positionEpochMs),
     };
   }
   const methods = {

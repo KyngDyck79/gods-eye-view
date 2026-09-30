@@ -36,6 +36,7 @@ import { eonetProxy } from './eonet/index.js';
 import { usgsProxy } from './usgs.js';
 import { facilitiesProxy } from './facilities/index.js';
 import { whisperProxy } from './whisper/index.js';
+import { aiProxy } from './ai/index.js';
 
 /** Construct the local provider plugins in their established order. */
 function localProviderPlugins() {
@@ -76,6 +77,7 @@ function localProviderPlugins() {
     usgsProxy(),
     facilitiesProxy(),
     whisperProxy(),
+    aiProxy(),
     gatewayStatusRoutes(),
     keySetupEndpoint(),
   ];

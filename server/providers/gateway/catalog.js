@@ -250,6 +250,27 @@ export const PROVIDER_CATALOG = Object.freeze({
     }),
     verified: '2026-09-30',
   }),
+  'ai-assistant': Object.freeze({
+    id: 'ai-assistant',
+    name: 'GOD AI (optional)',
+    domain: 'ai',
+    sourceUrl: 'https://docs.anthropic.com/en/api/messages',
+    cost: 'Paid by your own AI key',
+    apiKeyRequired: true,
+    needsKeyMessage:
+      'AI ASSISTANT NOT CONFIGURED — add AI_API_KEY (commands still work without it)',
+    rateLimit: 'At most 20 turns per minute and 500 per day here.',
+    license: "Your AI provider's terms",
+    commercialUse: 'conditional',
+    updateFrequency: 'On request',
+    dataTypes: ['assistant answers from app tool results'],
+    attribution: Object.freeze({
+      text: 'GOD AI tier: your configured provider',
+      url: '',
+      required: false,
+    }),
+    verified: '2026-09-30',
+  }),
   ourairports: Object.freeze({
     id: 'ourairports',
     name: 'OurAirports',

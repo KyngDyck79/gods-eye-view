@@ -4,6 +4,7 @@ import { initSystemStatus } from '../ui/systemStatus.js';
 import { initAudioSourcesDialog } from '../ui/audioSourcesDialog.js';
 import { initAlertsPanel } from '../ui/alertsPanel.js';
 import { initVoiceSettings } from '../ui/voiceSettings.js';
+import { initGodPanel } from '../ui/godPanel.js';
 
 /** Provider settings (dev server only) plus system status (always). */
 async function initStandaloneSettings(options) {
@@ -12,6 +13,7 @@ async function initStandaloneSettings(options) {
   const alerts = initAlertsPanel(options);
   const voiceLifetime = new AbortController();
   initVoiceSettings({ ...options, signal: voiceLifetime.signal });
+  initGodPanel({ ...options, signal: voiceLifetime.signal });
   const keys = await initKeySetup(options);
   return {
     destroy() {

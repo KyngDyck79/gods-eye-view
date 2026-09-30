@@ -15,6 +15,12 @@ import {
 } from '../alerts/engine.js';
 
 export const ALERT_SETTINGS_KEY = 'godsEyeView.v2.alertRules';
+
+/** Active alerts from the most recent run, for GOD's context. */
+let activeAlertsSnapshot = [];
+export function getActiveAlerts() {
+  return activeAlertsSnapshot;
+}
 const RUN_MS = 20_000;
 const HIDDEN_RUN_MS = 60_000;
 
@@ -178,6 +184,14 @@ export function initAlertsPanel({
       ? 'Some alert sources could not be checked'
       : null;
     feed.update(evaluated, alerts, settings);
+    activeAlertsSnapshot = feed
+      .list()
+      .filter((a) => !a.cleared)
+      .map(({ title, detail, firstSeenAt }) => ({
+        title,
+        detail,
+        firstSeenAt,
+      }));
     render();
   }
 

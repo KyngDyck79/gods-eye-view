@@ -1,5 +1,43 @@
 # Changelog
 
+## GOD'S EYE VIEW v2 — Phase 7: GOD assistant (2026-09-30)
+
+- **GOD** answers typed commands (the **GOD** chip, top right) and spoken
+  ones (voice). Tier 1 is a command parser that works offline and without
+  any key:
+  - track {callsign}
+  - show {layer} near {place}
+  - open cockpit
+  - nearest airport
+  - what's that plane
+  - weather here / there / at {airport}
+  - show severe weather
+  - cameras near {place or airport}
+  - which ATC frequency
+  - open ATC source
+  - toggle / turn on / turn off {layer}
+
+  "it", "that" and "there" mean the tracked aircraft; "here" means the map
+  center. Every answer comes from live app data and states its age. Estimates
+  are labeled.
+- Spoken answers use aviation phrasing, e.g. "That's United one three zero,
+  at thirty-seven thousand feet, as of forty-one seconds ago."
+- **Tier 2 (optional):**
+  - Free-form questions go to your AI provider through `/api/god/chat`
+    (Anthropic or OpenAI, key on the server only) with 16 app tools.
+  - The model must answer only from tool results. Otherwise it replies
+    exactly "That information is not currently available from the connected
+    data sources."
+  - Without `AI_API_KEY` the reply is "AI assistant not configured — add an
+    AI key in Settings → AI."
+- A **DEBUG** drawer in the GOD panel shows every parse, tool call and
+  result.
+- Honesty fixes found while testing:
+  - "cameras near" says when none are within 50 km, and how far the nearest
+    is, instead of jumping 1,700 km away.
+  - Layer failures give the layer's own reason.
+  - "nearest airport" skips heliports.
+
 ## GOD'S EYE VIEW v2 — Phase 6: local voice (2026-09-30)
 
 - **Local voice is now the default** (decision 6A). The mic button uses your

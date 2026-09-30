@@ -76,6 +76,8 @@ test('flights analyst record: full record maps every contract field', () => {
     squawk: null,
     emergency: null,
     registration: null,
+    typeName: FULL_INFO.typeName ?? null,
+    positionEpochMs: FULL_INFO.positionEpochMs ?? null,
   });
 });
 

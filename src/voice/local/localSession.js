@@ -140,7 +140,7 @@ export function createLocalVoiceSession({
     }
     if (!active) return;
     setState('listening', result?.reply ? result.reply : `HEARD: “${text}”`);
-    await reply(result?.reply || '');
+    await reply(result?.speech || result?.reply || '');
   }
 
   async function finishUtterance() {
