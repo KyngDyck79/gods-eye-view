@@ -1,4 +1,5 @@
-import { createCctvVideoSurface } from './cctvVideo.js';
+import { cctvFpsCapValue, createCctvVideoSurface } from './cctvVideo.js';
+import { cctvSourceRateLine } from './cctvRate.js';
 export function _calBadgeLabel(badge) {
   switch (badge) {
     case 'calibrated':
@@ -176,12 +177,41 @@ export function _renderCctvState(state) {
     if (!visible || this._cctvVideoCameraId !== activeId) {
       this._cctvVideoSurface?.stop();
       this._cctvVideoSurface = null;
+      clearInterval(this._cctvRateTimer);
+      this._cctvRateTimer = null;
     }
     this._cctvVideoCameraId = activeId;
     if (visible && !this._cctvVideoSurface) {
-      this._cctvVideoSurface = createCctvVideoSurface(this._cctvVideo, () =>
-        this.cctv.getActiveVideoElement?.(),
+      this._cctvVideoSurface = createCctvVideoSurface(
+        this._cctvVideo,
+        () => this.cctv.getActiveVideoElement?.(),
+        { getMaxFps: () => cctvFpsCapValue(this._cctvFpsCapValue) },
       );
+      // The measured rate changes while the stream plays; refresh its line.
+      const feedType = activeCamera?.feedType;
+      this._cctvRateTimer = setInterval(() => {
+        if (this._cctvSourceRate && this._cctvVideoSurface)
+          this._cctvSourceRate.textContent = cctvSourceRateLine({
+            isVideo: true,
+            feedType,
+            measuredFps: this._cctvVideoSurface.getMeasuredFps(),
+          });
+      }, 1000);
+    }
+  }
+  if (this._cctvSourceRate) {
+    if (!enabled || !activeCamera) {
+      this._cctvSourceRate.textContent = 'Source: —';
+    } else if (!liveIntent) {
+      this._cctvSourceRate.textContent = cctvSourceRateLine({
+        feedType: activeCamera.feedType,
+        cadence: activeCamera.sourceCadence,
+      });
+    } else if (!this._cctvRateTimer) {
+      this._cctvSourceRate.textContent = cctvSourceRateLine({
+        isVideo: true,
+        feedType: activeCamera.feedType,
+      });
     }
   }
 

@@ -181,30 +181,30 @@ test('doctor retains OAuth capability wording for a complete client pair', () =>
   );
 });
 
-test('doctor reports Basic mode without inferring runtime auth from OAuth credentials', () => {
+test('doctor reports the retired Basic mode and whether OAuth credentials exist', () => {
   const oauthCredentials = {
     OPENSKY_CLIENT_ID: { configured: true },
     OPENSKY_CLIENT_SECRET: { configured: true },
   };
-  for (const credentials of [{}, oauthCredentials]) {
-    assert.equal(
-      buildCapabilitySummary(credentials, { openSkyAuthMode: 'basic' }).flights,
-      'OpenSky Basic mode selected (credential presence and validity not verified)',
-    );
-  }
+  assert.equal(
+    buildCapabilitySummary({}, { openSkyAuthMode: 'basic' }).flights,
+    'OpenSky basic mode is retired (username/password no longer accepted); OAuth is used instead — add OPENSKY_CLIENT_ID and OPENSKY_CLIENT_SECRET',
+  );
+  assert.equal(
+    buildCapabilitySummary(oauthCredentials, { openSkyAuthMode: 'basic' }).flights,
+    'OpenSky basic mode is retired (username/password no longer accepted); OAuth is used instead',
+  );
 });
 
-test('doctor reports auto mode without assuming its eventual credential choice', () => {
+test('doctor reports the retired auto mode as OAuth', () => {
   const oauthCredentials = {
     OPENSKY_CLIENT_ID: { configured: true },
     OPENSKY_CLIENT_SECRET: { configured: true },
   };
-  for (const credentials of [{}, oauthCredentials]) {
-    assert.equal(
-      buildCapabilitySummary(credentials, { openSkyAuthMode: 'auto' }).flights,
-      'OpenSky auto mode selected (runtime credential choice and validity not verified)',
-    );
-  }
+  assert.equal(
+    buildCapabilitySummary(oauthCredentials, { openSkyAuthMode: 'auto' }).flights,
+    'OpenSky auto mode is retired (username/password no longer accepted); OAuth is used instead',
+  );
 });
 
 test('doctor describes the credential ladder without exposing values', () => {

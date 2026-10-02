@@ -1,5 +1,236 @@
 # Changelog
 
+## GOD'S EYE VIEW v2 — Voice from your phone (2026-10-02)
+
+- The app now accepts your Tailscale https address (`*.ts.net`), so a phone
+  browser allows the microphone.
+- Speech and GOD's AI tier answer only this Mac, or your own Tailscale login
+  (`GEV_OWNER_LOGINS`). Before this, anyone reaching the Mac through a
+  loopback proxy such as `tailscale serve` would have passed the old "this
+  Mac only" check.
+- Steps: `VOICE-SETUP.md` → "From your phone".
+
+## GOD'S EYE VIEW v2 — Phase 8: performance, phone layout, docs (2026-09-30)
+
+- **Performance:** new synthetic 5,000-aircraft load test
+  (`scripts/perf/aircraft-load.js`), measured on the Mac mini M2. Frame rate
+  meets the spec target (54–55 fps). The 100 ms freeze target is not met: each
+  5,000-contact poll blocks for 105–250 ms. See `docs/PERFORMANCE.md` and
+  `KNOWN-LIMITATIONS.md`.
+- **Phone layout** (700 px wide or less):
+  - a bottom tab bar AIR / GROUND / VOICE / WEATHER / MORE;
+  - bottom sheets with layer switches;
+  - VOICE in thumb reach (tap for on/off, hold to talk);
+  - GOD (with "go to {place}") above the tab bar;
+  - desktop panels tucked away, reachable from MORE;
+  - polling halved;
+  - the map credit line stays visible.
+- **GOD:** new "go to / fly to {place or airport}" command.
+- **Docs:** `SETUP.md`, `API-KEYS.md`, `TROUBLESHOOTING.md`,
+  `KNOWN-LIMITATIONS.md` and `DATA-SOURCES.md` (a pointer to
+  `DATA_SOURCES.md`), plus a v2 section at the top of the README with the
+  launch steps.
+
+## GOD'S EYE VIEW v2 — Phase 7: GOD assistant (2026-09-30)
+
+- **GOD** answers typed commands (the **GOD** chip, top right) and spoken
+  ones (voice). Tier 1 is a command parser that works offline and without
+  any key:
+  - track {callsign}
+  - show {layer} near {place}
+  - open cockpit
+  - nearest airport
+  - what's that plane
+  - weather here / there / at {airport}
+  - show severe weather
+  - cameras near {place or airport}
+  - which ATC frequency
+  - open ATC source
+  - toggle / turn on / turn off {layer}
+
+  "it", "that" and "there" mean the tracked aircraft; "here" means the map
+  center. Every answer comes from live app data and states its age. Estimates
+  are labeled.
+- Spoken answers use aviation phrasing, e.g. "That's United one three zero,
+  at thirty-seven thousand feet, as of forty-one seconds ago."
+- **Tier 2 (optional):**
+  - Free-form questions go to your AI provider through `/api/god/chat`
+    (Anthropic or OpenAI, key on the server only) with 16 app tools.
+  - The model must answer only from tool results. Otherwise it replies
+    exactly "That information is not currently available from the connected
+    data sources."
+  - Without `AI_API_KEY` the reply is "AI assistant not configured — add an
+    AI key in Settings → AI."
+- A **DEBUG** drawer in the GOD panel shows every parse, tool call and
+  result.
+- Honesty fixes found while testing:
+  - "cameras near" says when none are within 50 km, and how far the nearest
+    is, instead of jumping 1,700 km away.
+  - Layer failures give the layer's own reason.
+  - "nearest airport" skips heliports.
+
+## GOD'S EYE VIEW v2 — Phase 6: local voice (2026-09-30)
+
+- **Local voice is now the default** (decision 6A). The mic button uses your
+  chosen microphone. Speech is turned into text by whisper.cpp on this Mac,
+  through `/api/stt`, which answers this Mac only and refuses any speech
+  server that isn't on it. Nothing is saved.
+  - Web Speech is available as an engine, with its privacy and input notice.
+  - OpenAI Realtime stays available as an opt-in engine.
+- **Voice Settings** (the **SET** button on the voice control):
+  - engine and microphone picker (BlackHole 2ch preselected);
+  - live input level;
+  - noise suppression, voice activation (local speech detection), push to
+    talk (hold Space or HOLD TO TALK) and wake phrase;
+  - a 3-second local microphone test with playback and peak level;
+  - spoken-reply on/off, volume, speed and voice;
+  - flight levels;
+  - a warning if the Mac's output is BlackHole.
+- **● LISTENING** shows whenever audio is captured. Capture is muted while
+  GOD speaks.
+- **Aviation phrasing** for spoken replies: airline telephony ("American one
+  two three"), altitudes in words or flight levels, three-digit headings.
+- `npm run speech:setup` builds whisper.cpp's server and fetches `base.en`.
+  `npm run speech` starts it on 127.0.0.1:8178.
+- New doc: `VOICE-SETUP.md`, covering the exact AudioRelay → BlackHole steps
+  for the Galaxy S23 Ultra, plus troubleshooting.
+
+## GOD'S EYE VIEW v2 — Phase 5: marine, transit agencies, emergency facilities (2026-09-30)
+
+- **Emergency Facilities (OSM)** layer (Infrastructure group, share token 5).
+  Hospitals, fire stations, police, ambulance stations and emergency shelters
+  from OpenStreetMap. Fetched per 0.5° tile, cached 7 days on disk, at most
+  100 queries a day. Uses your `OVERPASS_UPSTREAMS` if set, otherwise the
+  public overpass-api.de, then VK Maps. Tilted views load the area around the
+  screen center.
+- **Transit agencies in config.** Add your own GTFS-Realtime agencies in
+  `config/transit-agencies.json`, which ships empty, with keys in `.env` as
+  `TRANSIT_KEY_*`. Keys stay on the server. WMATA Metrobus is the documented
+  example (`config/transit-agencies.example.json`,
+  `docs/TRANSIT-AGENCIES.md`). Problems show in Terminal and in
+  `/api/transit/feeds`.
+- **Marine.**
+  - aisstream.io is listed in SYSTEM and shows **NEEDS KEY** until
+    `AISSTREAM_API_KEY` is set.
+  - Vessel cards show each position's age (`AGE 42S`). With no reported
+    position time they show when it was received, or `TIME NOT REPORTED`,
+    instead of claiming `LIVE`.
+- In-app data credits added for NWS, NASA EONET, AviationWeather.gov and
+  OurAirports.
+- Weather warnings, traffic incidents and emergency facilities now refresh
+  their panel row after background loads.
+
+## GOD'S EYE VIEW v2 — Phase 4: warnings, natural events, alerts (2026-09-30)
+
+- **Weather Warnings (NWS)** layer (Weather group, share token 3): active NWS
+  warning, watch and advisory polygons in view, in the official NWS hazard
+  colors. The gateway downloads the national feed at most every 90 s.
+- **Natural Events (NASA EONET)** layer (Events group, share token 4): open
+  wildfires, volcanoes and storms from the last 30 days, with storm tracks
+  and source links.
+- **ALERTS** chip and feed (top right): emergency squawks (7500/7600/7700 or
+  an emergency status, in neutral wording), NWS Tornado / Severe
+  Thunderstorm / Flash Flood warnings in view, earthquakes at or above a set
+  magnitude within a set radius, and providers going offline or rate
+  limited. Alerts are timestamped and de-duplicated, clicking one flies there
+  or tracks the aircraft, and each rule has ON and VOICE switches. With VOICE
+  on, an alert is read aloud once, never twice.
+- Gateway routes: `/api/nws/alerts` (view or point), `/api/eonet/events`,
+  `/api/usgs/{feed}`.
+- Already in place and kept: the radar loop with play and UTC frame
+  timestamps, NHC cyclone cones, and the ISS ground track and pass
+  predictions.
+
+## GOD'S EYE VIEW v2 — Phase 3: ATC audio, traffic, cameras (2026-09-30)
+
+- **ATC audio.** The cockpit ATC page lists your own audio sources for the
+  airport and frequency, with LISTEN / STOP / MUTE / VOLUME. A new "Your audio
+  sources" dialog (SOURCES) stores receivers and stream links in this browser
+  only. LIVE AUDIO shows only while the stream is playing and a transmission
+  was heard in the last 15 s; a quiet frequency reads "no transmission heard".
+  Streams from your own network play through a local relay that only connects
+  to local addresses, only passes audio and records nothing. LiveATC is offered
+  only as **LISTEN ON EXTERNAL SOURCE**, which opens LiveATC's own page; its
+  streams are never embedded, relayed or recorded. Starting ATC audio stops the
+  radio and vice versa.
+- **Traffic.** Simulated traffic dots are off by default: roads without
+  measured speeds draw nothing and the row says "Road speeds: no source
+  configured". A labeled switch (SIMULATION OFF / SIMULATED DOTS ON) brings
+  the simulation back, and every status line then says SIMULATED.
+- **Traffic Incidents layer** (Movement group): accidents, closures, lane
+  closures, road works and jams in view, from TomTom Incident Details with your
+  key, budgeted to stay inside the free 2,500 requests per month.
+- **Cameras.** The viewer has a frame cap (AUTO / 5 / 10 / 15), which limits
+  redraws only, and a "Source:" line with the rate the camera actually
+  delivers: measured video frames per second, or how often a still image
+  really changes. Still images are re-requested conditionally (ETag /
+  Last-Modified), so unchanged frames aren't downloaded again. An unreachable
+  camera's placeholder reads CAMERA OFFLINE.
+- **SDR-SETUP.md**: build your own KMYR airband receiver (RTL-SDR →
+  RTLSDR-Airband → Icecast → the app).
+- South Carolina (511SC/SCDOT) cameras are **not** included: 511SC has no
+  developer program and its terms forbid display without SCDOT's written
+  permission.
+
+## GOD'S EYE VIEW v2 — Phase 2: cockpit, frequencies, aviation weather (2026-09-30)
+
+- The cockpit briefing has a fourth page, **ATC**: nearest airport and runway,
+  the estimated ATC facility and frequency with a HIGH/MEDIUM/LOW confidence
+  and a plain-English reason, ATIS, the airport's METAR (decoded and raw, with
+  its age) and TAF. When the field has no METAR, the nearest reporting
+  station is shown and named.
+- New frequency engine (`/api/airports/frequency`) following the spec's
+  ground / tower / approach / departure / en-route rules, with runway
+  alignment. Every frequency comes from OurAirports; above FL180 or beyond 40
+  nm it says "En-route (Center) frequency not in dataset" instead of guessing.
+- New AviationWeather.gov provider (`/api/avwx/metar`, `/taf`, `/nearest`)
+  using the official cache files, never per-station polling. METARs older than
+  90 minutes are marked STALE. Outages read "WEATHER DATA TEMPORARILY
+  UNAVAILABLE".
+- New AudioBus: one audible stream at a time. Radio now claims it, so any
+  future ATC stream stops the radio and vice versa. The ATC page has
+  LISTEN / STOP / MUTE / VOLUME / frequency / source / status controls, which
+  read NO AUDIO SOURCE until Phase 3 adds sources.
+- Cockpit briefing panel no longer grows wider than its window.
+
+## GOD'S EYE VIEW v2 — Phase 1: gateway and live aircraft (2026-09-29)
+
+- Live aircraft come from a new `/api/aircraft` route that fetches only the
+  current view: adsb.lol first (one point query of up to 250 nm, or up to four
+  spaced tiles), OpenSky for continental and world views or when adsb.lol is
+  down. Registration, type, squawk and emergency status now come with each
+  aircraft. Tabs share cached answers and in-flight requests.
+- Every gateway provider runs under a request budget: a hard per-minute
+  limit, a daily credit ledger (OpenSky credits are spread across the UTC
+  day), backoff with jitter that honours Retry-After, and a circuit breaker.
+- Aircraft data older than five minutes is never shown: the route answers
+  `AIRCRAFT DATA TEMPORARILY UNAVAILABLE` and the map clears. Dead reckoning
+  stops 30 s after the last real position. Positions older than 60 s are STALE.
+- The tracked-aircraft readout adds the squawk, emergency status in neutral
+  wording, the source and the UTC time of the last observed position, and
+  labels routes "PLAUSIBLE ROUTE" or "Route unverified".
+- OpenSky username/password auth is gone (OpenSky retired it on 2026-03-18);
+  `basic` and `auto` now mean OAuth.
+- OurAirports airports, runways, frequencies and navaids download once to
+  `data/cache/ourairports/`, refresh weekly and answer `/api/airports/*` from
+  memory.
+- Search: airport codes (KMYR, MYR) and "… airport" names fly to the airport;
+  an exact callsign, registration or ICAO hex of a loaded aircraft tracks it.
+- SYSTEM chip and dialog (bottom right) show each provider's status, last
+  success, latency, budget use, license and required attribution, from
+  `/api/providers`. `/api/health` reports gateway status and usage mode.
+- `GEV_USAGE_MODE=commercial` switches off providers whose terms forbid
+  commercial use. `GEV_CONTACT_EMAIL` goes into the User-Agent now sent to
+  adsb.lol, OpenSky, OurAirports, Nominatim, Overpass and CelesTrak.
+- Branding: GOD'S EYE VIEW, created by Rod Smith. The upstream MIT notice is
+  unchanged; see CREDITS.md.
+- New scripts: `npm run lint`, `npm run typecheck`, `npm run start`,
+  `npm run gate`.
+- Fixed a missing import in the bikeshare city registry that would throw for a
+  city without a load radius.
+
+## Earlier changes (upstream)
+
 - Public Overpass instances are no longer used by default. Street Traffic
   roads come from TomTom flow tiles, OpenFreeMap vector tiles, or both, chosen
   on the layer row (TomTom / OSM / Hybrid) or with `?trafficRoads=`. With a

@@ -26,6 +26,9 @@ function setup(t) {
     globalThis.cancelAnimationFrame = beforeCancel;
   });
   const state = createState({ services: {} });
+  // These tests exercise dot motion, which needs dots: opt into simulation
+  // (off by default since v2 — roads without measured flow draw nothing).
+  state._uncoveredMode = 'sim';
   state._enabled = true;
   state._liveMode = true;
   state._pointCollection = new C.PointPrimitiveCollection();

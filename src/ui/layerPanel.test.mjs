@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { runInNewContext } from 'node:vm';
 
-test('panel presentation places Transit between Street Traffic and Bike Share in Movement', () => {
+test('panel presentation places Traffic Incidents and Transit between Street Traffic and Bike Share in Movement', () => {
   const source = readFileSync(
     new URL('./layerPanel.js', import.meta.url),
     'utf8',
@@ -24,6 +24,7 @@ test('panel presentation places Transit between Street Traffic and Bike Share in
       'local-adsb',
       'ais-live-vessels',
       'traffic',
+      'traffic-incidents',
       'transit',
       'bikeshare',
     ],

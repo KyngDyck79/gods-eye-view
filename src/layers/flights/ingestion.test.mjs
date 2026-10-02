@@ -83,3 +83,36 @@ test('civil acquisition publishes source time and uses a replaced source on the 
   assert.deepEqual(probe.labels, ['First', 'Second']);
   assert.equal(probe.restores.length, 2);
 });
+
+test('no-fake-data: after five minutes without fresh data every aircraft is removed', async () => {
+  const outage = Object.assign(
+    new Error('AIRCRAFT DATA TEMPORARILY UNAVAILABLE'),
+    {
+      name: 'LiveSourceError',
+      status: 503,
+      retryAfterMs: 20_000,
+    },
+  );
+  const probe = setup({
+    getSnapshot: async () => {
+      throw outage;
+    },
+  });
+  probe.feed._count = 7;
+
+  // Four minutes into an outage: keep the (already STALE-cued) contacts.
+  probe.feed._lastUpdate = Date.now() - 4 * 60_000;
+  await probe.update(null);
+  assert.equal(probe.accepted.length, 0);
+  assert.equal(probe.feed._lastError, 'AIRCRAFT DATA TEMPORARILY UNAVAILABLE');
+
+  // Past five minutes: the normal absence path runs until nothing is left.
+  probe.feed._retryAt = 0;
+  probe.feed._lastUpdate = Date.now() - 5 * 60_000 - 1;
+  await probe.update(null);
+  assert.ok(probe.accepted.length >= 1);
+  assert.ok(
+    probe.accepted.every((s) => s.records.length === 0 && s.complete === true),
+  );
+  assert.equal(probe.feed._count, 0);
+});

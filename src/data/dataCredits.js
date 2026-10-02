@@ -144,6 +144,22 @@ export const DATA_CREDITS = [
     html: 'Earthquakes: Data courtesy of the U.S. Geological Survey',
   },
   {
+    key: 'nws-alerts',
+    html: 'Weather warnings: <a href="https://www.weather.gov/documentation/services-web-api" target="_blank" rel="noopener">NOAA National Weather Service</a> (public domain)',
+  },
+  {
+    key: 'nasa-eonet',
+    html: 'Natural events: <a href="https://eonet.gsfc.nasa.gov" target="_blank" rel="noopener">NASA EONET</a>',
+  },
+  {
+    key: 'aviationweather',
+    html: 'METAR/TAF: <a href="https://aviationweather.gov/data/api/" target="_blank" rel="noopener">NOAA AviationWeather.gov</a> (public domain; not for flight planning)',
+  },
+  {
+    key: 'ourairports',
+    html: 'Airports, runways &amp; frequencies: <a href="https://ourairports.com/data/" target="_blank" rel="noopener">OurAirports</a> (public domain)',
+  },
+  {
     key: 'nasa-gibs',
     html:
       'Recent imagery: We acknowledge the use of imagery provided by services from ' +

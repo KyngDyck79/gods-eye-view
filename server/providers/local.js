@@ -25,6 +25,18 @@ import { weatherProxy } from './weather.js';
 import { firePerimetersProxy } from './firePerimeters.js';
 import { cycloneProxy } from './cyclones.js';
 import { windProxy } from './wind.js';
+import { aircraftViewportProxy } from './aircraft/viewportRoute.js';
+import { gatewayStatusRoutes } from './gateway/routes.js';
+import { airportsProxy } from './airports/index.js';
+import { aviationWeatherProxy } from './aviationWeather/index.js';
+import { audioRelayProxy } from './audio/relay.js';
+import { trafficIncidentsProxy } from './trafficIncidents/index.js';
+import { nwsAlertsProxy } from './nws/index.js';
+import { eonetProxy } from './eonet/index.js';
+import { usgsProxy } from './usgs.js';
+import { facilitiesProxy } from './facilities/index.js';
+import { whisperProxy } from './whisper/index.js';
+import { aiProxy } from './ai/index.js';
 
 /** Construct the local provider plugins in their established order. */
 function localProviderPlugins() {
@@ -55,6 +67,18 @@ function localProviderPlugins() {
     weatherProxy(),
     cycloneProxy(),
     firePerimetersProxy(),
+    aircraftViewportProxy(),
+    airportsProxy(),
+    aviationWeatherProxy(),
+    audioRelayProxy(),
+    trafficIncidentsProxy(),
+    nwsAlertsProxy(),
+    eonetProxy(),
+    usgsProxy(),
+    facilitiesProxy(),
+    whisperProxy(),
+    aiProxy(),
+    gatewayStatusRoutes(),
     keySetupEndpoint(),
   ];
 }

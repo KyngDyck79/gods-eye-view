@@ -46,7 +46,9 @@
       "src/data/adsbLolFallback.js",
       "src/data/aisStreamAdapter.js",
       "src/data/aisWatchdog.js",
-      "src/sources/httpBody.js"
+      "src/sources/httpBody.js",
+      "server/providers/gateway/catalog.js",
+      "server/providers/gateway/registry.js"
     ],
     "external": ["ws"]
   },
@@ -88,7 +90,8 @@
       "server/providers/space/launch-library.js",
       "server/providers/common/http.js",
       "src/data/spaceProviderRequests.js",
-      "src/sources/httpBody.js"
+      "src/sources/httpBody.js",
+      "server/providers/gateway/registry.js"
     ],
     "external": []
   },
@@ -170,7 +173,8 @@
       "scripts/google-server-key.mjs",
       "src/data/cctvFootprint.js",
       "src/sources/cctvTypes.js",
-      "src/sources/httpBody.js"
+      "src/sources/httpBody.js",
+      "server/providers/cctv/cadence.js"
     ],
     "external": []
   },
@@ -209,7 +213,8 @@
       "src/data/routeSteps.js",
       "src/sources/httpBody.js",
       "src/sources/overpass.js",
-      "src/sources/rateLimit.js"
+      "src/sources/rateLimit.js",
+      "server/providers/gateway/registry.js"
     ],
     "external": []
   },
@@ -228,7 +233,8 @@
       "server/providers/overpass/geometry.js",
       "server/providers/overpass/transport.js",
       "src/sources/httpBody.js",
-      "src/sources/rateLimit.js"
+      "src/sources/rateLimit.js",
+      "server/providers/gateway/registry.js"
     ],
     "external": []
   },
@@ -255,7 +261,8 @@
       "src/data/local_data/natural_earth/regions.json",
       "src/data/naturalEarthRegions.js",
       "src/data/bundledJson.js",
-      "src/data/retryableLoad.js"
+      "src/data/retryableLoad.js",
+      "server/providers/gateway/registry.js"
     ],
     "external": []
   },
@@ -312,6 +319,7 @@
       "src/search/coordinateGeocoder.js",
       "src/search/coordinateParser.js",
       "src/search/presetGeocoder.js",
+      "src/search/airportGeocoder.js",
       "src/search/nominatim.js",
       "src/nominatimGeocode.js",
       "src/data/regionalModel.js",
@@ -434,7 +442,8 @@
       "src/ui/cctvControls.js",
       "src/ui/cctvFrames.js",
       "src/ui/cctvVideo.js",
-      "src/ui/cctvPresentation.js"
+      "src/ui/cctvPresentation.js",
+      "src/ui/cctvRate.js"
     ],
     "external": []
   },
@@ -480,7 +489,12 @@
       "src/cockpitMath.js",
       "src/cockpitUtilityLayout.js",
       "src/cockpitVisionPolicy.js",
-      "src/ui/panelRailGeometry.js"
+      "src/ui/panelRailGeometry.js",
+      "src/audio/audioBus.js",
+      "src/ui/cockpitAtc.js",
+      "src/audio/streamPlayer.js",
+      "src/data/tapAddress.js",
+      "src/audio/sources.js"
     ],
     "external": ["cesium"]
   },
@@ -622,7 +636,13 @@
       "src/ui/localSdrControls.js",
       "src/layers/localAdsb/feedNames.js",
       "src/ui/localSdrPresentation.js",
-      "src/data/cameraArrival.js"
+      "src/data/cameraArrival.js",
+      "src/audio/audioBus.js",
+      "src/ui/cockpitAtc.js",
+      "src/ui/cctvRate.js",
+      "src/audio/streamPlayer.js",
+      "src/data/tapAddress.js",
+      "src/audio/sources.js"
     ],
     "external": ["cesium"]
   },
@@ -1186,7 +1206,8 @@
       "src/layers/radio/tuningNoise.js",
       "src/layers/radio/volume.js",
       "src/ui/radioTunerModel.js",
-      "src/data/inputOwnership.js"
+      "src/data/inputOwnership.js",
+      "src/audio/audioBus.js"
     ],
     "external": ["cesium"]
   },
@@ -1878,6 +1899,7 @@
       "src/search/coordinateGeocoder.js",
       "src/search/coordinateParser.js",
       "src/search/presetGeocoder.js",
+      "src/search/airportGeocoder.js",
       "src/voice/session.js",
       "src/voice/sessionCommands.js",
       "src/voice/realtimeSession.js",
@@ -2027,7 +2049,41 @@
       "src/sources/requestDeadline.js",
       "src/data/local_data/osm_military_names/names.json",
       "src/layers/installations/namedMarkers.js",
-      "src/data/infrastructureOverlayEntry.js"
+      "src/data/infrastructureOverlayEntry.js",
+      "src/audio/audioBus.js",
+      "src/ui/cockpitAtc.js",
+      "src/layers/trafficIncidents/source.js",
+      "src/layers/trafficIncidents/index.js",
+      "src/app/layers/trafficIncidents.js",
+      "src/ui/cctvRate.js",
+      "src/audio/streamPlayer.js",
+      "src/data/tapAddress.js",
+      "src/audio/sources.js",
+      "src/layers/nwsWarnings/source.js",
+      "src/layers/naturalEvents/source.js",
+      "src/layers/nwsWarnings/index.js",
+      "src/layers/naturalEvents/index.js",
+      "src/app/layers/naturalEvents.js",
+      "src/app/layers/nwsWarnings.js",
+      "src/layers/emergencyFacilities/source.js",
+      "src/layers/emergencyFacilities/index.js",
+      "src/app/layers/emergencyFacilities.js",
+      "src/voice/local/settings.js",
+      "src/voice/local/tts.js",
+      "src/voice/local/stt.js",
+      "src/voice/local/wav.js",
+      "src/voice/local/vad.js",
+      "src/voice/local/mic.js",
+      "src/voice/local/localSession.js",
+      "src/god/instance.js",
+      "src/ui/godPanel.js",
+      "src/god/parser.js",
+      "src/voice/local/aviationSpeech.js",
+      "src/god/phrasing.js",
+      "src/god/god.js",
+      "src/alerts/engine.js",
+      "src/ui/alertsPanel.js",
+      "src/god/tools.js"
     ],
     "external": [
       "hls.js",
@@ -2413,6 +2469,7 @@
       "src/search/coordinateGeocoder.js",
       "src/search/coordinateParser.js",
       "src/search/presetGeocoder.js",
+      "src/search/airportGeocoder.js",
       "src/app/localGeojsonServices.js",
       "src/layers/alpr/records.js",
       "src/layers/earthquakes/records.js",
@@ -2511,7 +2568,20 @@
       "src/sources/requestDeadline.js",
       "src/data/local_data/osm_military_names/names.json",
       "src/layers/installations/namedMarkers.js",
-      "src/data/infrastructureOverlayEntry.js"
+      "src/data/infrastructureOverlayEntry.js",
+      "src/audio/audioBus.js",
+      "src/layers/trafficIncidents/source.js",
+      "src/layers/trafficIncidents/index.js",
+      "src/app/layers/trafficIncidents.js",
+      "src/layers/nwsWarnings/source.js",
+      "src/layers/nwsWarnings/index.js",
+      "src/layers/naturalEvents/source.js",
+      "src/app/layers/nwsWarnings.js",
+      "src/layers/naturalEvents/index.js",
+      "src/app/layers/naturalEvents.js",
+      "src/layers/emergencyFacilities/source.js",
+      "src/layers/emergencyFacilities/index.js",
+      "src/app/layers/emergencyFacilities.js"
     ],
     "external": [
       "hls.js",
@@ -2564,6 +2634,7 @@
       "src/search/coordinateGeocoder.js",
       "src/search/coordinateParser.js",
       "src/search/presetGeocoder.js",
+      "src/search/airportGeocoder.js",
       "src/search/nominatim.js",
       "src/nominatimGeocode.js",
       "src/data/regionalModel.js",
@@ -2906,7 +2977,9 @@
       "src/sources/transitHistory.js",
       "src/sources/transitService.js",
       "src/sources/transitHistoryStore.js",
-      "src/sources/rateLimit.js"
+      "src/sources/rateLimit.js",
+      "src/data/transitAgencyConfig.js",
+      "server/providers/transitAgencies.js"
     ],
     "external": ["pbf"]
   },

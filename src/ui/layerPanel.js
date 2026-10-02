@@ -26,6 +26,7 @@ const PANEL_GROUPS = [
       'local-adsb',
       'ais-live-vessels',
       'traffic',
+      'traffic-incidents',
       'transit',
       'bikeshare',
     ],
@@ -37,6 +38,7 @@ const PANEL_GROUPS = [
   {
     label: 'Infrastructure',
     ids: [
+      'emergency-facilities',
       'alpr-cameras',
       'military-installations',
       'local-datacenters',
@@ -46,11 +48,18 @@ const PANEL_GROUPS = [
   },
   {
     label: 'Events',
-    ids: ['rocket-launches', 'earthquakes', 'local-firms', 'fire-perimeters'],
+    ids: [
+      'rocket-launches',
+      'earthquakes',
+      'natural-events',
+      'local-firms',
+      'fire-perimeters',
+    ],
   },
   {
     label: 'Weather',
     ids: [
+      'nws-warnings',
       'wind',
       'weather-radar',
       'weather-satellite',

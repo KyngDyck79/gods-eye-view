@@ -142,3 +142,38 @@ Use the same controls before attributing a difference to the application:
 
 Use this page as a regression baseline for one known hardware and browser
 configuration, not as a compatibility guarantee.
+
+## v2: 5,000 aircraft (spec 4.29), September 30, 2026
+
+Measured with `scripts/perf/aircraft-load.js`, a **synthetic** load test. In
+the test tab only, it replaces `/api/aircraft` answers with generated
+contacts spread over the view, labeled "SYNTHETIC LOAD TEST", and measures
+frame times with `requestAnimationFrame` and main-thread stalls with the Long
+Tasks API.
+
+| Setting | Value |
+|---|---|
+| Machine | Mac mini M2 (Rod's) |
+| Browser | Chromium 152 inside the Claude desktop app's browser pane (not the Chrome app itself) |
+| Viewport | 961 × 994 at device pixel ratio 2 |
+| View | Continental US from 3,000 km, flights layer only, Esri imagery |
+
+| Scenario | Aircraft rendered | Average FPS | 5th-percentile FPS | Worst frame | Long tasks > 100 ms (10 s) |
+|---|---:|---:|---:|---:|---:|
+| 5,000, camera still | 5,000 | 55 | 56 | 133 ms | 1 (133 ms) |
+| 5,000, camera rotating | 5,000 | 54 | 56 | 167 ms | 2 (longest 181 ms) |
+| 17,847 (5,000 synthetic + 12,847 real), rotating | 17,847 | 33–39 | 12–20 | 217–267 ms | 2–10 |
+
+- **≥ 45 fps with 5,000 aircraft: met** (54–55 fps average).
+- **No freeze over 100 ms: not met.** Each poll of 5,000 contacts ran
+  flight-layer ingestion for 105–247 ms (measured: `update()` took 247, 143
+  and 105 ms over three consecutive polls). The fix is to parse and normalize
+  in a Web Worker, or to apply records in frame-sized chunks. That was left
+  for a focused change rather than rewriting the tested ingestion pipeline at
+  the end of the build.
+
+To re-run it in Chrome, open the app, then paste into the DevTools console:
+
+```js
+await (await import('/scripts/perf/aircraft-load.js')).runAircraftLoad({ motion: true })
+```

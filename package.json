@@ -2,17 +2,17 @@
   "name": "gods-eye-view",
   "private": true,
   "version": "0.1.1",
-  "description": "A real-time intelligence console for planet Earth — photorealistic 3D globe, live aircraft/ships/satellites/earthquakes/CCTV, and hands-free voice control. Runs in a browser.",
+  "description": "GOD'S EYE VIEW by Rod Smith — a real-time command center for geospatial intelligence, aviation, weather, traffic and radio. Photorealistic 3D globe, live aircraft/ships/satellites/earthquakes/cameras, and voice control. Runs in a browser.",
   "type": "module",
   "license": "MIT",
-  "author": "Bilawal Sidhu",
-  "homepage": "https://github.com/bilawalsidhu/gods-eye-view#readme",
+  "author": "Rod Smith",
+  "homepage": "https://github.com/KyngDyck79/gods-eye-view#readme",
   "repository": {
     "type": "git",
-    "url": "https://github.com/bilawalsidhu/gods-eye-view.git"
+    "url": "https://github.com/KyngDyck79/gods-eye-view.git"
   },
   "bugs": {
-    "url": "https://github.com/bilawalsidhu/gods-eye-view/issues"
+    "url": "https://github.com/KyngDyck79/gods-eye-view/issues"
   },
   "engines": {
     "node": ">=24.14.0 <25 || >=26 <27"
@@ -42,11 +42,17 @@
     "opensky:import": "./scripts/opensky-import-client.sh",
     "build": "vite build",
     "preview": "vite preview",
+    "start": "vite build && vite preview",
+    "lint": "eslint .",
+    "typecheck": "tsc -p tsconfig.json",
+    "gate": "npm run lint && npm run typecheck && npm test && npm run check:boundaries && npm run format:check && npm run build",
     "test": "node scripts/run-unit-tests.mjs",
     "test:track": "node scripts/track-regression.mjs",
     "qa:map-source-tray": "node scripts/qa-map-source-tray.mjs",
     "check:boundaries": "node scripts/check-import-directions.mjs && node scripts/check-package-boundaries.mjs",
-    "qa:transit": "node scripts/qa-transit.mjs"
+    "qa:transit": "node scripts/qa-transit.mjs",
+    "speech:setup": "bash scripts/setup-speech.sh",
+    "speech": "bash scripts/start-speech.sh"
   },
   "dependencies": {
     "@jtarrio/signals": "^0.10.0",
@@ -61,9 +67,14 @@
     "satellite.js": "^6.0.2"
   },
   "devDependencies": {
+    "@eslint/js": "^9.39.5",
+    "@types/node": "^24.19.0",
+    "eslint": "^9.39.5",
+    "globals": "^17.12.0",
     "prettier": "3.9.6",
     "puppeteer": "^25.10.0",
     "sharp": "^0.35.4",
+    "typescript": "^5.9.3",
     "vite": "^6.0.0",
     "vite-plugin-cesium": "^1.2.23",
     "ws": "^8.21.0"

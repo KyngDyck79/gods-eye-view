@@ -161,6 +161,14 @@ export function createQueries({
         ? info.renderAltitudeM
         : carto.height,
       onGround: info?.onGround === true,
+      // Reported (not derived) kinematics for the ATC frequency estimate.
+      verticalRateMps: Number.isFinite(info?.verticalRate)
+        ? info.verticalRate
+        : null,
+      squawk: info?.squawk ?? null,
+      positionEpochMs: Number.isFinite(info?.positionEpochMs)
+        ? info.positionEpochMs
+        : null,
       velocityMps: displayed.speedMps,
       track: displayed.trackDeg,
       stale: Boolean(
@@ -255,6 +263,13 @@ export function createQueries({
       operator: text(info?.airline),
       routeOrigin: routeOk ? text(info?.route?.origin?.code) : null,
       routeDestination: routeOk ? text(info?.route?.destination?.code) : null,
+      // Transponder state as reported (alerts engine; may be set in error).
+      squawk: text(info?.squawk),
+      emergency: text(info?.emergency),
+      registration: text(info?.registration),
+      typeName: text(info?.typeName),
+      // When the position was reported (for "as of N seconds ago").
+      positionEpochMs: num(info?.positionEpochMs),
     };
   }
   const methods = {

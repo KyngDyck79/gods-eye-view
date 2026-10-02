@@ -802,7 +802,7 @@ test('cockpit briefing cycle control keeps its state as the accessible name', ()
   assert.match(match[0], /aria-label="CYCLE OFF"/);
   assert.match(match[0], /aria-pressed="false"/);
   assert.match(match[0], />CYCLE OFF<\/button>/);
-  assert.match(match[0], /title="Cycle briefing pages automatically every 9 seconds \(Signals → News → Local\)\./);
+  assert.match(match[0], /title="Cycle briefing pages automatically every 9 seconds \(Signals → News → Local → ATC\)\./);
 
   const update = setBriefAutoRotate.toString();
   assert.ok(update, 'cockpit briefing cycle state updater is missing');

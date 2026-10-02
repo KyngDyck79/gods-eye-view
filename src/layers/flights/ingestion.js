@@ -1,4 +1,8 @@
-import { ERROR_BACKOFF_INTERVAL } from './recordPolicy.js';
+import {
+  AIRCRAFT_REMOVE_AFTER_MS,
+  ERROR_BACKOFF_INTERVAL,
+  MISSING_POLL_LIMIT,
+} from './recordPolicy.js';
 
 /** Own acquisition, cancellation, freshness and backoff independently of rendering. */
 export function createIngestion({
@@ -8,6 +12,22 @@ export function createIngestion({
   setSourceLabel,
   applyPendingTrackingRestore,
 }) {
+  /**
+   * Never leave old aircraft on the map through a long outage: once the last
+   * accepted snapshot is AIRCRAFT_REMOVE_AFTER_MS old, run the normal
+   * absence path until every contact (and any tracking) is released.
+   */
+  function expireIfOutageTooLong(viewer) {
+    const last = feed._lastUpdate;
+    if (Number.isFinite(last) && Date.now() - last < AIRCRAFT_REMOVE_AFTER_MS)
+      return;
+    if (!feed._count) return;
+    const empty = { records: [], complete: true, source: feed._lastSource };
+    for (let i = 0; i < MISSING_POLL_LIMIT; i += 1)
+      applySnapshot(empty, viewer);
+    feed._count = 0;
+  }
+
   const methods = {
     async update(viewer, { signal = null } = {}) {
       const nowMs = Date.now();
@@ -78,6 +98,7 @@ export function createIngestion({
         }
         feed._lastError =
           e?.name === 'LiveSourceError' ? e.message : 'Live data unavailable';
+        expireIfOutageTooLong(viewer);
       } finally {
         feed._activeUpdateControllers.delete(resourceController);
       }

@@ -1,6 +1,7 @@
 import { makeRateLimiter, clientKey } from '../common/rate-limit.js';
 import { coalesceProxyRequest } from '../common/http.js';
 import { fetchRegionalJson } from './http.js';
+import { GEV_PROJECT_URL, gevUserAgent } from '../gateway/registry.js';
 import { naturalRegionAtPoint } from '../../../src/data/naturalEarthRegions.js';
 import {
   nominatimToGeocodeResult,
@@ -12,11 +13,9 @@ import {
  * Referer that identifies the application, and states that stock library
  * agents will not do. Both are sent.
  */
-const NOMINATIM_HEADERS = Object.freeze({
-  'User-Agent':
-    'gods-eye-view/0.1 (+https://github.com/bilawalsidhu/gods-eye-view)',
-  Referer: 'https://github.com/bilawalsidhu/gods-eye-view',
-});
+function nominatimHeaders() {
+  return { 'User-Agent': gevUserAgent(), Referer: GEV_PROJECT_URL };
+}
 
 /**
  * Minimum spacing between upstream calls. The policy states an absolute
@@ -158,7 +157,7 @@ export function createNominatimSearchProvider({
       const rows = await enqueueNominatim(
         () =>
           requestJson(`${endpoint}?${params}`, {
-            headers: NOMINATIM_HEADERS,
+            headers: nominatimHeaders(),
             redirect: 'error',
           }),
         { bounded: true, signal },

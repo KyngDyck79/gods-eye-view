@@ -157,11 +157,9 @@ export function buildCapabilitySummary(
     : OPENSKY_AUTH_MODE_DEFAULT;
   const flights = openSkyMode === 'anon'
     ? 'OpenSky keyless anonymous access (rate-limited)'
-    : openSkyMode === 'basic'
-      ? 'OpenSky Basic mode selected (credential presence and validity not verified)'
-      : openSkyMode === 'auto'
-        ? 'OpenSky auto mode selected (runtime credential choice and validity not verified)'
-        : hasOAuthCredentials
+    : openSkyMode === 'basic' || openSkyMode === 'auto'
+      ? `OpenSky ${openSkyMode} mode is retired (username/password no longer accepted); OAuth is used instead${hasOAuthCredentials ? '' : ' — add OPENSKY_CLIENT_ID and OPENSKY_CLIENT_SECRET'}`
+      : hasOAuthCredentials
           ? 'OpenSky OAuth credentials present (runtime mode and validity not verified)'
           : 'OpenSky keyless anonymous access (rate-limited)';
   const route = selectMapStartupRoute({

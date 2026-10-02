@@ -4,6 +4,11 @@ import { initDrawTool } from '../annotations/drawTool.js';
 import { initImageryBoxTool } from '../ui/imageryBoxTool.js';
 import { createRecentImageryPanel } from '../ui/recentImagery.js';
 import { initGevVoiceCommands } from '../voice/gevRealtime.js';
+import { createGevActionRunner } from '../voice/gevActions.js';
+import { createGod } from '../god/god.js';
+import { createGodTools } from '../god/tools.js';
+import { pushGodDebug, setGod } from '../god/instance.js';
+import { withConsoleEcho } from '../ui/godPanel.js';
 import { installScopeMask, destroyScopeMask } from '../scopeMask.js';
 import {
   installRenderGovernor,
@@ -93,7 +98,9 @@ export function createApplicationTools({
     });
   }
   if (startChrome)
-    defer(startChrome({ loadingScreen, styleManager, dataManager, signal }));
+    defer(
+      startChrome({ loadingScreen, styleManager, dataManager, signal, viewer }),
+    );
   // Idle render governor: flips the scene into requestRenderMode whenever
   // nothing animates per frame. Installed AFTER every module above has had
   // its chance to register pre-install holds. (perf wave 2)
@@ -157,18 +164,31 @@ export function createApplicationTools({
   defer(() => {
     if (window.__godsEyeView === debug) delete window.__godsEyeView;
   });
-  const voiceCommands = initGevVoiceCommands({
+  const runnerOptions = {
     ...voice,
     floorServices: operations.surface.groundFloor,
     annotationResolver: operations.annotationResolver,
     searchNavigation: operations.searchAndFlyTo,
-    signal,
     placeSearch,
     viewer,
     styleManager,
     dataManager,
     sceneDirector,
     annotations,
+  };
+  // One action runner shared by voice and GOD (spec 4.19).
+  const runner = createGevActionRunner(runnerOptions);
+  const god = createGod({
+    tools: createGodTools({ runner, dataManager, viewer, placeSearch }),
+    onDebug: pushGodDebug,
+  });
+  setGod(god);
+  defer(() => setGod(null));
+  const voiceCommands = initGevVoiceCommands({
+    ...runnerOptions,
+    signal,
+    runner,
+    handleVoiceCommand: withConsoleEcho((text) => god.handle(text)),
   });
   defer(() => {
     voiceCommands.stop({ removeUi: true });

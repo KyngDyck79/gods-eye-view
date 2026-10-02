@@ -18,6 +18,10 @@ import {
 } from './cctv/constants.js';
 import { sanitizeCctvRangeHeader } from './cctv/range.js';
 import { createHlsPuller } from './cctv/stream.js';
+import {
+  createFrameCadenceTracker,
+  describeStillCadence,
+} from './cctv/cadence.js';
 import { googleServerApiKey } from './places/google-key.js';
 export { CCTV_FRAME_FETCH_TIMEOUT_MS, fetchCctvImageFromUpstream };
 /**
@@ -43,6 +47,10 @@ export function cctvProxy({ sourceRoot = process.cwd() } = {}) {
   const HEALTH_MAX_ENTRIES = CCTV_MAX_SOURCES_CEILING;
   /** Live HLS strategies (see ./cctv/stream.js). Shared across dev and preview. */
   const puller = createHlsPuller();
+  /** Last frame per camera, for conditional (304) refreshes. */
+  const frameCache = new Map();
+  const FRAME_CACHE_MAX = 300;
+  const cadence = createFrameCadenceTracker();
 
   /** Update the health entry for a camera, evicting the oldest entry if at capacity. */
   const setHealth = (cameraId, patch) => {
@@ -58,6 +66,9 @@ export function cctvProxy({ sourceRoot = process.cwd() } = {}) {
       sourceKind: patch.sourceKind || prev.sourceKind || 'unknown',
       label: patch.label || prev.label || '',
       message: patch.message || prev.message || '',
+      // Measured still-image cadence (./cctv/cadence.js), kept until replaced.
+      cadence:
+        patch.cadence !== undefined ? patch.cadence : prev.cadence || null,
       updatedAt: Date.now(),
     });
   };
@@ -485,23 +496,54 @@ export function cctvProxy({ sourceRoot = process.cwd() } = {}) {
             ? source?.url
             : '');
 
+        const cached = frameCache.get(cameraId);
+        const validators =
+          cached && upstreamCandidate === cached.url
+            ? { etag: cached.etag, lastModified: cached.lastModified }
+            : null;
         const upstreamImage =
           source?.sourceKind === 'txdot-its'
             ? await fetchTxdotSnapshot(upstreamCandidate)
-            : await fetchCctvImageFromUpstream(upstreamCandidate);
-        if (upstreamImage?.ok) {
+            : await fetchCctvImageFromUpstream(upstreamCandidate, {
+                validators:
+                  validators?.etag || validators?.lastModified
+                    ? validators
+                    : null,
+              });
+        if (upstreamImage?.ok && (!upstreamImage.notModified || cached)) {
+          const frame = upstreamImage.notModified ? cached : upstreamImage;
+          if (!upstreamImage.notModified) {
+            frameCache.delete(cameraId);
+            frameCache.set(cameraId, {
+              url: upstreamCandidate,
+              body: upstreamImage.body,
+              contentType: upstreamImage.contentType,
+              etag: upstreamImage.etag || null,
+              lastModified: upstreamImage.lastModified || null,
+            });
+            while (frameCache.size > FRAME_CACHE_MAX)
+              frameCache.delete(frameCache.keys().next().value);
+          }
+          const measured = cadence.observe(
+            cameraId,
+            upstreamImage.notModified ? null : upstreamImage.body,
+          );
           setHealth(cameraId, {
             status: 'ok',
             sourceKind: 'snapshot',
             label: source?.provider || 'Configured source',
-            message: 'Upstream snapshot active',
+            message: describeStillCadence(measured),
+            cadence: measured,
           });
           res.writeHead(200, {
-            'Content-Type': upstreamImage.contentType,
+            'Content-Type': frame.contentType,
             'Cache-Control': 'no-store',
             'X-CCTV-Source': 'upstream-image',
+            ...(upstreamImage.notModified
+              ? { 'X-CCTV-Frame': 'unchanged' }
+              : {}),
           });
-          res.end(upstreamImage.body);
+          res.end(frame.body);
           return;
         }
 
@@ -532,9 +574,7 @@ export function cctvProxy({ sourceRoot = process.cwd() } = {}) {
           cameraId,
           label,
           city,
-          status: source?.url
-            ? 'UPSTREAM UNAVAILABLE'
-            : 'NO UPSTREAM CONFIGURED',
+          status: source?.url ? 'CAMERA OFFLINE' : 'NO UPSTREAM CONFIGURED',
         });
 
         setHealth(cameraId, {

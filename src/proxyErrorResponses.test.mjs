@@ -31,6 +31,7 @@ function fixture(name, overrides = {}, preview = false) {
     fetch: async () => { throw new Error(detail); },
     console: { warn: (...args) => logs.push(args.join(' ')), error: (...args) => logs.push(args.join(' ')) },
     setInterval: () => ({ unref() {} }),
+    gevUserAgent: () => 'GodsEyeView/2.0 (+test)',
     LL2_CACHE_TTL_MS: 15 * 60_000,
     parseTerrainPoints: () => [[1, 2]],
     resolveTerrainHeightRequest: async () => { throw new Error(detail); },

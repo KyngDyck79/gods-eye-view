@@ -1,0 +1,4 @@
+{
+  "$comment": "Your transit agencies. Start empty. See config/transit-agencies.example.json and docs/TRANSIT-AGENCIES.md for how to add one. Never put a key in this file: keys go in .env.",
+  "agencies": []
+}

@@ -100,6 +100,8 @@ export function createPresentation({
         (camera.feedConfigured ? 'configured' : 'seed'),
       sourceStatus: health?.status || 'unknown',
       sourceMessage: health?.message || '',
+      // Measured still-image cadence from the proxy (null until known).
+      sourceCadence: health?.cadence || null,
       sourceLabel: health?.label || camera.provider || '',
       credit: camera.credit || '',
       calibration: {

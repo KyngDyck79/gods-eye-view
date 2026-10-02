@@ -6,6 +6,9 @@ import {
   finite,
 } from './contract.js';
 
+/** Aircraft positions older than this are STALE (GODS-EYE-VIEW-SPEC v2, 2.3). */
+export const AIRCRAFT_STALE_MS = 60_000;
+
 /** Normalize the OpenSky state-vector route, including its regional fallback. */
 export function normalizeOpenSkyAircraft(row) {
   if (!Array.isArray(row)) return null;
@@ -27,8 +30,11 @@ export function normalizeOpenSkyAircraft(row) {
     courseDeg: finite(row[10]),
     verticalRateMps: finite(row[11]),
     category: finite(row[17]),
-    typeCode: null,
-    registration: null,
+    squawk: cleanText(row[14]) || null,
+    // Columns 18–20 are the gateway's adsb.lol extension; OpenSky rows end at 17.
+    registration: cleanText(row[18]) || null,
+    typeCode: cleanText(row[19]) || null,
+    emergency: cleanText(row[20]) || null,
     operator: null,
   };
 }
@@ -93,11 +99,11 @@ export function openSkySnapshot(
     coverage,
     observedAtMs,
     ageMs,
-    stale: stale || (ageMs != null && ageMs > 120000),
+    stale: stale || (ageMs != null && ageMs > AIRCRAFT_STALE_MS),
     freshness:
       observedAtMs == null
         ? 'unknown'
-        : stale || ageMs > 120000
+        : stale || ageMs > AIRCRAFT_STALE_MS
           ? 'stale'
           : 'current',
   };

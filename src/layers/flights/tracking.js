@@ -23,6 +23,12 @@ import {
   CYAN_TRANSPARENT,
 } from './policy.js';
 
+/** UTC clock time of an observed fix, e.g. "18:04:12Z"; empty when unknown. */
+export function observedTimeLabel(epochMs) {
+  if (!Number.isFinite(epochMs) || epochMs <= 0) return '';
+  return `${new Date(epochMs).toISOString().slice(11, 19)}Z`;
+}
+
 export function createTracking({
   flightState,
   services,
@@ -757,7 +763,11 @@ export function createTracking({
       flightState.records.missingPolls.get(icao24) || flightState.feed._backoff
         ? 'STALE'
         : '';
-    const lines = [[cs, fl, spd, stale].filter(Boolean).join(' · ')];
+    const squawk = info.squawk ? `SQK ${info.squawk}` : '';
+    const lines = [[cs, fl, spd, squawk, stale].filter(Boolean).join(' · ')];
+    // Neutral wording: codes are sometimes set in error, so report, never dramatize.
+    if (info.emergency)
+      lines.push(`Emergency status reported: ${info.emergency}`);
     // Converted contacts report their class as TR-3B and nothing else — the
     // operator/type identity is exactly what the Easter egg is replacing.
     const ident = isTr3b(icao24)
@@ -767,7 +777,21 @@ export function createTracking({
           .join(' · ');
     if (ident) lines.push(ident);
     if (info.route && _routeIsPlausible(icao24, info.route)) {
-      lines.push(`${info.route.origin.code} → ${info.route.destination.code}`);
+      lines.push(
+        `PLAUSIBLE ROUTE ${info.route.origin.code} → ${info.route.destination.code}`,
+      );
+    } else if (info.route) {
+      lines.push('Route unverified');
+    }
+    // Source and the time of the last OBSERVED position. An absolute time
+    // stays true between polls; a relative "N s ago" would not.
+    const observed = observedTimeLabel(info.positionEpochMs);
+    if (observed) {
+      lines.push(
+        [flightState.feed?._lastSource, `position ${observed}`]
+          .filter(Boolean)
+          .join(' · '),
+      );
     }
     return lines.join('\n');
   }

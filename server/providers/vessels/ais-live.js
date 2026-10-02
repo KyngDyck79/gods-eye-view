@@ -3,6 +3,8 @@ import { createRequire } from 'node:module';
 import { createAisStreamAdapter } from '../../../src/data/aisStreamAdapter.js';
 import { parseSilenceTimeoutEnv } from '../../../src/data/aisWatchdog.js';
 import { clampInt } from '../common/query.js';
+import { PROVIDER_CATALOG } from '../gateway/catalog.js';
+import { providerRegistry } from '../gateway/registry.js';
 import {
   AISSTREAM_CACHE_MAX,
   AISSTREAM_STALE_MS,
@@ -61,6 +63,16 @@ let _aisStreamTickTimer = null;
 let _aisNeedsRearm = false;
 /** @type {Function|null|undefined} `ws` constructor; null = unavailable, undefined = not yet probed. */
 let _aisWebSocketImpl;
+/** SYSTEM panel entry: NEEDS KEY without AISSTREAM_API_KEY, else live health. */
+let _aisProvider = null;
+function reportAisHealth(feed) {
+  _aisProvider ||= providerRegistry.register(PROVIDER_CATALOG.aisstream, {
+    configured: () => Boolean(process.env.AISSTREAM_API_KEY),
+  });
+  if (!process.env.AISSTREAM_API_KEY) return;
+  if (feed.status === 'live') _aisProvider.success({});
+  else if (feed.error) _aisProvider.failure(new Error(String(feed.error)));
+}
 
 /**
  * Vite plugin: AISStream live vessel cache.
@@ -71,6 +83,7 @@ let _aisWebSocketImpl;
  */
 export function aisLiveProxy() {
   function install(middlewares) {
+    reportAisHealth(aisStreamStatusSnapshot());
     middlewares.use('/api/ais-live', async (req, res) => {
       try {
         ensureAisStreamConnection();
@@ -116,6 +129,7 @@ export function aisLiveProxy() {
         const rows = aisStreamRows(maxRows);
 
         const feed = aisStreamStatusSnapshot();
+        reportAisHealth(feed);
 
         res.statusCode = process.env.AISSTREAM_API_KEY ? 200 : 503;
         res.setHeader('Content-Type', 'application/json; charset=utf-8');

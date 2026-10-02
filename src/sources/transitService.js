@@ -107,7 +107,10 @@ export async function fetchTransitFeed(
  * @param {{fetchImpl?: typeof fetch}} [options]
  * @returns {{handle: (request: Request) => Promise<Response>, close: () => void}}
  */
-export function createTransitService({ fetchImpl = fetch } = {}) {
+export function createTransitService({
+  fetchImpl = fetch,
+  configProblems = () => [],
+} = {}) {
   /** @type {Map<string, {at:number, body:string, host:string}>} feedId → snapshot */
   const cache = new Map();
   const history = createTransitHistory();
@@ -240,10 +243,17 @@ export function createTransitService({ fetchImpl = fetch } = {}) {
       });
     }
     if (route.route === 'feeds') {
-      return reply(200, JSON.stringify({ feeds: publicTransitCatalog() }), {
-        'Content-Type': 'application/json; charset=utf-8',
-        'Cache-Control': 'public, max-age=3600',
-      });
+      return reply(
+        200,
+        JSON.stringify({
+          feeds: publicTransitCatalog(),
+          configProblems: configProblems(),
+        }),
+        {
+          'Content-Type': 'application/json; charset=utf-8',
+          'Cache-Control': 'no-store',
+        },
+      );
     }
     const { feed } = route;
     const now = Date.now();

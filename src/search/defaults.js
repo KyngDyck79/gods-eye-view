@@ -6,11 +6,13 @@ import { createGoogleGeocoder } from './google.js';
 import { createPhotonGeocoder } from '../keylessGeocoder.js';
 import { createCoordinateGeocoder } from './coordinateGeocoder.js';
 import { createPresetGeocoder } from './presetGeocoder.js';
+import { createAirportGeocoder } from './airportGeocoder.js';
 
 /**
  * Coordinates and bundled names first — both answer offline and with no key —
- * then Google when configured, then keyless Photon, then the local Nominatim
- * route as a last resort. Transport stays local to setup.
+ * then airport codes from the local OurAirports index, then Google when
+ * configured, then keyless Photon, then the local Nominatim route as a last
+ * resort. Transport stays local to setup.
  *
  * `presets` is the caller's bundled place data. It is passed in rather than
  * imported so this package keeps reading no application state; with none
@@ -37,6 +39,9 @@ export function createDefaultPlaceSearch({
     providers: providers.geocode || [
       createCoordinateGeocoder(),
       ...(presets ? [createPresetGeocoder({ presets })] : []),
+      // Airport codes and "… airport" names answer from the local OurAirports
+      // index; anything else passes through untouched.
+      createAirportGeocoder({ fetchImpl, endpoint: endpoints.airports }),
       ...(selected
         ? [selected]
         : [

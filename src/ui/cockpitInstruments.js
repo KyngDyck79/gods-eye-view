@@ -147,6 +147,7 @@ export function updateHud(
     this.lastContextUpdateMs = nowMs;
     this.updateLocalPosition(info);
     this.maybeRefreshRegionalBrief(info);
+    this.maybeRefreshAtcBrief?.(info);
     this.updateContext(info, heading);
   }
   if (this.hud) this.hud.dataset.layer = info.layerId || 'flights';

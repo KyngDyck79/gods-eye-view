@@ -34,7 +34,9 @@ export function createBrowserViteConfig({
       allowedHosts:
         host === '0.0.0.0' || host === '::'
           ? true
-          : ['localhost', '127.0.0.1', '.local'],
+          : // `.ts.net`: your own Tailscale HTTPS name (tailscale serve), so a
+            // phone can reach the app over https and use its microphone.
+            ['localhost', '127.0.0.1', '.local', '.ts.net'],
       fs: {
         deny: ['.env', '.env.*', '*.{crt,pem}', '**/.git/**', '**/ENVIRONMENT'],
       },

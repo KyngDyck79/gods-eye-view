@@ -23,3 +23,74 @@
     </div>
     <p class="key-setup-note" data-key-setup-status role="status" aria-live="polite">The Google Maps key buys the photorealistic planet — everything else stacks on top.</p>
   </aside>
+
+  <!-- SYSTEM STATUS — diagnostics v1 (src/ui/systemStatus.js). Rows come from
+       GET /api/providers; nothing here is hard-coded provider state. -->
+  <button id="system-status-chip" type="button" hidden aria-haspopup="dialog" aria-controls="system-status" aria-expanded="false" data-status="IDLE">
+    <span class="material-symbols-outlined" aria-hidden="true">radar</span>
+    <span data-system-status-label>SYSTEM</span>
+  </button>
+  <aside id="system-status" role="dialog" aria-labelledby="system-status-title" hidden>
+    <header class="system-status-header">
+      <span class="system-status-kicker">GOD'S EYE VIEW · SYSTEM STATUS</span>
+      <button type="button" class="system-status-close" data-system-status-close aria-label="Close system status">
+        <span class="material-symbols-outlined" aria-hidden="true">close</span>
+      </button>
+    </header>
+    <h2 id="system-status-title">Data providers</h2>
+    <p class="system-status-mode" data-system-status-mode></p>
+    <div class="system-status-list" data-system-status-list></div>
+    <footer class="system-status-about">
+      <p><strong>GOD'S EYE VIEW</strong> · Created by Rod Smith</p>
+      <p>Built on the open-source God's Eye View project by Bilawal Sidhu and contributors (MIT License). See CREDITS.md.</p>
+    </footer>
+  </aside>
+
+  <!-- AUDIO SOURCES — user-owned ATC audio (src/ui/audioSourcesDialog.js).
+       Entries live in this browser only. LiveATC is never added here: it is
+       only ever opened as an external link. -->
+  <aside id="audio-sources" class="system-status-dialog" role="dialog" aria-labelledby="audio-sources-title" hidden>
+    <header class="system-status-header">
+      <span class="system-status-kicker">GOD'S EYE VIEW · ATC AUDIO SOURCES</span>
+      <button type="button" class="system-status-close" data-audio-sources-close aria-label="Close audio sources">
+        <span class="material-symbols-outlined" aria-hidden="true">close</span>
+      </button>
+    </header>
+    <h2 id="audio-sources-title">Your audio sources</h2>
+    <p class="system-status-mode">Kept in this browser only. Never uploaded or synced. See SDR-SETUP.md for a receiver of your own.</p>
+    <div class="system-status-list" data-audio-sources-list></div>
+    <form class="audio-sources-form" data-audio-sources-form>
+      <label>Name <input name="label" maxlength="60" placeholder="KMYR Tower (my SDR)" /></label>
+      <label>Stream address <input name="url" required placeholder="http://192.168.1.20:8000/kmyr" /></label>
+      <label>Type
+        <select name="kind">
+          <option value="USER SDR">USER SDR — my receiver on this network</option>
+          <option value="USER URL">USER URL — another stream I'm allowed to listen to</option>
+        </select>
+      </label>
+      <label>Airport (optional) <input name="airportIcao" maxlength="4" placeholder="KMYR" /></label>
+      <label>Frequency MHz (optional) <input name="frequencyMHz" inputmode="decimal" placeholder="128.45" /></label>
+      <button type="submit">ADD SOURCE</button>
+      <p class="system-status-message" data-audio-sources-status role="status"></p>
+    </form>
+  </aside>
+
+  <!-- ALERTS — timestamped alert feed (src/ui/alertsPanel.js). -->
+  <button id="alerts-chip" type="button" hidden aria-haspopup="dialog" aria-controls="alerts-panel" aria-expanded="false" data-count="0">
+    <span class="material-symbols-outlined" aria-hidden="true">flare</span>
+    <span data-alerts-label>ALERTS</span>
+  </button>
+  <aside id="alerts-panel" role="dialog" aria-labelledby="alerts-title" hidden>
+    <header class="system-status-header">
+      <span class="system-status-kicker">GOD'S EYE VIEW · ALERTS</span>
+      <button type="button" class="system-status-close" data-alerts-close aria-label="Close alerts">
+        <span class="material-symbols-outlined" aria-hidden="true">close</span>
+      </button>
+    </header>
+    <h2 id="alerts-title">Alerts</h2>
+    <div class="system-status-list" data-alerts-list></div>
+    <details class="alerts-rules">
+      <summary>Rules</summary>
+      <div data-alerts-rules></div>
+    </details>
+  </aside>

@@ -217,7 +217,7 @@ export class FlightRecords {
       category: cat,
       // An adsbdb-enriched type code outranks the coarse OpenSky category.
       klass: classifyAircraft({
-        typeCode: prevMeta?.typeCode ?? null,
+        typeCode: prevMeta?.typeCode ?? observation.typeCode ?? null,
         category: cat,
       }),
       turnRateDps: prevMeta?.turnRateDps || 0,
@@ -235,10 +235,25 @@ export class FlightRecords {
         prevMeta?.lastContactEpochMs,
         null,
       ),
-      // adsbdb enrichment — written by the enrichment callbacks, carried across polls:
-      typeCode: prevMeta?.typeCode ?? null,
+      // Transponder state is reported per fix, never carried forward: a
+      // squawk that is no longer transmitted must not linger on the card.
+      squawk: observation.squawk ?? null,
+      emergency:
+        observation.emergency && observation.emergency !== 'none'
+          ? observation.emergency
+          : null,
+      // Last OBSERVED position time (not the dead-reckoned display time).
+      positionEpochMs: stickyNumber(
+        observation.positionTimeMs,
+        prevMeta?.positionEpochMs,
+        null,
+      ),
+      // adsbdb enrichment — written by the enrichment callbacks, carried
+      // across polls. The feed's own type/registration (adsb.lol) fills in
+      // until enrichment answers.
+      typeCode: prevMeta?.typeCode ?? observation.typeCode ?? null,
       typeName: prevMeta?.typeName ?? null,
-      registration: prevMeta?.registration ?? null,
+      registration: prevMeta?.registration ?? observation.registration ?? null,
       airline: prevMeta?.airline ?? null,
       route: prevMeta?.route ?? null,
       // The RAW poll fix lat/lon (this tick's OpenSky state-vector

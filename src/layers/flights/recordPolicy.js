@@ -9,6 +9,9 @@ export const LANDED_MISSING_POLL_LIMIT = 1;
 
 export const MISSING_POLL_LIMIT = 3;
 
+/** With no fresh data for this long, every aircraft is removed (spec 2.3). */
+export const AIRCRAFT_REMOVE_AFTER_MS = 5 * 60_000;
+
 /** Cooldown in milliseconds after a transient source error. */
 export const ERROR_BACKOFF_INTERVAL = 20000;
 

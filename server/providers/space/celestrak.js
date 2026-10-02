@@ -1,3 +1,4 @@
+import { gevUserAgent } from '../gateway/registry.js';
 import path from 'node:path';
 import { promises as fsp } from 'node:fs';
 import { celestrakTleUrl } from '../../../src/data/spaceProviderRequests.js';
@@ -55,8 +56,7 @@ export function celestrakProxy() {
       // CelesTrak 403s bulk groups (e.g. `active`) unless the request carries a
       // descriptive User-Agent with a contact point.
       headers: {
-        'User-Agent':
-          'gods-eye-view-celestrak-proxy/1.0 (+https://github.com/bilawalsidhu/gods-eye-view)',
+        'User-Agent': gevUserAgent(),
       },
     });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);

@@ -189,7 +189,7 @@ test('a conversion survives a poll refresh, in both the billboard and the tracke
   const realFetch = globalThis.fetch;
   const nowSec = Math.floor(Date.now() / 1000);
   globalThis.fetch = async (url) => {
-    if (!String(url).startsWith('/api/opensky')) {
+    if (!String(url).startsWith('/api/aircraft')) {
       return { ok: true, status: 200, json: async () => ({ ac: [] }) };
     }
     return {

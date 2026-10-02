@@ -583,6 +583,11 @@ export const LAYER_STATE_REGISTRY = Object.freeze([
   Object.freeze({ id: 'directions', token: 'n', disposition: 'enabled-only' }),
   Object.freeze({ id: 'earthquakes', token: 'e', disposition: 'enabled-only' }),
   Object.freeze({
+    id: 'emergency-facilities',
+    token: '5',
+    disposition: 'enabled-only',
+  }),
+  Object.freeze({
     id: 'fire-perimeters',
     token: '2',
     disposition: 'enabled-only',
@@ -614,6 +619,16 @@ export const LAYER_STATE_REGISTRY = Object.freeze([
   Object.freeze({
     id: 'military-installations',
     token: 'i',
+    disposition: 'enabled-only',
+  }),
+  Object.freeze({
+    id: 'natural-events',
+    token: '4',
+    disposition: 'enabled-only',
+  }),
+  Object.freeze({
+    id: 'nws-warnings',
+    token: '3',
     disposition: 'enabled-only',
   }),
   Object.freeze({
@@ -649,6 +664,11 @@ export const LAYER_STATE_REGISTRY = Object.freeze([
     token: 't',
     disposition: 'enabled+options',
     optionOwner: 'traffic',
+  }),
+  Object.freeze({
+    id: 'traffic-incidents',
+    token: '0',
+    disposition: 'enabled-only',
   }),
   Object.freeze({ id: 'transit', token: 'j', disposition: 'enabled-only' }),
   Object.freeze({
