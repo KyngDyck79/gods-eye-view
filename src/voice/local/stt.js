@@ -49,7 +49,7 @@ export async function transcribeLocally(
 }
 
 export const WEB_SPEECH_NOTICE =
-  'Browser speech recognition may send your audio to the browser maker’s servers, and it listens to the macOS default input — set System Settings → Sound → Input to BlackHole 2ch.';
+  'Browser speech recognition may send your audio to the browser maker’s servers. On a phone it uses the phone’s microphone; on the Mac it listens to the macOS default input (set System Settings → Sound → Input to BlackHole 2ch)';
 
 /** Web Speech recognizer, or null when the browser has none. */
 export function createWebSpeechRecognizer(win = globalThis) {

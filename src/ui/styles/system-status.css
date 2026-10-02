@@ -708,3 +708,23 @@ body.gev-mobile #mobile-tabbar button[data-tab='VOICE'] {
 body.gev-mobile #mobile-tabbar button[data-tab='VOICE'][data-live='true'] {
   color: #ff5a5a;
 }
+body.gev-mobile #mobile-voice-caption:not([hidden]) {
+  position: fixed;
+  z-index: 298;
+  left: 12px;
+  right: 12px;
+  bottom: calc(60px + env(safe-area-inset-bottom, 0px));
+  padding: 8px 12px;
+  color: #fff;
+  font-size: 13px;
+  line-height: 1.35;
+  background: rgba(7, 13, 22, 0.92);
+  border: 1px solid rgba(255, 77, 77, 0.4);
+  border-radius: 10px;
+}
+#mobile-voice-caption {
+  display: none;
+}
+body.gev-mobile #mobile-voice-caption:not([hidden]) {
+  display: block;
+}

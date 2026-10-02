@@ -109,6 +109,79 @@ function placeRef(place) {
  * @returns {null | { intent: string, [k: string]: any }}
  */
 export function parseCommand(text, { layers = [] } = {}) {
+  return (
+    parseStrict(text, layers) ||
+    parseStrict(stripFiller(text), layers) ||
+    keywordIntent(stripFiller(text))
+  );
+}
+
+/** Spoken lead-ins that carry no meaning ("hey god, can you tell me…"). */
+export function stripFiller(text) {
+  let t = clean(text);
+  let before;
+  do {
+    before = t;
+    t = t
+      .replace(
+        /^(hey god|ok god|okay god|god|um+|uh+|so|and|please|can you|could you|would you|will you|i want to|i'd like to|i would like to|tell me|let me know|let me see|give me|show me)[, ]+/,
+        '',
+      )
+      .replace(/\s+(please|for me|right now|now)$/, '');
+  } while (t !== before);
+  return t;
+}
+
+/**
+ * Last resort for natural speech: a few unmistakable keywords. Still never a
+ * guess about data; every intent here answers from live sources.
+ * @param {string} t Cleaned text.
+ */
+export function keywordIntent(t) {
+  if (!t) return null;
+  let m;
+  if (
+    /\b(nearest|closest)\b.*\bairports?\b|\bairports?\b.*\b(nearest|closest|near me|nearby|around here)\b/.test(
+      t,
+    )
+  )
+    return { intent: 'nearestAirport' };
+  if (/\b(that|this)\s+(plane|aircraft|flight|jet|airplane)\b/.test(t))
+    return { intent: 'whatsThatPlane' };
+  if (
+    /\b(severe weather|weather warnings?|tornado|thunderstorm warnings?|flood warnings?|any storms?)\b/.test(
+      t,
+    )
+  )
+    return { intent: 'severeWeather' };
+  if (/\bfrequenc(y|ies)\b/.test(t)) return { intent: 'atcFrequency' };
+  if (/\b(listen|play|open|hear)\b.*\b(atc|tower|air traffic)\b/.test(t))
+    return { intent: 'openAtcSource' };
+  if (/\bcockpit\b/.test(t)) return { intent: 'openCockpit' };
+  if ((m = /\bcameras?\b.*?\b(?:near|around|at|in|by)\s+(.+)$/.exec(t)))
+    return { intent: 'camerasNear', ...placeRef(m[1]) };
+  if (
+    (m =
+      /\b(?:weather|metar|forecast|temperature|conditions)\b.*?\b(?:at|in|for|near|around|over)\s+(.+)$/.exec(
+        t,
+      ))
+  )
+    return { intent: 'weather', ...placeRef(m[1]) };
+  if (
+    /\b(weather|metar|temperature|raining|rain|windy|wind|how hot|how cold)\b/.test(
+      t,
+    )
+  )
+    return { intent: 'weather', ref: 'here' };
+  if (
+    (m = /\b(?:go|fly|take me|zoom|head|jump)\s+(?:over\s+)?to\s+(.+)$/.exec(t))
+  )
+    return { intent: 'goTo', ...placeRef(m[1]) };
+  return null;
+}
+
+/** The exact command forms (spec 4.19). */
+function parseStrict(text, layers) {
   let t = clean(text).replace(/^(hey god|god|ok god|okay god)[, ]+/, '');
   t = t
     .replace(/^(please|can you|could you|would you)\s+/, '')
@@ -163,7 +236,7 @@ export function parseCommand(text, { layers = [] } = {}) {
   }
   if (
     (m =
-      /^(?:show|find|open)?\s*(?:the )?(?:traffic )?cameras? (?:near|around|at|in|by) (.+)$/.exec(
+      /^(?:show|find|open)?\s*(?:me )?(?:the |any )?(?:traffic )?cameras? (?:near|around|at|in|by) (.+)$/.exec(
         t,
       ))
   )

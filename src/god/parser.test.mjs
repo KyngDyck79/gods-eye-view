@@ -101,3 +101,34 @@ test('layer names resolve from synonyms and panel names', () => {
   assert.equal(resolveLayer('ship', layers), 'ais-live-vessels');
   assert.equal(resolveLayer('nothing like this', layers), null);
 });
+
+test('natural speech still finds the command', () => {
+  const cases = [
+    ['Where is the nearest airport?', { intent: 'nearestAirport' }],
+    ["what's the closest airport to me", { intent: 'nearestAirport' }],
+    ['the nearest airport', { intent: 'nearestAirport' }],
+    [
+      'Hey God, can you tell me the weather',
+      { intent: 'weather', ref: 'here' },
+    ],
+    [
+      'How is the weather in Charleston',
+      { intent: 'weather', ref: 'place', place: 'charleston' },
+    ],
+    ['Is it raining', { intent: 'weather', ref: 'here' }],
+    ['Are there any tornado warnings', { intent: 'severeWeather' }],
+    ['What kind of plane is that plane', { intent: 'whatsThatPlane' }],
+    ['what frequency should I be on', { intent: 'atcFrequency' }],
+    ['I want to listen to the tower', { intent: 'openAtcSource' }],
+    [
+      'Take me to Myrtle Beach please',
+      { intent: 'goTo', ref: 'place', place: 'myrtle beach' },
+    ],
+    [
+      'show me cameras near Austin',
+      { intent: 'camerasNear', ref: 'place', place: 'austin' },
+    ],
+  ];
+  for (const [said, want] of cases) assert.deepEqual(p(said), want, said);
+  assert.equal(p('who won the game last night'), null);
+});

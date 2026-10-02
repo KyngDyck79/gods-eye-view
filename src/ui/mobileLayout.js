@@ -65,6 +65,34 @@ export function initMobileLayout({
   }
   doc.body.append(bar, sheet);
 
+  // The dock (and its voice readout) is hidden on phones, so show what GOD
+  // heard and answered just above the tab bar.
+  const caption = doc.createElement('div');
+  caption.id = 'mobile-voice-caption';
+  caption.setAttribute('aria-live', 'polite');
+  caption.hidden = true;
+  doc.body.append(caption);
+  let lastCaption = '';
+  const syncCaption = () => {
+    const control = doc.getElementById('gev-voice-control');
+    const status = control?.dataset.status || 'idle';
+    const text =
+      doc.getElementById('gev-voice-detail')?.textContent?.trim() || '';
+    const show = media.matches && status !== 'idle' && text !== '';
+    caption.hidden = !show;
+    if (show && text !== lastCaption) {
+      caption.textContent = text;
+      lastCaption = text;
+    }
+  };
+  new win.MutationObserver(syncCaption).observe(doc.body, {
+    subtree: true,
+    childList: true,
+    characterData: true,
+    attributes: true,
+    attributeFilter: ['data-status'],
+  });
+
   /**
    * The voice button in thumb reach: tap turns voice on or off (the dock's
    * mic button); press and hold talks (the same Space push-to-talk the
