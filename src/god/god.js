@@ -162,6 +162,57 @@ export function createGod({
       if (r?.ok === false) return { reply: layerFailure(r, layerId, true) };
       return { reply: `Showing ${r?.label || layerId} near ${point.label}.` };
     },
+    async camera({ motion, direction, amount, ...slots }) {
+      if (motion === 'globe') {
+        const r = await tools.run('zoom_to_globe', {});
+        return {
+          reply:
+            r?.ok === false
+              ? r.error || 'Could not zoom out.'
+              : 'Showing the whole globe.',
+        };
+      }
+      if (motion === 'zoom') {
+        const r = await tools.run('adjust_camera_zoom', { direction, amount });
+        return {
+          reply:
+            r?.ok === false
+              ? r.error || 'Could not zoom.'
+              : `Zooming ${direction}.`,
+        };
+      }
+      let label = '';
+      if (slots.ref === 'place') {
+        const point = await resolvePoint(slots);
+        if (!point) return { reply: `I couldn't find “${slots.place}”.` };
+        const fly = await tools.flyTo(point, { close: true });
+        if (fly?.ok === false)
+          return { reply: fly.error || `Couldn't fly to ${point.label}.` };
+        label = point.label;
+      }
+      const args =
+        motion === 'orbit'
+          ? {
+              motion: 'orbit',
+              direction: 'right',
+              speed: 'slow',
+              mode: 'continuous',
+            }
+          : motion === 'stop'
+            ? { motion: 'stop' }
+            : { motion, direction, speed: 'normal', mode: 'once' };
+      const r = await tools.run('move_camera', args);
+      if (r?.ok === false)
+        return { reply: r.error || 'The camera could not do that.' };
+      if (motion === 'orbit')
+        return {
+          reply: `Circling ${label || 'this spot'}. Say “stop” to stop.`,
+        };
+      if (motion === 'stop') return { reply: 'Stopped.' };
+      return {
+        reply: `${motion === 'tilt' ? 'Tilting' : motion === 'rotate' ? 'Turning' : 'Panning'} ${direction}.`,
+      };
+    },
     async goTo(slots) {
       if (slots.ref !== 'place')
         return { reply: 'Say where, e.g. “go to KMYR” or “go to Charleston”.' };

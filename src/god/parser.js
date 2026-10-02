@@ -139,6 +139,8 @@ export function stripFiller(text) {
  */
 export function keywordIntent(t) {
   if (!t) return null;
+  const camera = cameraIntent(t);
+  if (camera) return camera;
   let m;
   if (
     /\b(nearest|closest)\b.*\bairports?\b|\bairports?\b.*\b(nearest|closest|near me|nearby|around here)\b/.test(
@@ -180,6 +182,84 @@ export function keywordIntent(t) {
   return null;
 }
 
+const AMOUNT = (t) =>
+  /\b(a (little|bit)|slightly|little|bit)\b/.test(t)
+    ? 'little'
+    : /\b(a lot|way|all the way|much)\b/.test(t)
+      ? 'lot'
+      : 'medium';
+
+/**
+ * Camera moves: zoom in/out, orbit / circle / pan around (a place), pan or
+ * tilt a direction, stop, whole globe.
+ * @param {string} t Cleaned text.
+ */
+export function cameraIntent(t) {
+  let m;
+  if (
+    /^(stop|stop (moving|orbiting|spinning|rotating|panning|it|the camera)|hold (still|it)|freeze)$/.test(
+      t,
+    )
+  )
+    return { intent: 'camera', motion: 'stop' };
+  if (
+    /\b(whole (world|globe|earth|planet)|zoom (all the way )?out to (the )?(globe|earth|world))\b/.test(
+      t,
+    )
+  )
+    return { intent: 'camera', motion: 'globe' };
+  if (
+    /\bzoom\s*(?:the (?:map|camera)\s*)?in\b|\b(get|move|go) closer\b|\bcloser\b/.test(
+      t,
+    )
+  )
+    return {
+      intent: 'camera',
+      motion: 'zoom',
+      direction: 'in',
+      amount: AMOUNT(t),
+    };
+  if (
+    /\bzoom\s*(?:the (?:map|camera)\s*)?out\b|\b(pull|back) (back|out|up)\b|\bfarther\b|\bfurther (out|away)\b/.test(
+      t,
+    )
+  )
+    return {
+      intent: 'camera',
+      motion: 'zoom',
+      direction: 'out',
+      amount: AMOUNT(t),
+    };
+  if (
+    (m =
+      /\b(?:circle around|spin around|fly around|pan around|go around|rotate around|look around|orbit|circle)\b(?:\s+(?:the\s+)?(.+))?$/.exec(
+        t,
+      ))
+  ) {
+    const place = (m[1] || '')
+      .replace(/^(it|here|this|this area|that)$/, '')
+      .trim();
+    return place
+      ? { intent: 'camera', motion: 'orbit', ref: 'place', place }
+      : { intent: 'camera', motion: 'orbit' };
+  }
+  if (
+    (m =
+      /\b(pan|move|look|turn|rotate|tilt)\s+(left|right|up|down)\b/.test(t) &&
+      /\b(pan|move|look|turn|rotate|tilt)\s+(left|right|up|down)\b/.exec(t))
+  ) {
+    const verb = m[1];
+    const motion =
+      verb === 'tilt' || (verb === 'look' && /up|down/.test(m[2]))
+        ? 'tilt'
+        : verb === 'turn' || verb === 'rotate'
+          ? 'rotate'
+          : 'pan';
+    return { intent: 'camera', motion, direction: m[2] };
+  }
+  return null;
+}
+
 /** The exact command forms (spec 4.19). */
 function parseStrict(text, layers) {
   let t = clean(text).replace(/^(hey god|god|ok god|okay god)[, ]+/, '');
@@ -188,6 +268,9 @@ function parseStrict(text, layers) {
     .replace(/\s+please$/, '');
   if (!t) return null;
   let m;
+
+  const camera = cameraIntent(t);
+  if (camera) return camera;
 
   if (
     /^(what('?s| is) (that|this) (plane|aircraft|flight)|identify (that|this|it)( plane| aircraft)?|what plane is (that|this)|who is (that|this))$/.test(

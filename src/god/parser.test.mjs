@@ -132,3 +132,44 @@ test('natural speech still finds the command', () => {
   for (const [said, want] of cases) assert.deepEqual(p(said), want, said);
   assert.equal(p('who won the game last night'), null);
 });
+
+test('camera moves', () => {
+  const cases = [
+    [
+      'zoom in',
+      { intent: 'camera', motion: 'zoom', direction: 'in', amount: 'medium' },
+    ],
+    [
+      'zoom out a little',
+      { intent: 'camera', motion: 'zoom', direction: 'out', amount: 'little' },
+    ],
+    [
+      'get closer',
+      { intent: 'camera', motion: 'zoom', direction: 'in', amount: 'medium' },
+    ],
+    [
+      'pan around the state capitol',
+      {
+        intent: 'camera',
+        motion: 'orbit',
+        ref: 'place',
+        place: 'state capitol',
+      },
+    ],
+    [
+      'orbit the Texas State Capitol',
+      {
+        intent: 'camera',
+        motion: 'orbit',
+        ref: 'place',
+        place: 'texas state capitol',
+      },
+    ],
+    ['circle around', { intent: 'camera', motion: 'orbit' }],
+    ['pan left', { intent: 'camera', motion: 'pan', direction: 'left' }],
+    ['tilt up', { intent: 'camera', motion: 'tilt', direction: 'up' }],
+    ['stop', { intent: 'camera', motion: 'stop' }],
+    ['show me the whole globe', { intent: 'camera', motion: 'globe' }],
+  ];
+  for (const [said, want] of cases) assert.deepEqual(p(said), want, said);
+});

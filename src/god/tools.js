@@ -177,12 +177,12 @@ export function createGodTools({
     };
   }
 
-  const flyTo = (point) =>
+  const flyTo = (point, { close = false } = {}) =>
     run('fly_to_location', {
       latitude: point.lat,
       longitude: point.lon,
-      viewMode: 'overview',
-      rangeM: 25_000,
+      viewMode: close ? 'close' : 'overview',
+      rangeM: close ? 2_500 : 25_000,
       waitForArrival: true,
     });
 
