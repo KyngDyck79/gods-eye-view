@@ -1,5 +1,15 @@
 # Changelog
 
+## GOD'S EYE VIEW v2 — Voice from your phone (2026-10-02)
+
+- The app now accepts your Tailscale https address (`*.ts.net`), so a phone
+  browser allows the microphone.
+- Speech and GOD's AI tier answer only this Mac, or your own Tailscale login
+  (`GEV_OWNER_LOGINS`). Before this, anyone reaching the Mac through a
+  loopback proxy such as `tailscale serve` would have passed the old "this
+  Mac only" check.
+- Steps: `VOICE-SETUP.md` → "From your phone".
+
 ## GOD'S EYE VIEW v2 — Phase 8: performance, phone layout, docs (2026-09-30)
 
 - **Performance:** new synthetic 5,000-aircraft load test

@@ -17,7 +17,7 @@ test('the speech server must be on this Mac', () => {
   assert.match(resolveWhisperUrl({ WHISPER_SERVER_URL: 'https://api.example.com' }).problem, /on this Mac/);
   assert.equal(resolveWhisperUrl({ WHISPER_SERVER_URL: 'http://127.0.0.1:8178' }).url.port, '8178');
   assert.ok(resolveWhisperUrl({ WHISPER_SERVER_URL: 'http://localhost:8178' }).url);
-  assert.equal(isLocalRequest({ socket: { remoteAddress: '::ffff:127.0.0.1' } }), true);
+  assert.equal(isLocalRequest({ socket: { remoteAddress: '::ffff:127.0.0.1' }, headers: { host: 'localhost:4173' } }), true);
   assert.equal(isLocalRequest({ socket: { remoteAddress: '192.168.1.9' } }), false);
   assert.equal(looksLikeWav(wav), true);
   assert.equal(looksLikeWav(Buffer.from('not audio at all, clearly not a wav file.......')), false);

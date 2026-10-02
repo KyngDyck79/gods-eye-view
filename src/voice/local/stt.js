@@ -11,7 +11,14 @@ export async function getSpeechServerStatus(
 ) {
   try {
     const response = await fetchImpl('/api/stt/status', { cache: 'no-store' });
-    return await response.json();
+    const body = await response.json().catch(() => ({}));
+    if (!response.ok)
+      return {
+        configured: false,
+        online: false,
+        message: body?.error || `HTTP ${response.status}`,
+      };
+    return body;
   } catch {
     return {
       configured: false,

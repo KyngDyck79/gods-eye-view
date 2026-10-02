@@ -32,6 +32,7 @@ Add or fill in the line (e.g. `TOMTOM_API_KEY=abc123`), save with
 | `AI_API_KEY` (+ `AI_PROVIDER`, `AI_MODEL`) | GOD's AI tier for free-form questions. Commands work without it. | Anthropic console or OpenAI platform | Paid per use; the app caps 500 turns/day | No, `.env` only |
 | `TRANSIT_KEY_…` | Keyed transit agencies you add in `config/transit-agencies.json` | The agency's developer site; see [docs/TRANSIT-AGENCIES.md](docs/TRANSIT-AGENCIES.md) | Usually free | No, `.env` only |
 | `WHISPER_SERVER_URL` | Local speech recognition (set to `http://127.0.0.1:8178`) | Built on your Mac by `npm run speech:setup`; see [VOICE-SETUP.md](VOICE-SETUP.md) | Free | No, `.env` only |
+| `GEV_OWNER_LOGINS` | Voice and GOD's AI from *your* phone over Tailscale https. Friends you share with stay blocked. | Your Tailscale login email (Tailscale menu-bar icon) | — | No, `.env` only |
 | `GEV_CONTACT_EMAIL` | Your email in the app's identifying User-Agent (NWS and others ask for a contact) | Your own email | — | No, `.env` only |
 | `OVERPASS_UPSTREAMS` | A reliable OpenStreetMap server you run or pay for (road shapes, installations, facilities) | Optional | — | No, `.env` only |
 

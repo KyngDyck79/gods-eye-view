@@ -19,6 +19,7 @@ test('explicit build inputs preserve browser-only defines, plugin order and loop
     'localhost',
     '127.0.0.1',
     '.local',
+    '.ts.net',
   ]);
   assert.ok(config.server.fs.deny.includes('**/ENVIRONMENT'));
   assert.ok(config.server.fs.deny.includes('.env.*'));

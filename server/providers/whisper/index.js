@@ -9,10 +9,12 @@
  * answers { text } with response_format=json (examples/server/README.md).
  * WHISPER_SERVER_URL must point at this Mac (localhost / 127.0.0.1 / ::1), so
  * audio never leaves it. Both routes answer this Mac only, and nothing is
- * written to disk.
+ * written to disk. Over Tailscale Serve (https, for a phone microphone) only the
+ * owner's login is served; see ../common/access.js.
  */
 
 import { readRequestBodyCapped } from '../common/request.js';
+import { OWNER_ONLY_MESSAGE, requestAccess } from '../common/access.js';
 import { createBudget } from '../gateway/budget.js';
 import { PROVIDER_CATALOG } from '../gateway/catalog.js';
 import { providerRegistry } from '../gateway/registry.js';
@@ -43,10 +45,9 @@ export function resolveWhisperUrl(env = process.env) {
   return { url, problem: null };
 }
 
-/** True for requests from this Mac. */
-export function isLocalRequest(req) {
-  const addr = String(req?.socket?.remoteAddress || '');
-  return addr === '127.0.0.1' || addr === '::1' || addr === '::ffff:127.0.0.1';
+/** True for requests the owner may make (this Mac, or the owner's Tailscale login). */
+export function isLocalRequest(req, env = process.env) {
+  return requestAccess(req, env).owner;
 }
 
 /** True when the bytes are a RIFF/WAVE file. */
@@ -165,7 +166,7 @@ export function whisperProxy(options) {
         res.end(JSON.stringify(body));
       };
       if (!isLocalRequest(req))
-        return send(403, { error: 'Speech is available on this Mac only' });
+        return send(403, { error: `Speech: ${OWNER_ONLY_MESSAGE}` });
       const path = new URL(req.url || '/', 'http://localhost').pathname;
       try {
         if (req.method === 'GET' && path === '/status') {

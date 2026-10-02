@@ -15,7 +15,7 @@ import { readRequestBodyCapped } from '../common/request.js';
 import { createBudget } from '../gateway/budget.js';
 import { PROVIDER_CATALOG } from '../gateway/catalog.js';
 import { providerRegistry } from '../gateway/registry.js';
-import { isLocalRequest } from '../whisper/index.js';
+import { OWNER_ONLY_MESSAGE, requestAccess } from '../common/access.js';
 
 export const AI_DEFAULT_MODELS = Object.freeze({
   anthropic: 'claude-sonnet-5-5',
@@ -267,8 +267,8 @@ export function aiProxy(options) {
         });
         res.end(JSON.stringify(body));
       };
-      if (!isLocalRequest(req))
-        return send(403, { error: 'GOD is available on this Mac only' });
+      if (!requestAccess(req).owner)
+        return send(403, { error: `GOD's AI tier: ${OWNER_ONLY_MESSAGE}` });
       const path = new URL(req.url || '/', 'http://localhost').pathname;
       try {
         if (req.method === 'GET' && path === '/status')

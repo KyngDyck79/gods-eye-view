@@ -119,6 +119,56 @@ For each command, paste it into **Terminal** and press **Return**.
    shows at the top of the screen whenever audio is being captured. Your
    words appear as `HEARD: "…"`.
 
+## From your phone (Android or iPhone)
+
+Phone browsers only allow the microphone on **https** pages. `http://192.168…`
+is not enough. Tailscale gives your Mac a private https address:
+
+1. Install Tailscale on the Mac, open it from Applications, and sign in:
+
+   ```bash
+   brew install --cask tailscale-app
+   ```
+
+2. Install **Tailscale** on the phone (Play Store or App Store) and sign in
+   with the **same** account. Turn it on.
+3. In a browser, open <https://login.tailscale.com/admin/dns> and turn on
+   **HTTPS Certificates** (MagicDNS must be on too).
+4. Give the app an https address. This keeps working after restarts:
+
+   ```bash
+   /Applications/Tailscale.app/Contents/MacOS/Tailscale serve --bg --https=443 localhost:4173
+   ```
+
+   It prints your address, like `https://mac-mini.tail1234.ts.net`.
+5. Tell the app the phone is yours. Add this line to `.env` with your
+   Tailscale login (shown in the Tailscale menu-bar icon), then restart the
+   app with `npm run dev`:
+
+   ```
+   GEV_OWNER_LOGINS=you@example.com
+   ```
+
+6. On the phone, open that https address. Tap **MORE → VOICE SETTINGS**,
+   then **ALLOW MICROPHONE TO LIST DEVICES**, and allow it. Run **TEST
+   MICROPHONE**: the meter must move.
+7. Choose the **Engine**:
+   - **Local speech server**: needs `npm run speech` running on the Mac
+     (setup above). The audio goes only from your phone to your Mac, over
+     Tailscale's encrypted connection.
+   - **Browser speech recognition**: works right away, with nothing on the
+     Mac. Google processes the audio.
+
+   Reload the page after changing the engine.
+8. Turn **Voice response** on to hear GOD's answers through the phone.
+
+Then tap **VOICE** (bottom center) to turn voice on. With the local engine,
+**hold** VOICE while you talk and let go to send. With browser speech, just
+talk. GOD answers out loud.
+
+Friends you share the Mac with can open the https address too, but voice and
+AI answer only your login.
+
 ## Voice Settings reference
 
 | Setting | What it does |
