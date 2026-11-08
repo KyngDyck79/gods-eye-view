@@ -27,6 +27,9 @@ fun SendScreen(nav: NavController, toId: Long) {
     var input by remember { mutableStateOf("") }
     var note by remember { mutableStateOf("") }
     val scope = rememberCoroutineScope()
+    var done by remember { mutableStateOf<Pair<String, String>?>(null) }
+
+    done?.let { (t, d) -> SuccessView(t, d) { nav.popBackStack() }; return }
 
     Column(Modifier.fillMaxSize().background(CashBlack).padding(20.dp), horizontalAlignment = Alignment.CenterHorizontally) {
         TopBar("Send to ${to?.name ?: ""}", { nav.popBackStack() })
@@ -37,10 +40,12 @@ fun SendScreen(nav: NavController, toId: Long) {
             }.padding(8.dp),
         )
         Spacer(Modifier.height(12.dp))
-        Text(
-            if (input.isEmpty()) "$0" else "$$input",
-            color = if (input.isEmpty()) TextSecondary else TextPrimary, fontSize = 64.sp, fontWeight = FontWeight.Bold,
-        )
+        Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+            FitText(
+                if (input.isEmpty()) "$0" else "$$input",
+                color = if (input.isEmpty()) TextSecondary else TextPrimary, maxSize = 56.sp,
+            )
+        }
         val cents = input.toCents()
         val limit = me?.balanceCents ?: 0L
         if (cents > limit) Text("Insufficient funds", color = NegativeRed, fontSize = 14.sp)
@@ -58,7 +63,7 @@ fun SendScreen(nav: NavController, toId: Long) {
         Spacer(Modifier.height(16.dp))
         val myId = me?.id
         GreenButton("Send ${if (cents > 0) cents.asMoney() else ""}", myId != null && to != null && cents in 1..limit) {
-            if (myId != null) scope.launch { dao.send(myId, toId, cents, note.trim()); nav.popBackStack() }
+            if (myId != null) scope.launch { dao.send(myId, toId, cents, note.trim()); done = "Sent" to "${cents.asMoney()} to ${to?.name ?: ""}" }
         }
         Spacer(Modifier.height(24.dp))
     }

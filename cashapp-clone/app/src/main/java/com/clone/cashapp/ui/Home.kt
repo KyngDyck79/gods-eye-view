@@ -51,10 +51,7 @@ fun Home(nav: NavController) {
             )
         }
         Spacer(Modifier.height(24.dp))
-        Text(
-            (me?.balanceCents ?: 0L).asMoney(),
-            color = TextPrimary, fontSize = 56.sp, fontWeight = FontWeight.Bold, letterSpacing = (-1).sp,
-        )
+        FitText((me?.balanceCents ?: 0L).asMoney(), color = TextPrimary, maxSize = 40.sp, modifier = Modifier.fillMaxWidth())
         Spacer(Modifier.height(28.dp))
         Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
             Pill("Add Cash") { nav.navigate(Routes.ADD) }
