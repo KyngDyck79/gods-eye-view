@@ -27,12 +27,12 @@ fun CardScreen(nav: NavController) {
     var locked by rememberSaveable { mutableStateOf(false) }
     Column(Modifier.fillMaxSize().background(CashBlack).padding(20.dp)) {
         Spacer(Modifier.height(40.dp))
-        Text("Cash Card", color = TextPrimary, fontSize = 30.sp, fontWeight = FontWeight.Bold)
+        Text("Stackz Card", color = TextPrimary, fontSize = 30.sp, fontWeight = FontWeight.Bold)
         Spacer(Modifier.height(28.dp))
         Box(
             Modifier.fillMaxWidth().height(210.dp).clip(RoundedCornerShape(20.dp))
                 .alpha(if (locked) 0.45f else 1f)
-                .background(Brush.linearGradient(listOf(CashGreen, Color(0xFF00A83B)))),
+                .background(Brush.linearGradient(listOf(CashGreen, Color(0xFF66CB89)))),
             contentAlignment = Alignment.BottomStart,
         ) {
             Column(Modifier.padding(24.dp)) {
@@ -44,7 +44,7 @@ fun CardScreen(nav: NavController) {
                     Text("EXP 12/29   CVV •••", color = CashBlack, fontSize = 13.sp)
                     Spacer(Modifier.height(6.dp))
                 }
-                Text(if (locked) "CASH CARD · LOCKED" else "CASH CARD", color = CashBlack, fontSize = 13.sp, fontWeight = FontWeight.SemiBold)
+                Text(if (locked) "STACKZ CARD · LOCKED" else "STACKZ CARD", color = CashBlack, fontSize = 13.sp, fontWeight = FontWeight.SemiBold)
             }
         }
         Spacer(Modifier.height(28.dp))

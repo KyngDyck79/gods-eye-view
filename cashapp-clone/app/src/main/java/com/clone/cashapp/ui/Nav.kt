@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CreditCard
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -23,6 +24,7 @@ object Routes {
     const val ONBOARDING = "onboarding"
     const val HOME = "home"
     const val CARD = "card"
+    const val SEARCH = "search"
     const val QR = "qr"
     const val ADD = "add"
     const val OUT = "out"
@@ -36,6 +38,7 @@ private data class Tab(val route: String, val label: String, val icon: ImageVect
 private val tabs = listOf(
     Tab(Routes.HOME, "Money", Icons.Filled.Home),
     Tab(Routes.CARD, "Card", Icons.Filled.CreditCard),
+    Tab(Routes.SEARCH, "Search", Icons.Filled.Search),
 )
 
 @Composable
@@ -74,6 +77,7 @@ fun AppNav(nav: NavHostController, start: String) {
             composable(Routes.ONBOARDING) { Onboarding(nav) }
             composable(Routes.HOME) { Home(nav) }
             composable(Routes.CARD) { CardScreen(nav) }
+            composable(Routes.SEARCH) { SearchScreen(nav) }
             composable(Routes.QR) { QrScreen(nav) }
             composable(Routes.ADD) { AmountScreen(nav, Routes.ADD) }
             composable(Routes.OUT) { AmountScreen(nav, Routes.OUT) }

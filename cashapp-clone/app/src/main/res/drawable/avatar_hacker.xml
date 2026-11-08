@@ -18,6 +18,6 @@
     <path android:fillColor="#FF000000"
         android:pathData="M50,29 C38,29 31,41 31,54 C31,67 39,77 50,77 C61,77 69,67 69,54 C69,41 62,29 50,29 Z" />
     <!-- faint green eyes -->
-    <path android:fillColor="#B300D54B"
+    <path android:fillColor="#B366E693"
         android:pathData="M40.5,52 a3,1.8 0 1,0 6,0 a3,1.8 0 1,0 -6,0 Z M53.5,52 a3,1.8 0 1,0 6,0 a3,1.8 0 1,0 -6,0 Z" />
 </vector>

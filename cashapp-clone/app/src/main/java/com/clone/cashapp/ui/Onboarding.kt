@@ -14,6 +14,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.clone.cashapp.data.Db
 import com.clone.cashapp.data.Profile
+import com.clone.cashapp.data.Seed
 import com.clone.cashapp.ui.theme.*
 import kotlinx.coroutines.launch
 
@@ -32,7 +33,7 @@ fun Onboarding(nav: NavController) {
             0 -> {
                 OwnerAvatar(88.dp)
                 Spacer(Modifier.height(24.dp))
-                Text("Welcome to Cash App", color = TextPrimary, fontSize = 30.sp, fontWeight = FontWeight.Bold)
+                Text("Welcome to Stackz", color = TextPrimary, fontSize = 30.sp, fontWeight = FontWeight.Bold)
                 Spacer(Modifier.height(40.dp))
                 OutlinedTextField(
                     value = name, onValueChange = { name = it },
@@ -49,7 +50,7 @@ fun Onboarding(nav: NavController) {
                 GreenButton("Continue", name.isNotBlank()) { step = 1 }
             }
             1 -> {
-                Text("Choose your \$cashtag", color = TextPrimary, fontSize = 28.sp, fontWeight = FontWeight.Bold)
+                Text("Choose your \$tag", color = TextPrimary, fontSize = 28.sp, fontWeight = FontWeight.Bold)
                 Spacer(Modifier.height(40.dp))
                 OutlinedTextField(
                     value = tag, onValueChange = { tag = it.lowercase().filter { c -> c.isLetterOrDigit() } },
@@ -63,10 +64,11 @@ fun Onboarding(nav: NavController) {
                 Spacer(Modifier.weight(1f))
                 GreenButton("Finish", tag.isNotBlank()) {
                     scope.launch {
-                        dao.insertProfile(Profile(name = name.trim(), cashtag = tag, balanceCents = 0, isCurrentUser = true))
-                        dao.insertProfile(Profile(name = "Jordan Blake", cashtag = "jblake", balanceCents = 4200))
-                        dao.insertProfile(Profile(name = "Maya Torres", cashtag = "mayat", balanceCents = 13300))
-                        dao.insertProfile(Profile(name = "Sam Rivera", cashtag = "samr", balanceCents = 900))
+                        val meId = dao.insertProfile(
+                            Profile(name = name.trim(), cashtag = tag, balanceCents = Seed.START_BALANCE_CENTS, isCurrentUser = true),
+                        )
+                        val ids = Seed.contacts.map { dao.insertProfile(it) }
+                        dao.insertTxns(Seed.history(meId, ids))
                         nav.navigate(Routes.HOME) { popUpTo(Routes.ONBOARDING) { inclusive = true } }
                     }
                 }

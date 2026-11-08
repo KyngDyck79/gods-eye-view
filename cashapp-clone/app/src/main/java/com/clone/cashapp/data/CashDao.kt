@@ -14,7 +14,7 @@ interface CashDao {
     @Query("SELECT * FROM profiles WHERE isCurrentUser = 0")
     fun others(): Flow<List<Profile>>
 
-    @Query("SELECT * FROM profiles WHERE cashtag LIKE '%' || :q || '%' AND isCurrentUser = 0")
+    @Query("SELECT * FROM profiles WHERE (name LIKE '%' || :q || '%' OR cashtag LIKE '%' || :q || '%') AND isCurrentUser = 0 ORDER BY name")
     fun search(q: String): Flow<List<Profile>>
 
     @Query("SELECT * FROM txns ORDER BY timestamp DESC")
@@ -30,6 +30,7 @@ interface CashDao {
     suspend fun credit(id: Long, amt: Long)
 
     @Insert suspend fun insertTxn(t: Txn)
+    @Insert suspend fun insertTxns(t: List<Txn>)
     @Insert suspend fun insertProfile(p: Profile): Long
 
     @Query("UPDATE profiles SET name = :name, cashtag = :tag WHERE id = :id")

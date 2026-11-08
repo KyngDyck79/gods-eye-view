@@ -97,6 +97,8 @@ private fun Pill(label: String, onClick: () -> Unit) {
     ) { Text(label, color = CashBlack, fontWeight = FontWeight.SemiBold, fontSize = 15.sp) }
 }
 
+private val dateFmt = java.text.SimpleDateFormat("MMM d, yyyy", java.util.Locale.US)
+
 @Composable
 private fun TxnRow(txn: Txn, meId: Long, people: Map<Long, Profile>) {
     val out = (txn.type == TxnType.SEND && txn.fromId == meId) || txn.type == TxnType.CASHOUT
@@ -106,7 +108,9 @@ private fun TxnRow(txn: Txn, meId: Long, people: Map<Long, Profile>) {
         TxnType.ADD -> "Added cash"
         TxnType.CASHOUT -> "Cashed out"
     }
-    val subtitle = if (txn.type == TxnType.SEND || txn.type == TxnType.RECEIVE) txn.note else ""
+    val date = dateFmt.format(java.util.Date(txn.timestamp))
+    val subtitle = listOf(if (txn.type == TxnType.SEND || txn.type == TxnType.RECEIVE) txn.note else "", date)
+        .filter { it.isNotBlank() }.joinToString(" · ")
     Row(Modifier.fillMaxWidth().padding(vertical = 12.dp), verticalAlignment = Alignment.CenterVertically) {
         Box(Modifier.size(42.dp).clip(CircleShape).background(CardGray), contentAlignment = Alignment.Center) {
             Text(if (out) "↑" else "↓", color = TextPrimary)

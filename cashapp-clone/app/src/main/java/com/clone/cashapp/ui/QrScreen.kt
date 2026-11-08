@@ -41,7 +41,7 @@ fun QrScreen(nav: NavController) {
     var bmp by remember { mutableStateOf<Bitmap?>(null) }
 
     LaunchedEffect(me?.cashtag) {
-        me?.cashtag?.let { bmp = makeQr("https://cash.app/\$$it") }
+        me?.cashtag?.let { bmp = makeQr("stackz:\$$it") }
     }
 
     Column(Modifier.fillMaxSize().background(CashBlack).padding(20.dp), horizontalAlignment = Alignment.CenterHorizontally) {
@@ -49,7 +49,7 @@ fun QrScreen(nav: NavController) {
         Spacer(Modifier.weight(1f))
         bmp?.let {
             Image(
-                it.asImageBitmap(), "QR code for my cashtag",
+                it.asImageBitmap(), "My QR code",
                 modifier = Modifier.size(260.dp).clip(RoundedCornerShape(16.dp)),
             )
         }
