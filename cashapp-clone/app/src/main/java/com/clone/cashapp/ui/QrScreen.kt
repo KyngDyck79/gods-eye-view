@@ -54,6 +54,8 @@ fun QrScreen(nav: NavController) {
             )
         }
         Spacer(Modifier.height(24.dp))
+        OwnerAvatar(56.dp)
+        Spacer(Modifier.height(12.dp))
         Text("$" + (me?.cashtag ?: ""), color = TextPrimary, fontSize = 24.sp, fontWeight = FontWeight.Bold)
         Text(me?.name ?: "", color = TextSecondary, fontSize = 15.sp)
         Spacer(Modifier.weight(1f))

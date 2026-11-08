@@ -38,9 +38,12 @@ fun Home(nav: NavController) {
     Column(Modifier.fillMaxSize().background(CashBlack).padding(horizontal = 20.dp)) {
         Spacer(Modifier.height(48.dp))
         Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-            Text("$", color = TextSecondary, fontSize = 22.sp)
-            Spacer(Modifier.width(6.dp))
-            Text(me?.cashtag ?: "", color = TextSecondary, fontSize = 16.sp, fontWeight = FontWeight.Medium)
+            OwnerAvatar(40.dp)
+            Spacer(Modifier.width(12.dp))
+            Column {
+                Text(me?.name ?: "", color = TextPrimary, fontSize = 16.sp, fontWeight = FontWeight.SemiBold)
+                Text("$" + (me?.cashtag ?: ""), color = TextSecondary, fontSize = 13.sp)
+            }
             Spacer(Modifier.weight(1f))
             Icon(
                 Icons.Filled.QrCode, "My QR code", tint = TextPrimary,

@@ -22,7 +22,7 @@ fun Onboarding(nav: NavController) {
     val ctx = LocalContext.current
     val dao = remember { Db.get(ctx).dao() }
     var step by remember { mutableStateOf(0) }
-    var name by remember { mutableStateOf("") }
+    var name by remember { mutableStateOf(OWNER_NAME) }
     var tag by remember { mutableStateOf("") }
     val scope = rememberCoroutineScope()
 
@@ -30,7 +30,7 @@ fun Onboarding(nav: NavController) {
         Spacer(Modifier.height(80.dp))
         when (step) {
             0 -> {
-                Text("$", color = CashGreen, fontSize = 64.sp, fontWeight = FontWeight.Bold)
+                OwnerAvatar(88.dp)
                 Spacer(Modifier.height(24.dp))
                 Text("Welcome to Cash App", color = TextPrimary, fontSize = 30.sp, fontWeight = FontWeight.Bold)
                 Spacer(Modifier.height(40.dp))
